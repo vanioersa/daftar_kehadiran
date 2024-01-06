@@ -13,8 +13,9 @@ class Auth extends CI_Controller
 
     public function index()
     {
-        $this->load->view('auth/login');
-    }
+        $data['user'] = $this->m_model->get_data('user')->result();
+        $this->load->view('auth/login', $data);
+    }    
 
     public function register()
     {
@@ -32,30 +33,25 @@ class Auth extends CI_Controller
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
 
         if ($this->form_validation->run() == FALSE) {
-            // Jika validasi gagal, kembali ke form dengan pesan error
             $this->load->view('auth/register');
         } else {
-            // Jika validasi sukses, simpan data ke database (gunakan model)
             $data = array(
                 'nama' => $this->input->post('nama'),
                 'email' => $this->input->post('email'),
                 'alamat' => $this->input->post('alamat'),
                 'jenis_kelamin' => $this->input->post('jenis_kelamin'),
                 'aktivitas' => $this->input->post('aktivitas'),
-                'password' => md5($this->input->post('password')), // Use MD5 for password
+                'password' => md5($this->input->post('password')),
                 'role' => 'user'
             );
-
-            // Panggil model untuk menyimpan data
             $this->m_model->insert_data($data);
-
-            // Redirect ke halaman auth/login setelah berhasil menyimpan data
             redirect(base_url('auth'));
         }
     }
 
     public function submit_login()
     {
+        $nama = $this->input->post('nama', true);
         $email = $this->input->post('email', true);
         $password = $this->input->post('password', true);
         $data = ['email' => $email];
