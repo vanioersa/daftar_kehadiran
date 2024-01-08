@@ -19,7 +19,7 @@
         </a>
         <div class="flex-grow flex flex-col justify-between text-gray-500 bg-gray-800">
             <nav class="flex flex-col mx-4 my-6 space-y-4">
-                <a href="<?php echo base_url('admin/page_1') ?>" class="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
+                <a href="<?php echo base_url('admin/hal_1') ?>" class="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
                     <span class="sr-only">Folders</span>
                     <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
@@ -96,58 +96,25 @@
             </div>
         </header>
         <main class="p-6 sm:p-10 space-y-6">
-            <section class="grid md:grid-cols-2 xl:grid-cols-4 xl:grid-rows-3 xl:grid-flow-col gap-6">
-                <div class="flex flex-col md:col-span-2 md:row-span-2 bg-white shadow rounded-lg">
-                    <div class="px-6 py-5 font-semibold border-b border-gray-100">The number of applied and left students per month</div>
-                    <div class="p-4 flex-grow">
-                        <div class="flex items-center justify-center h-full px-4 py-16 text-gray-400 text-3xl font-semibold bg-gray-100 border-2 border-gray-200 border-dashed rounded-md">Chart</div>
-                    </div>
-                </div>
-                <div class="row-span-3 bg-white shadow rounded-lg">
-                    <div class="flex items-center justify-between px-6 py-5 font-semibold border-b border-gray-100">
-                        <span>Students by average mark</span>
-                    </div>
-                    <div class="overflow-y-auto" style="max-height: 24rem;">
-                        <ul class="p-6 space-y-6">
-                            <li class="flex items-center">
-                                <div class="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                                    <img src="https://randomuser.me/api/portraits/women/82.jpg" alt="Annette Watson profile picture">
-                                </div>
-                                <span class="text-gray-600">Annette Watson</span>
-                                <span class="ml-auto font-semibold">9.3</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="flex flex-col row-span-3 bg-white shadow rounded-lg">
-                    <div class="px-6 py-5 font-semibold border-b border-gray-100">Students by type of studying</div>
-                    <div class="p-4 flex-grow">
-                        <div class="flex items-center justify-center h-full px-4 py-24 text-gray-400 text-3xl font-semibold bg-gray-100 border-2 border-gray-200 border-dashed rounded-md">Chart</div>
-                    </div>
-                </div>
-            </section>
-            <section class="text-right font-semibold text-gray-500">
-                <a href="#" class="text-purple-600 hover:underline">Recreated on Codepen</a> with <a href="https://tailwindcss.com/" class="text-teal-400 hover:underline">Tailwind CSS</a> by Azri Kahar, <a href="https://dribbble.com/shots/10711741-Free-UI-Kit-for-Figma-Online-Courses-Dashboard" class="text-purple-600 hover:underline">original design</a> made by Chili Labs
-            </section>
-        </main>
-    </div>
-    <script>
-        function confirmLogout() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You will be logged out!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, log me out!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to the logout URL
-                    window.location.href = "<?php echo base_url('auth/logout') ?>";
+
+
+            <script>
+                function confirmLogout() {
+                    Swal.fire({
+                        // title: 'Are you sure?',
+                        title: 'Apakah anda yakin ingin keluar!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya!',
+                        cancelButtonText: 'Tidak'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect to the logout URL
+                            window.location.href = "<?php echo base_url('auth/logout') ?>";
+                        }
+                    });
                 }
-            });
-        }
-    </script>
+            </script>
 </body>
 
 </html>

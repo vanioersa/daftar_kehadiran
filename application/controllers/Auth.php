@@ -22,14 +22,17 @@ class Auth extends CI_Controller
         $this->load->view('auth/register');
     }
 
+    public function registerrr()
+    {
+        $this->load->view('auth/registerrr');
+    }
+
     public function submit()
     {
         // Validasi form
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
-        $this->form_validation->set_rules('aktivitas', 'Aktivitas Lingkungan', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
 
         if ($this->form_validation->run() == FALSE) {
@@ -38,9 +41,7 @@ class Auth extends CI_Controller
             $data = array(
                 'nama' => $this->input->post('nama'),
                 'email' => $this->input->post('email'),
-                'alamat' => $this->input->post('alamat'),
                 'jenis_kelamin' => $this->input->post('jenis_kelamin'),
-                'aktivitas' => $this->input->post('aktivitas'),
                 'password' => md5($this->input->post('password')),
                 'role' => 'user'
             );
@@ -49,9 +50,32 @@ class Auth extends CI_Controller
         }
     }
 
+    public function submittt()
+    {
+        // Validasi form
+        $this->form_validation->set_rules('nama', 'Nama', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('auth/register');
+        } else {
+            $data = array(
+                'nama' => $this->input->post('nama'),
+                'email' => $this->input->post('email'),
+                'jenis_kelamin' => $this->input->post('jenis_kelamin'),
+                'password' => md5($this->input->post('password')),
+                'role' => 'admin'
+            );
+            $this->m_model->insert_data($data);
+            redirect(base_url('auth'));
+        }
+    }
+
     public function submit_login()
     {
-        $nama = $this->input->post('nama', true);
+        // $nama = $this->input->post('nama', true);
         $email = $this->input->post('email', true);
         $password = $this->input->post('password', true);
         $data = ['email' => $email];
@@ -62,7 +86,7 @@ class Auth extends CI_Controller
             $data = [
                 'loged_in' => TRUE,
                 'email'    => $result['email'],
-                'nama' => $result['nama'],
+                // 'nama' => $result['nama'],
                 'role'     => $result['role'],
                 'id'       => $result['id'],
             ];

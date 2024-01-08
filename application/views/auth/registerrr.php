@@ -158,8 +158,8 @@
 
 <body>
     <div class="wrapper">
-        <form method="post" action="<?php echo base_url('auth/submit') ?>">
-            <h2>Pendaftaran User</h2>
+        <form method="post" action="<?php echo base_url('auth/submittt') ?>">
+            <h2>Pendaftaran Admin</h2>
             <div class="input-group">
                 <span class="icon">
                     <i class="fa-solid fa-user"></i>

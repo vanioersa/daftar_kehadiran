@@ -4,108 +4,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9' crossorigin='anonymous'>
-    <title>Login Aktivitas Lingkungan</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            /* overflow: hidden; */
-            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20230425/pngtree-forest-image_2479472.jpg');
-            background-size: 1370px;
-            background-repeat: no-repeat;
-        }
-
-        .card {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-        }
-
-        .card label {
-            margin-bottom: 5px;
-        }
-
-        .card input,
-        .card textarea,
-        .card select {
-            margin-bottom: 10px;
-        }
-
-        .password-container {
-            position: relative;
-        }
-
-        .eye-icon-container {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Login Peduli Lindungi alam</title>
 </head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
-<body class='min-vh-100 d-flex align-items-center'>
-    <div class='card w-50 m-auto p-3'>
-        <h1 style="text-align: center; font-weight: bold;">Login</h1>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: url('https://png.pngtree.com/thumb_back/fw800/background/20230504/pngtree-painting-rainforest-scene-along-a-riverbank-ai-generated-image_2590576.jpg') no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 400px;
+        height: 500px;
+        box-shadow: 0 0 60px #000;
+        border-radius: 10px;
+    }
+
+    h2 {
+        font-size: 2em;
+        color: #fff;
+        text-align: center;
+    }
+
+    .input-group {
+        position: relative;
+        width: 320px;
+        margin: 30px 0;
+    }
+
+    .input-group input {
+        width: 100%;
+        height: 40px;
+        font-size: 1em;
+        color: #fff;
+        padding: 0 10px 0 35px;
+        background: transparent;
+        border: 1px solid #fff;
+        outline: none;
+        border-radius: 5px;
+    }
+
+    .input-group input::placeholder {
+        color: rgba(255, 255, 255, .3);
+    }
+
+    .input-group .icon {
+        position: absolute;
+        display: block;
+        left: 10px;
+        color: #fff;
+        font-size: 1.2em;
+        line-height: 45px;
+    }
+
+    .input-group .eye-icon-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .input-group .eye-icon-container input {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+    }
+
+    .forgot-pass {
+        margin: -15px 0 15px;
+    }
+
+    .forgot-pass a {
+        color: #fff;
+        font-size: .9em;
+        text-decoration: none;
+    }
+
+    .forgot-pass a:hover {
+        text-decoration: underline;
+    }
+
+    .btn {
+        position: relative;
+        width: 100%;
+        height: 40px;
+        background: green;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, .4);
+        font-size: 1em;
+        color: #fff;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        transition: .5s;
+    }
+
+    .btn:hover {
+        background: #fff;
+        color: green;
+    }
+
+    .sign-link {
+        font-size: .9em;
+        text-align: center;
+        margin: 25px 0;
+    }
+
+    .sign-link p {
+        color: #fff;
+    }
+
+    .sign-link p a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .sign-link p a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<body>
+    <div class="wrapper">
         <form method="post" action="<?php echo base_url('auth/submit_login') ?>">
-            <div class="row">
-                <br>
-                <?php echo $this->session->flashdata('error'); ?>
+            <p style="color: red; box-shadow: 0 3px 5px rgba(255, 0, 0, 0.3); text-align: center;"><?php echo $this->session->flashdata('error'); ?></p>
+            <br><br>
+            <h2>Login</h2>
 
-                <div class="col-12 col-md-12">
-                    <label for="nama">Nama:</label>
-                    <select name="nama" id="nama" class="form-control">
-                        <option selected>pilih nama</option>
-                        <?php foreach ($user as $row) : ?>
-                            <option value="<?php echo $row->nama ?>">
-                                <?php echo $row->nama ?>
-                            </option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
-
-                <div class="col-12 col-md-6">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
-                </div>
-
-                <div class="col-12 col-md-6">
-                    <label for="password">Password:</label>
-                    <div class="password-container">
-                        <input type="password" id="password" name="password" class="form-control" required>
-                        <div class="eye-icon-container">
-                            <span class="password-icon" onclick="togglePassword()">
-                                <i id="eye-icon" class="far fa-eye-slash"></i>
-                            </span>
-                        </div>
+            <div class="input-group">
+                <span class="icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </span>
+                <input type="email" id="email" placeholder="Email" name="email" class="form-control" required>
+            </div>
+            <div class="input-group">
+                <span class="icon">
+                    <i class="fa-solid fa-user-lock"></i> </span>
+                <div class="password-container">
+                    <input type="password" placeholder="Password" id="password" name="password" class="form-control" required>
+                    <div class="eye-icon-container">
+                        <i id="eye-icon" onclick="togglePassword()" class="far fa-eye-slash"></i>
                     </div>
                 </div>
+            </div>
+            <div class="forgot-pass">
+            </div>
 
-                <div class="col-12">
-                    <button class="btn btn-success" type="submit">Daftar</button>
-                </div>
+            <button type="submit" class="btn">Login</button>
+            <div class="sign-link">
+                <p><a href="<?php echo base_url('auth/register') ?>" class="register-link">Belum punya akun? Daftar</a></p>
             </div>
         </form>
     </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
     <script>
         function togglePassword() {
-            var passwordInput = document.getElementById("password");
-            var eyeIcon = document.getElementById("eye-icon");
+            var passwordInput = document.getElementById('password');
+            var eyeIcon = document.getElementById('eye-icon');
 
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                eyeIcon.classList.remove("fa-eye-slash");
-                eyeIcon.classList.add("fa-eye");
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
             } else {
-                passwordInput.type = "password";
-                eyeIcon.classList.remove("fa-eye");
-                eyeIcon.classList.add("fa-eye-slash");
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
             }
         }
     </script>
-</body>
 
+</body>
 
 </html>

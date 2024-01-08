@@ -17,4 +17,9 @@ class User extends CI_Controller
     {
         $this->load->view('user/dashboard');
     }
+    
+    public function page_1()
+    {
+        $this->load->view('user/page_1');
+    }
 }

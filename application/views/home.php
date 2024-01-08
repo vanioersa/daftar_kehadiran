@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peduli Alam sekitar</title>
+    <title>Peduli Lindungi alam</title>
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -27,9 +27,9 @@
             </div>
             <div id="menu" class="hidden lg:block">
                 <ul class="inline-flex">
-                    <li>
+                    <!-- <li>
                         <a class="px-4 py-2 hover:text-gray-800" href="<?php echo base_url('auth/register') ?>">Register</a>
-                    </li>
+                    </li> -->
                     <li>
                         <a class="px-4 py-2 hover:text-gray-800" href="<?php echo base_url('auth') ?>">Login</a>
                     </li>
