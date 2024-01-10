@@ -9,6 +9,7 @@
 
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
+    <!-- baru -->
 </body>
 
 </html>
