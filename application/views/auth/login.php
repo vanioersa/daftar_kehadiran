@@ -18,6 +18,7 @@
     }
 
     body {
+        overflow: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -148,7 +149,7 @@
     }
 </style>
 
-<body>
+<body class="overvlow-hidden">
     <div class="wrapper">
         <form method="post" action="<?php echo base_url('auth/submit_login') ?>">
             <p style="color: red; box-shadow: 0 3px 5px rgba(255, 0, 0, 0.3); text-align: center;"><?php echo $this->session->flashdata('error'); ?></p>
@@ -161,6 +162,7 @@
                 </span>
                 <input type="email" id="email" placeholder="Email" name="email" class="form-control" required>
             </div>
+
             <div class="input-group">
                 <span class="icon">
                     <i class="fa-solid fa-user-lock"></i> </span>
@@ -171,6 +173,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="forgot-pass">
             </div>
 
@@ -182,7 +185,6 @@
     </div>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
     <script>
         function togglePassword() {
             var passwordInput = document.getElementById('password');
@@ -199,7 +201,6 @@
             }
         }
     </script>
-
 </body>
 
 </html>

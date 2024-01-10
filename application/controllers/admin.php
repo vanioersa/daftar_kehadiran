@@ -18,15 +18,22 @@ class Admin extends CI_Controller
         $this->load->view('admin/dashboard');
     }
 
-    public function page_1()
+    public function public()
     {
         $data['public'] = $this->m_model->get_data('deskripsi_public')->result();
-        $this->load->view('admin/page_1', $data);
-    }    
+        $data['total_records'] = $this->m_model->count_records('deskripsi_public');
 
-    public function tambah_card()
+        $this->load->view('admin/page_1', $data);
+    }
+
+    public function tambah_card_public()
     {
         $this->load->view('admin/tambah_card');
+    }
+
+    public function edit_card_public()
+    {
+        $this->load->view('admin/edit_card');
     }
 
     public function aksi_tambah_card()

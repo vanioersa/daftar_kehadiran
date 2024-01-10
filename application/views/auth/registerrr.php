@@ -51,15 +51,10 @@
         position: relative;
         width: 320px;
         margin: 30px 0;
-        display: flex;
-        flex-direction: column;
-        flex-direction: row;
-        align-items: center;
     }
 
     .input-group input,
     .input-group textarea {
-        flex: 1;
         width: 100%;
         height: 40px;
         font-size: 1em;
@@ -69,11 +64,9 @@
         border: 1px solid #fff;
         outline: none;
         border-radius: 5px;
-        margin-bottom: 10px;
     }
 
     .input-group select {
-        flex: 1;
         width: 100%;
         height: 40px;
         font-size: 1em;
@@ -83,7 +76,6 @@
         border: 1px solid #fff;
         outline: none;
         border-radius: 5px;
-        margin-bottom: 10px;
     }
 
     .input-group input::placeholder {
@@ -97,6 +89,20 @@
         color: #fff;
         font-size: 1.2em;
         line-height: 45px;
+    }
+
+    .input-group .eye-icon-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .input-group .eye-icon-container input {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
     }
 
     .forgot-pass {
@@ -154,6 +160,20 @@
     .sign-link p a:hover {
         text-decoration: underline;
     }
+
+    .input-group .eye-icon-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .input-group .eye-icon-container input {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+    }
 </style>
 
 <body>
@@ -187,15 +207,18 @@
 
             <div class="input-group">
                 <span class="icon">
-                    <i class="fa-solid fa-envelope"></i>
+                    <i class="fas fa-envelope"></i>
                 </span>
-                <input type="password" placeholder="Password" name="password" class="form-control" required>
+                <input type="password" placeholder="Password" id="password" name="password" class="form-control" required>
+                <div class="eye-icon-container">
+                    <i id="eye-icon" onclick="togglePassword()" class="fas fa-eye-slash"></i>
+                </div>
             </div>
 
             <div class="forgot-pass">
 
             </div>
-            
+
             <button type="submit" class="btn">Daftar</button>
             <div class="sign-link">
             </div>
@@ -203,6 +226,22 @@
     </div>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById('password');
+            var eyeIcon = document.getElementById('eye-icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
 </body>
 </body>
 

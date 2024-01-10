@@ -13,11 +13,11 @@
             background-color: #f4f4f4;
         }
 
-        .container {
+        .babu {
             max-width: 600px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: #39e382;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -32,13 +32,19 @@
             bottom: 10px;
             right: 50px;
         }
+
+        .buba {
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: x-large;
+        }
     </style>
 </head>
 
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
-    <div class="container">
-        <h1 class="mb-4">Form Data Ruang</h1>
+    <div class="babu container">
+        <h1 class="buba text-center">Form Data Ruang</h1>
 
         <form action="<?php echo base_url('admin/aksi_tambah_card') ?>" method="post" id="survey-form" class="survey-form ">
             <div class="form-group">
@@ -56,7 +62,8 @@
                 <input type="file" id="foto" name="foto" class="form-control" required>
             </div>
 
-            <button type="submit" id="submit" class="btn btn-success">Submit</button>
+            <!-- <button type="submit" class="btn btn-primary text-bg-black">submit</button> -->
+            <button type="submit" id="submit" class="btn btn-outline-dark">submit</button>
         </form>
     </div>
 

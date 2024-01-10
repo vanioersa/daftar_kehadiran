@@ -13,7 +13,7 @@
 <body class="text-gray-700 bg-white" style="font-family: 'Source Sans Pro', sans-serif">
     <nav style="background-color: #667eea" class="text-black">
         <div class="container mx-auto px-6 py-2 flex justify-between items-center">
-            <a class="flex items-center font-bold text-2xl lg:text-4xl" href="">
+            <a class="flex items-center font-bold text-2xl lg:text-2xl" href="">
                 <img src="https://png.pngtree.com/png-clipart/20230623/original/pngtree-environmental-protection-natural-environment-logo-vector-png-image_9204796.png" style="height: 60px;" alt="">
                 <p class="ml-2">Peduli Lindungi alam</p>
             </a>
@@ -27,9 +27,6 @@
             </div>
             <div id="menu" class="hidden lg:block">
                 <ul class="inline-flex">
-                    <!-- <li>
-                        <a class="px-4 py-2 hover:text-gray-800" href="<?php echo base_url('auth/register') ?>">Register</a>
-                    </li> -->
                     <li>
                         <a class="px-4 py-2 hover:text-gray-800" href="<?php echo base_url('auth') ?>">Login</a>
                     </li>
@@ -40,49 +37,29 @@
 
     <section class="container mx-auto px-6 p-10">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
-            Deskripsi
+            Deskripsi 
         </h2>
-        <div class="flex items-center flex-wrap mb-20">
-            <div class="w-full md:w-1/2">
-                <h4 class="text-3xl text-gray-800 font-bold mb-3">
-                    hutan tropis
-                </h4>
-                <p class="text-gray-600 mb-8">
-                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe ea eveniet ipsa, nesciunt consequatur facere inventore qui repellendus atque consequuntur eum dolorem nemo rem? Dicta totam iste quia velit impedit.
-                </p>
-            </div>
-            <div class="w-full md:w-1/2">
-                <img src="https://cdn.idntimes.com/content-images/community/2019/09/pexels-photo-302804-0616bfe2472d6d4dbee88cefef6f76d0_600x400.jpeg" alt="Monitoring" />
-            </div>
-        </div>
-        <div class="flex items-center flex-wrap mb-20">
-            <div class="w-full md:w-1/2">
-                <img src="https://mutucertification.com/wp-content/uploads/2023/07/Hutan-Adalah-Pengertian-Jenis-Ciri-sampai-Manfaatnya.jpg" alt="Reporting" />
-            </div>
-            <div class="w-full md:w-1/2 pl-10">
-                <h4 class="text-3xl text-gray-800 font-bold mb-3">
-                    sungai nil
-                </h4>
-                <p class="text-gray-600 mb-8">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis obcaecati ratione cum repudiandae quo voluptates provident ex unde, expedita voluptate aperiam mollitia error natus voluptatum impedit blanditiis. Nisi, nostrum delectus!
-                </p>
-            </div>
-        </div>
-        <div class="flex items-center flex-wrap mb-20">
-            <div class="w-full md:w-1/2">
-                <h4 class="text-3xl text-gray-800 font-bold mb-3">
-                    hutan hujan
-                </h4>
-                <p class="text-gray-600 mb-8">
-                   Lorem ipsum dolor sit amet consectetur, adipisicing elit. Et, voluptate! Quas eveniet rem nisi atque. Velit laudantium magni, blanditiis eaque dolorum sint aut nobis obcaecati sed reiciendis quibusdam laboriosam expedita!
-                </p>
-            </div>
-            <div class="w-full md:w-1/2">
-                <img src="https://www.opensid.id/wp-content/uploads/2023/03/lima-langkah-melestarikan-hutan-20220327125110-1024x680.jpg" alt="Syncing" />
-            </div>
+        <div class="container mt-5">
+            <?php if (!empty($public)) : ?>
+                <?php foreach ($public as $item) : ?>
+                    <div class="mb-10">
+                        <div class="card flex flex-col md:flex-row">
+                            <img src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" style="width: 500px; height: 250px;" alt="Monitoring">
+                            <div class="card-body flex-1 ml-4">
+                                <h5 style="font-weight: bold; font-size: xx-large;" class="card-title mb-4"><?php echo $item->tempat; ?></h5>
+                                <p class="card-text"><?php echo $item->deskripsi; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div class="col-12">
+                    <p>Tidak ada data yang tersedia</p>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
-
+    
     <section class="bg-blue-100">
         <div class="container mx-auto px-6 py-20">
             <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
@@ -142,3 +119,5 @@
         });
     </script>
 </body>
+
+</html>
