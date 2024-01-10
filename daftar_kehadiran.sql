@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 08, 2024 at 07:53 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.1.17
+-- Generation Time: Jan 10, 2024 at 02:42 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `daftar_kehadiran`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deskripsi_public`
+--
+
+CREATE TABLE `deskripsi_public` (
+  `id` int(11) NOT NULL,
+  `tempat` varchar(100) DEFAULT NULL,
+  `deskripsi` varchar(100) DEFAULT NULL,
+  `image` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -41,7 +54,7 @@ CREATE TABLE `pesan` (
 --
 
 CREATE TABLE `user` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL,
   `nama` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `jenis_kelamin` varchar(100) DEFAULT NULL,
@@ -54,9 +67,21 @@ CREATE TABLE `user` (
 --
 
 --
+-- Indexes for table `deskripsi_public`
+--
+ALTER TABLE `deskripsi_public`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `pesan`
 --
 ALTER TABLE `pesan`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -64,9 +89,21 @@ ALTER TABLE `pesan`
 --
 
 --
+-- AUTO_INCREMENT for table `deskripsi_public`
+--
+ALTER TABLE `deskripsi_public`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `pesan`
 --
 ALTER TABLE `pesan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

@@ -76,7 +76,7 @@ class Admin extends CI_Controller
                     $response = [
                         'status' => 'success',
                         'message' => 'Data berhasil ditambahkan.',
-                        'redirect' => base_url('admin/page_1'),
+                        'redirect' => base_url('admin/public'),
                     ];
                 } else {
                     $response = [

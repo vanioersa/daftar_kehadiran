@@ -55,4 +55,14 @@ class M_model extends CI_Model
 
         return false;
     }
+
+    public function count_records()
+    {
+        $this->db->from('deskripsi_public');
+        $recordCount = $this->db->count_all_results();
+        $maxCount = 3;
+        $limitedCount = min($recordCount, $maxCount);
+
+        return $limitedCount;
+    }
 }
