@@ -15,7 +15,8 @@ class Admin extends CI_Controller
 
     public function index()
     {
-        $this->load->view('admin/dashboard');
+        $data['batu'] = $this->m_model->get_data('user')->result();
+        $this->load->view('admin/dashboard', $data);
     }
 
     public function public()
@@ -31,9 +32,66 @@ class Admin extends CI_Controller
         $this->load->view('admin/tambah_card');
     }
 
-    public function edit_card_public()
+    public function pesan()
     {
-        $this->load->view('admin/edit_card');
+        $this->load->view('admin/pesan');
+    }
+
+    public function profile()
+    {
+        $data['user'] = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->result();
+        $this->load->view('admin/profile', $data); // Mengirimkan variabel $data ke tampilan
+    }
+
+    public function hapus_image($id)
+    {
+        // Ambil data ruangan dari database berdasarkan ID
+        $deskripsi = $this->m_model->get_deskripsi_by_id($id);
+
+        if ($deskripsi) {
+            // Dapatkan nama file gambar
+            $image_file = $deskripsi->image;
+
+            if ($image_file) {
+                // Hapus file gambar dari direktori
+                $image_path = './image/' . $image_file;
+
+                if (file_exists($image_path) && unlink($image_path)) {
+                    // Update data deskripsi di database untuk menghapus referensi gambar
+                    $data = ['image' => '']; // Atur kolom gambar menjadi kosong
+                    $this->m_model->edit_deskripsi($id, $data);
+
+                    // Kirim respons JSON untuk memberi tahu hasil penghapusan gambar
+                    $response = [
+                        'status' => 'success',
+                        'message' => 'Foto telah dihapus.',
+                        'redirect' => base_url('admin/public') // Tambahkan URL tujuan
+                    ];
+                } else {
+                    // Jika gagal menghapus gambar
+                    $response = [
+                        'status' => 'error',
+                        'message' => 'Foto tidak dapat dihapus. Silakan coba lagi.'
+                    ];
+                }
+            } else {
+                // Jika tidak ada gambar
+                $response = [
+                    'status' => 'error',
+                    'message' => 'Foto sudah dihapus.'
+                ];
+            }
+        } else {
+            // Jika data ruangan tidak ditemukan
+            $response = [
+                'status' => 'error',
+                'message' => 'Data ruangan tidak ditemukan.'
+            ];
+        }
+
+        // Kirim respons JSON ke browser
+        header('Content-Type: application/json');
+        echo json_encode($response);
     }
 
     public function aksi_tambah_card()
@@ -95,5 +153,202 @@ class Admin extends CI_Controller
 
         // Menggunakan echo json_encode untuk response AJAX
         echo json_encode($response);
+    }
+
+    public function edit_card_public($id)
+    {
+        $data['public'] = $this->m_model->get_deskripsi_by_id($id);
+        $this->load->view('admin/edit_card', $data);
+    }
+
+    public function aksi_edit_card($id)
+    {
+        $id = $id;
+
+        $tempat = $this->input->post('tempat');
+        $deskripsi = $this->input->post('deskripsi');
+        $image = $_FILES['foto']['name'];
+        $foto_temp = $_FILES['foto']['tmp_name'];
+
+        $response = [
+            'status' => 'error',
+            'message' => 'Terjadi kesalahan saat mengubah deskripsi public.',
+            'redirect' => ''
+        ];
+
+        if ($id) {
+            $current_data = $this->m_model->get_deskripsi_by_id($id);
+
+            if ($current_data) {
+                $data = [];
+
+                $data['tempat'] = $tempat;
+                $data['deskripsi'] = $deskripsi;
+
+                if ($tempat !== $current_data->tempat || $deskripsi !== $current_data->deskripsi || !empty($image)) {
+                    if (!empty($image)) {
+                        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+                        $file_extension = pathinfo($image, PATHINFO_EXTENSION);
+
+                        if (!in_array(strtolower($file_extension), $allowed_extensions)) {
+                            $response = [
+                                'status' => 'error',
+                                'message' => 'Ekstensi file tidak diizinkan. Pilih file foto dengan ekstensi: ' . implode(', ', $allowed_extensions),
+                                'redirect' => base_url('admin/edit_card_public/' . $id),
+                            ];
+                            header('Content-Type: application/json');
+                            echo json_encode($response);
+                            return;
+                        }
+
+                        $kode = round(microtime(true) * 100);
+                        $file_name = $kode . '_' . $image;
+                        $upload_path = './image/' . $file_name;
+
+                        if (move_uploaded_file($foto_temp, $upload_path)) {
+                            $old_file = $this->m_model->get_image_by_id('deskripsi_public', $id);
+                            if ($old_file && file_exists('./image/' . $old_file)) {
+                                unlink('./image/' . $old_file);
+                            }
+
+                            $data['image'] = $file_name;
+                        } else {
+                            $response = [
+                                'status' => 'error',
+                                'message' => 'Gagal mengunggah foto. Silakan coba lagi.',
+                                'redirect' => base_url('admin/edit_card_public/' . $id),
+                            ];
+                        }
+                    }
+
+                    $update_result = $this->m_model->edit_deskripsi($id, $data);
+
+                    if ($update_result) {
+                        $response = [
+                            'status' => 'success',
+                            'message' => 'Berhasil Mengubah Deskripsi Public',
+                            'redirect' => base_url('admin/public'),
+                        ];
+                    }
+                } else {
+                    // Tidak ada perubahan data
+                    $response = [
+                        'status' => 'error',
+                        'message' => 'Anda harus mengubah setidaknya satu data pada deskripsi Public.',
+                        'redirect' => base_url('admin/edit_card_public/' . $id),
+                    ];
+                }
+            }
+        }
+
+        // Kirim respons JSON
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+    public function upload_img($value)
+    {
+        $kode = round(microtime(true) * 1000);
+        $config['upload_path'] = '../../image/';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = '30000';
+        $config['file_name'] = $kode;
+
+        $this->load->library('upload', $config); // Load library 'upload' with config
+
+        if (!$this->upload->do_upload($value)) {
+            return array(false, '');
+        } else {
+            $fn = $this->upload->data();
+            $nama = $fn['file_name'];
+            return array(true, $nama);
+        }
+    }
+
+    public function aksi_ubah_profilee()
+    {
+        $image = $_FILES['foto']['name'];
+        $foto_temp = $_FILES['foto']['tmp_name'];
+        $password_baru = $this->input->post('password_baru');
+        $konfirmasi_password = $this->input->post('konfirmasi_password');
+        $email = $this->input->post('email');
+        $jenis_kelamin = $this->input->post('jenis_kelamin');
+        $nama = $this->input->post('nama');
+
+        // Jika ada foto yang diunggah
+        if ($image) {
+            $kode = round(microtime(true) * 100);
+            $file_name = $kode . '_' . $image;
+            $upload_path = './image/' . $file_name;
+
+            if (move_uploaded_file($foto_temp, $upload_path)) {
+                // Hapus image lama jika ada
+                $old_file = $this->m_model->get_foto_by_id($this->session->userdata('id'));
+                if ($old_file && file_exists('./image/' . $old_file)) {
+                    unlink('./image/' . $old_file);
+                }
+
+                $data = [
+                    'image' => $file_name,
+                    'email' => $email,
+                    'jenis_kelamin' => $jenis_kelamin,
+                    'nama' => $nama,
+                ];
+            } else {
+                // Gagal mengunggah image baru
+                redirect(base_url('admin/profile'));
+            }
+        } else {
+            // Jika tidak ada image yang diunggah
+            $data = [
+                'email' => $email,
+                'jenis_kelamin' => $jenis_kelamin,
+                'nama' => $nama,
+            ];
+        }
+
+        // Kondisi jika ada password baru
+        if (!empty($password_baru)) {
+            // Pastikan password baru dan konfirmasi password sama
+            if ($password_baru === $konfirmasi_password) {
+                // Wadah password baru
+                $data['password'] = md5($password_baru);
+            } else {
+                $this->session->set_flashdata('message', 'Password baru dan konfirmasi password harus sama');
+                redirect(base_url('admin/profile'));
+            }
+        }
+
+        // Eksekusi dengan model ubah_data
+        $update_result = $this->m_model->ubah_data('user', $data, array('id' => $this->session->userdata('id')));
+
+        if ($update_result) {
+            $this->session->set_flashdata('sukses', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+     Berhasil Merubah data
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>');
+            redirect(base_url('admin/profile'));
+        } else {
+            redirect(base_url('admin/profile'));
+        }
+    }
+
+    public function hapus_imagee()
+    {
+        $data = array(
+            'image' => NULL
+        );
+
+        $eksekusi = $this->m_model->ubah_data('user', $data, array('id' => $this->session->userdata('id')));
+        if ($eksekusi) {
+
+            $this->session->set_flashdata('sukses', '<div class="alert alert-success alert-dismissible fade show" role="alert"> Berhasil Menghapus Profile
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>');
+            redirect(base_url('admin/profile'));
+        } else {
+            $this->session->set_flashdata('error', 'gagal...');
+            redirect(base_url('admin/profile'));
+        }
     }
 }

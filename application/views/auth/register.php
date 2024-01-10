@@ -70,7 +70,7 @@
         width: 100%;
         height: 40px;
         font-size: 1em;
-        color: red;
+        color: green;
         padding: 0 10px 0 35px;
         background: transparent;
         border: 1px solid #fff;
@@ -175,6 +175,20 @@
 
             <div class="input-group">
                 <span class="icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </span>
+                <input type="number" id="nomor" placeholder="nomor" name="nomor" class="form-control" required>
+            </div>
+
+            <div class="input-group">
+                <span class="icon">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <input type="email" id="email" placeholder="Email" name="email" class="form-control" required>
+            </div>
+
+            <div class="input-group">
+                <span class="icon">
                     <i class="fas fa-restroom"></i>
                 </span>
                 <select id="jenis_kelamin" name="jenis_kelamin" class="form-control" required>
@@ -188,17 +202,12 @@
                 <span class="icon">
                     <i class="fas fa-envelope"></i>
                 </span>
-                <input type="email" id="email" placeholder="Email" name="email" class="form-control" required>
-            </div>
-
-            <div class="input-group">
-                <span class="icon">
-                    <i class="fas fa-envelope"></i>
-                </span>
                 <input type="password" placeholder="Password" id="password" name="password" class="form-control" required>
                 <div class="eye-icon-container">
                     <i id="eye-icon" onclick="togglePassword()" class="fas fa-eye-slash"></i>
                 </div>
+                <br>
+                <p style="color: red;">*Password minimal 8  karakter</p>
             </div>
 
             <div class="forgot-pass">

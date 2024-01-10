@@ -29,9 +29,9 @@ class M_model extends CI_Model
         return $data;
     }
 
-    public function ubah_data($tabel, $data, $where)
-    {
-        $data = $this->db->update($tabel, $data, $where);
+    public function ubah_data( $tabel, $data, $where )
+ {
+        $data = $this->db->update( $tabel, $data, $where );
         return $this->db->affected_rows();
     }
 
@@ -64,5 +64,44 @@ class M_model extends CI_Model
         $limitedCount = min($recordCount, $maxCount);
 
         return $limitedCount;
+    }
+
+    public function get_deskripsi_by_id($id)
+    {
+        $query = $this->db->get_where('deskripsi_public', array('id' => $id));
+        return $query->row();
+    }
+
+    public function get_image_by_id($table, $id)
+    {
+        $query = $this->db->get_where($table, array('id' => $id));
+
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            return $row->image;
+        }
+
+        return null;
+    }
+
+    public function get_foto_by_id($id)
+    {
+        $this->db->select('image');
+        $this->db->from('user');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            $result = $query->row();
+            return $result->image;
+        } else {
+            return false;
+        }
+    }
+
+    public function edit_deskripsi($id, $data)
+    {
+        $this->db->where('id', $id);
+        return $this->db->update('deskripsi_public', $data);
     }
 }

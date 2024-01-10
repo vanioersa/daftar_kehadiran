@@ -37,7 +37,7 @@
 
     <section class="container mx-auto px-6 p-10">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
-            Deskripsi 
+            Deskripsi Public
         </h2>
         <div class="container mt-5">
             <?php if (!empty($public)) : ?>
@@ -46,7 +46,7 @@
                         <div class="card flex flex-col md:flex-row">
                             <img src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" style="width: 500px; height: 250px;" alt="Monitoring">
                             <div class="card-body flex-1 ml-4">
-                                <h5 style="font-weight: bold; font-size: xx-large;" class="card-title mb-4"><?php echo $item->tempat; ?></h5>
+                                <h5 style="font-weight: bold; font-size: x-large;" class="card-title mb-4"><?php echo $item->tempat; ?></h5>
                                 <p class="card-text"><?php echo $item->deskripsi; ?></p>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
         </div>
     </section>
     
-    <section class="bg-blue-100">
+    <section class="bg-green-500">
         <div class="container mx-auto px-6 py-20">
             <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
                 Rating
@@ -100,7 +100,7 @@
         </div>
     </section>
 
-    <footer class="bg-gray-300">
+    <footer class="bg-green-100">
         <div class="container mx-auto px-6 pt-10 pb-6">
             <div class="flex flex-wrap">
                 <div class="w-full text-center">

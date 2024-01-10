@@ -31,6 +31,7 @@ class Auth extends CI_Controller
     {
         // Validasi form
         $this->form_validation->set_rules('nama', 'Nama', 'required');
+        $this->form_validation->set_rules('nomor', 'nomor', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
@@ -40,6 +41,7 @@ class Auth extends CI_Controller
         } else {
             $data = array(
                 'nama' => $this->input->post('nama'),
+                'nomor' => $this->input->post('nomor'),
                 'email' => $this->input->post('email'),
                 'jenis_kelamin' => $this->input->post('jenis_kelamin'),
                 'password' => md5($this->input->post('password')),
@@ -54,6 +56,7 @@ class Auth extends CI_Controller
     {
         // Validasi form
         $this->form_validation->set_rules('nama', 'Nama', 'required');
+        $this->form_validation->set_rules('nomor', 'nomor', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
@@ -63,6 +66,7 @@ class Auth extends CI_Controller
         } else {
             $data = array(
                 'nama' => $this->input->post('nama'),
+                'nomor' => $this->input->post('nomor'),
                 'email' => $this->input->post('email'),
                 'jenis_kelamin' => $this->input->post('jenis_kelamin'),
                 'password' => md5($this->input->post('password')),
@@ -77,6 +81,7 @@ class Auth extends CI_Controller
     {
         // $nama = $this->input->post('nama', true);
         $email = $this->input->post('email', true);
+        $nomor = $this->input->post('nomor', true);
         $password = $this->input->post('password', true);
         $data = ['email' => $email];
         $query = $this->m_model->getwhere('user', $data);
@@ -86,7 +91,7 @@ class Auth extends CI_Controller
             $data = [
                 'loged_in' => TRUE,
                 'email'    => $result['email'],
-                // 'nama' => $result['nama'],
+                'nomor' => $result['nomor'],
                 'role'     => $result['role'],
                 'id'       => $result['id'],
             ];

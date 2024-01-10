@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Data Ruang</title>
+    <title>Tambah Data Public Deskripsi</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -15,9 +15,8 @@
 
         .babu {
             max-width: 600px;
-            margin: 20px auto;
+            margin: 80px auto;
             padding: 20px;
-            background-color: #39e382;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -38,27 +37,61 @@
             font-weight: bold;
             font-size: x-large;
         }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .group-form {
+            font-size: larger;
+            font-weight: bolder;
+        }
+
+        .back-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 50px;
+        }
+
+        .buba {
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: xx-large;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .buru {
+                margin-left: 49%;
+            }
+
+            .back-btn {
+                margin-bottom: 5px;
+                margin-right: 60%;
+                width: 100px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
-    <div class="babu container">
-        <h1 class="buba text-center">Form Data Ruang</h1>
+    <div class="babu container bg-green-500">
+        <h1 class="buba text-center">Tambah Public Deskripsi</h1>
 
         <form action="<?php echo base_url('admin/aksi_tambah_card') ?>" method="post" id="survey-form" class="survey-form ">
             <div class="form-group">
-                <label for="deskripsi">Deskripsi</label>
+                <label class="group-form" for="deskripsi">Deskripsi</label>
                 <input type="text" id="deskripsi" name="deskripsi" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <label for="tempat">Lokasi</label>
+                <label class="group-form" for="tempat">Lokasi</label>
                 <input type="text" id="tempat" name="tempat" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <label for="foto">Foto</label>
+                <label class="group-form" for="foto">Foto</label>
                 <input type="file" id="foto" name="foto" class="form-control" required>
             </div>
 
@@ -67,7 +100,7 @@
         </form>
     </div>
 
-    <a href="<?php echo base_url('admin/public') ?>" class="btn btn-secondary back-btn">Kembali</a>
+    <a class="btn btn-secondary back-btn" onclick="confirmGoBack()">Kembali</a>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -77,6 +110,20 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
+        function confirmGoBack() {
+            Swal.fire({
+                text: 'Apakah Anda yakin ingin kembali?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "<?php echo base_url('admin/public') ?>";
+                }
+            });
+        }
+
         $(document).ready(function() {
             const form = document.getElementById("survey-form");
 

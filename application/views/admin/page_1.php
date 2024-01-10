@@ -20,6 +20,7 @@
         }
     }
 </style>
+
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
 
@@ -33,29 +34,29 @@
 
 
     <h1 style="text-align: center; font-size: xx-large; font-weight: bold;">Public</h1>
-        <section class="container mx-auto px-10 p-10">
-            <div class="flex flex-wrap -mx-4 mb-20 gap-32">
-                <?php if (!empty($public)) : ?>
-                    <?php foreach ($public as $item) : ?>
-                        <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 mb-8">
-                            <div class="bg-white rounded-lg overflow-hidden shadow-md bubaba">
-                                <a href="<?php echo base_url('admin/edit_card_public'); ?>">
-                                    <img class="w-full h-64 object-cover object-center" src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" alt="Monitoring">
-                                    <div class="p-6">
-                                        <h4 class="text-xl font-bold mb-2">
-                                            <?php echo $item->tempat; ?>
-                                        </h4>
-                                        <p class="text-gray-600 mb-4"><?php echo $item->deskripsi; ?></p>
-                                    </div>
-                                </a>
-                            </div>
+    <section class="container mx-auto px-10 p-10">
+        <div class="flex flex-wrap -mx-4 mb-20 gap-32">
+            <?php if (!empty($public)) : ?>
+                <?php foreach ($public as $item) : ?>
+                    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 mb-8">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-md bubaba">
+                            <a href="<?php echo base_url('admin/edit_card_public/' . $item->id); ?>">
+                                <img class="w-full h-64 object-cover object-center" src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" alt="Monitoring">
+                                <div class="p-6">
+                                    <h4 class="text-xl font-bold mb-2">
+                                        <?php echo $item->tempat; ?>
+                                    </h4>
+                                    <p class="text-gray-600 mb-4"><?php echo $item->deskripsi; ?></p>
+                                </div>
+                            </a>
                         </div>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <p class="w-full text-center">Tidak ada data yang tersedia</p>
-                <?php endif; ?>
-            </div>
-        </section>
+                    </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <p class="w-full text-center">Tidak ada data yang tersedia</p>
+            <?php endif; ?>
+        </div>
+    </section>
 </body>
 
 </html>
