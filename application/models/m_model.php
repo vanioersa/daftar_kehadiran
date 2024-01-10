@@ -29,9 +29,9 @@ class M_model extends CI_Model
         return $data;
     }
 
-    public function ubah_data( $tabel, $data, $where )
- {
-        $data = $this->db->update( $tabel, $data, $where );
+    public function ubah_data($tabel, $data, $where)
+    {
+        $data = $this->db->update($tabel, $data, $where);
         return $this->db->affected_rows();
     }
 
@@ -70,6 +70,18 @@ class M_model extends CI_Model
     {
         $query = $this->db->get_where('deskripsi_public', array('id' => $id));
         return $query->row();
+    }
+
+    public function get_user_by_id($user_id)
+    {
+        $this->db->where('id', $user_id);
+        $query = $this->db->get('user');
+
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        } else {
+            return false;
+        }
     }
 
     public function get_image_by_id($table, $id)

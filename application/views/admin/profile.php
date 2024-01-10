@@ -5,24 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>Profile</title>
 </head>
 
 <style>
-    /* Your existing styles for body, root, scroll bar, etc. */
-
-    /* Wrapper for Profile Information */
     .profile-container {
         max-width: 80%;
         margin: auto;
@@ -30,24 +18,23 @@
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-top: 50px;
-        /* Adjust as needed */
+        margin-top: 30px;
     }
 
     .profile-container img {
         display: block;
         margin: auto;
         margin-bottom: 20px;
-        border-radius: 50%;
         max-width: 100%;
-        /* Make sure the image is responsive */
     }
 
     .profile-container form {
         margin-top: 20px;
     }
 
-    /* Add more styles as needed */
+    .text-buba {
+        font-size: xx-large;
+    }
 
     @media (max-width: 768px) {
         .profile-container {
@@ -77,7 +64,7 @@
 
             <div class="row text-center">
                 <input name="id" type="hidden" value="<?php echo $row->id ?>">
-                <div class="text">
+                <div class="text-buba">
                     <b>Akun <?php echo $this->session->userdata('username'); ?></b>
                 </div>
 
@@ -92,7 +79,7 @@
                 <br> <br>
 
                 <input name="id" type="hidden" value="<?php echo $row->id; ?>">
-                <form method="post" action="<?php echo base_url('admin/aksi_ubah_profilee'); ?>" enctype="multipart/form-data">
+                <form method="post" action="<?php echo base_url('admin/aksi_ubah_profile'); ?>" enctype="multipart/form-data">
                     <div class="row">
 
                         <div class="col-md-6">
@@ -106,7 +93,7 @@
                         </div>
                         <br>
                         <div class="col-md-6">
-                            <label for="foto" class="form-label">Foto</label>
+                            <label for="foto" class="form-label fs-5"><b>Foto</b></label>
                             <input type="file" class="form-control" id="foto" name="foto">
                         </div>
 
@@ -120,19 +107,26 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="password_lama" class="form-label"><b>Password Lama</b></label>
-                            <div class="input-group mb-3"><input type="password" class="form-control" id="password_lama" name="password_lama">
+                            <label for="password_lama" class="form-label fs-5"><b>Nomor</b></label>
+                            <input type="number" class="form-control" id="nomor" name="nomor" value="<?php echo $row->nomor; ?>">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="password_lama" class="form-label fs-5"><b>Password Lama</b></label>
+                            <div class="input-group mb-3">
+                                <input type="password" class="form-control" id="password_lama" name="password_lama" value="<?php echo $row->password; ?>">
                                 <button class="btn btn-outline-secondary" type="button" id="togglePasswordlama" onclick="togglePassword('password_lama', 'togglePasswordLama')"><i class="fas fa-eye-slash"></i></button>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <label for="password_baru" class="form-label"><b>Password Baru</b></label>
+                            <label for="password_baru" class="form-label fs-5"><b>Password Baru</b></label>
                             <div class="input-group mb-3">
                                 <input type="password" class="form-control" id="password_baru" name="password_baru">
                                 <button class="btn btn-outline-secondary" type="button" id="togglePasswordBaru" onclick="togglePassword('password_baru', 'togglePasswordBaru')"><i class="fas fa-eye-slash"></i></button>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <label for="konfirmasi_password" class="form-label"><b>Konfirmasi Password</b></label>
                             <div class="input-group mb-3">
@@ -140,14 +134,12 @@
                                 <button class="btn btn-outline-secondary" type="button" id="toggleKonfirmasiPassword" onclick="togglePassword('konfirmasi_password', 'toggleKonfirmasiPassword')"><i class="fas fa-eye-slash"></i></button>
                             </div>
                         </div>
+
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-success" name="submit">Ubah</button>
+                            <button type="submit" class="btn btn-success pl-10 pr-10" name="submit">Ubah</button>
+                            <button type="button" class="btn btn-danger pl-5 pr-5 ml-20" onclick="navigateTo('<?php echo base_url('admin/hapus_imagee'); ?>')">Hapus Foto</button>
                         </div>
                     </div>
-                </form>
-
-                <form method="post" action="<?php echo base_url('admin/hapus_imagee'); ?>" enctype="multipart/form-data">
-                    <button type="submit" class="btn btn-danger" onclick="navigateTo('<?php echo base_url('admin/hapus_image'); ?>')">Hapus Foto</button>
                 </form>
             </div>
         </div>
@@ -173,7 +165,6 @@
             }
         }
 
-        // Attach the SweetAlert confirmation to the "Logout" button
         document.getElementById('logout-button').addEventListener('click', function(e) {
             e.preventDefault();
             showLogoutConfirmation();

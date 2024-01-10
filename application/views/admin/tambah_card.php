@@ -95,7 +95,6 @@
                 <input type="file" id="foto" name="foto" class="form-control" required>
             </div>
 
-            <!-- <button type="submit" class="btn btn-primary text-bg-black">submit</button> -->
             <button type="submit" id="submit" class="btn btn-outline-dark">submit</button>
         </form>
     </div>

@@ -14,7 +14,7 @@
 
         .babu {
             max-width: 600px;
-            margin: 80px auto;
+            margin: 50px auto 20px;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -33,7 +33,6 @@
 
         .back-btn {
             position: absolute;
-            bottom: 10px;
             right: 50px;
         }
 
@@ -44,18 +43,12 @@
         }
 
         .buru {
-            margin-left: 86%;
+            left: auto;
         }
 
         @media only screen and (max-width: 767px) {
             .buru {
                 margin-left: 49%;
-            }
-
-            .back-btn {
-                margin-bottom: 5px;
-                margin-right: 60%;
-                width: 100px;
             }
         }
     </style>
