@@ -165,6 +165,13 @@
 
             <div class="input-group">
                 <span class="icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </span>
+                <input type="email" id="email" placeholder="Email" name="email" class="form-control" required>
+            </div>
+
+            <div class="input-group">
+                <span class="icon">
                     <i class="fa-solid fa-user-lock"></i> </span>
                 <div class="password-container">
                     <input type="password" placeholder="Password" id="password" name="password" class="form-control" required>

@@ -77,10 +77,11 @@ class Auth extends CI_Controller
 
     public function submit_login()
     {
-        // $email = $this->input->post('email', true);
+        $email = $this->input->post('email', true);
         $nomor = $this->input->post('nomor', true);
         $password = $this->input->post('password', true);
         
+        $data = ['email' => $email];
         $data = ['nomor' => $nomor];
         $query = $this->m_model->getwhere('user', $data);
         $result = $query->row_array();
@@ -88,7 +89,7 @@ class Auth extends CI_Controller
         if (!empty($result) && md5($password) === $result['password']) {
             $data = [
                 'loged_in' => TRUE,
-                // 'email'    => $result['email'],
+                'email'    => $result['email'],
                 'nomor' => $result['nomor'],
                 'role'     => $result['role'],
                 'id'       => $result['id'],
