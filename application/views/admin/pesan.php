@@ -30,7 +30,7 @@
                 <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
                     <select id="penerima" name="penerima[]" class="border rounded-md px-3 py-2 mb-4 md:mb-0" <?php echo count($user_names) > 5 ? 'multiple size="5"' : ''; ?>>
                         <?php foreach ($user_names as $user) : ?>
-                            <option value="<?= $user->nama; ?>"><?= $user->nama; ?></option>
+                            <option value="<?= $user->id; ?>"><?= $user->nama; ?></option>
                         <?php endforeach; ?>
                     </select>
                     <button type="button" onclick="kirimPesan()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Kirim Pesan</button>
@@ -44,11 +44,11 @@
             <div class="w-full overflow-x-auto">
                 <table class="w-full text-left border border-collapse hover:text-white border-blue-500">
                     <thead>
-                        <tr class="text-xs font-semibold tracking-wide text-white bg-blue-500 dark:bg-gray-700">
+                        <tr class="text-xs text-center font-semibold tracking-wide text-white bg-blue-500 dark:bg-gray-700">
                             <th class="px-6 py-3">Pengirim</th>
-                            <th class="px-6 py-3">Nomor</th>
-                            <th class="px-6 py-3">Email</th>
+                            <th class="px-6 py-3">Nomor Pengirim</th>
                             <th class="px-6 py-3">Di Terima</th>
+                            <th class="px-6 py-3">Nomor Penerima</th>
                             <th class="px-6 py-3">Pesan</th>
                             <th class="px-6 py-3">Tanggal</th>
                         </tr>
@@ -58,18 +58,27 @@
                             <tr class="hover:bg-green-500 hover:text-white text-gray-700 dark:text-gray-400">
                                 <td class="px-2 py-4">
                                     <div class="flex items-center">
-                                        <?php if (!empty($row->id_user)) : ?>
-                                            <img src="<?php echo base_url('./image/' . tampil_image_byid($row->id_user)) ?>" class="object-cover w-8 h-8 rounded-full mr-2" alt="Profile Picture" loading="lazy">
+                                        <?php if (!empty($row->id_pengirim)) : ?>
+                                            <img src="<?php echo base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="object-cover w-8 h-8 rounded-full mr-2" alt="Profile Picture" loading="lazy">
                                         <?php else : ?>
                                             <img src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" class="object-cover w-8 h-8 rounded-full mr-2" alt="Default Profile Picture" loading="lazy" />
                                         <?php endif; ?>
-                                        <p class="font-semibold text-gray-800 dark:text-gray-300"><?php echo tampil_nama_byid($row->id_user) ?></p>
+                                        <p class="font-semibold text-gray-800 dark:text-gray-300"><?php echo tampil_nama_byid($row->id_pengirim) ?></p>
                                     </div>
                                 </td>
-                                <td class="px-4 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo tampil_nomor_byid($row->id_user); ?></td>
-                                <td class="px-4 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo tampil_email_byid($row->id_user); ?></td>
-                                <td class="px-4 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo $row->penerima; ?></td>
-                                <td class="px-10 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo $row->pesan; ?></td>
+                                <td class="px-4 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo tampil_nomor_byid($row->id_pengirim); ?></td>
+                                <td class="px-4 py-4 text-center text-gray-800 dark:text-gray-300">
+                                    <div class="flex items-center">
+                                        <?php if (!empty($row->id_penerima)) : ?>
+                                            <img src="<?php echo base_url('./image/' . tampil_image_byid($row->id_penerima)) ?>" class="object-cover w-8 h-8 rounded-full mr-2" alt="Profile Picture" loading="lazy">
+                                        <?php else : ?>
+                                            <img src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" class="object-cover w-8 h-8 rounded-full mr-2" alt="Default Profile Picture" loading="lazy" />
+                                        <?php endif; ?>
+                                        <p class="font-semibold text-gray-800 dark:text-gray-300"><?php echo tampil_nama_byid($row->id_penerima) ?></p>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo tampil_nomor_byid($row->id_penerima); ?></td>
+                                <td class="px-6 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo $row->pesan; ?></td>
                                 <td class="px-6 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo $row->tanggal; ?></td>
                             </tr>
                         <?php endforeach; ?>

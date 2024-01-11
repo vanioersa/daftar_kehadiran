@@ -81,12 +81,12 @@ class M_model extends CI_Model
         foreach ($penerima_array as $penerima) {
             $data = array(
                 'pesan'    => $pesan,
-                'id_user' => $pengirim,
-                'penerima' => $penerima,
-                'tanggal'  => date('Y-m-d H:i')
+                'id_pengirim' => $pengirim,
+                'id_penerima' => $penerima,
+                'tanggal'  => date('Y-m-d H.i'),
+                'jam'  => date('H.i')
             );
 
-            // Ensure $penerima is a string before inserting
             if (is_array($penerima)) {
                 $penerima = implode(', ', $penerima);
             }

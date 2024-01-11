@@ -324,8 +324,8 @@ class Admin extends CI_Controller
         $offset = ($page - 1) * $data['per_page'];
 
         $data['pesan'] = $this->m_model->get_dataa('pesan', $data['per_page'], $offset)->result();
-        $currentUserId = $this->session->userdata('id');
-        $data['user_names'] = $this->m_model->get_data_except_current_user('user', $currentUserId)->result();
+        $user_data = $this->session->userdata('id');
+        $data['user_names'] = $this->m_model->get_data_except_current_user('user', $user_data)->result();
 
         // Load pagination library
         $this->load->library('pagination');
