@@ -29,7 +29,6 @@ class Auth extends CI_Controller
 
     public function submit()
     {
-        // Validasi form
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('nomor', 'nomor', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
@@ -54,7 +53,6 @@ class Auth extends CI_Controller
 
     public function submittt()
     {
-        // Validasi form
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('nomor', 'nomor', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
@@ -79,18 +77,18 @@ class Auth extends CI_Controller
 
     public function submit_login()
     {
-        // $nama = $this->input->post('nama', true);
-        $email = $this->input->post('email', true);
+        // $email = $this->input->post('email', true);
         $nomor = $this->input->post('nomor', true);
         $password = $this->input->post('password', true);
-        $data = ['email' => $email];
+        
+        $data = ['nomor' => $nomor];
         $query = $this->m_model->getwhere('user', $data);
         $result = $query->row_array();
 
         if (!empty($result) && md5($password) === $result['password']) {
             $data = [
                 'loged_in' => TRUE,
-                'email'    => $result['email'],
+                // 'email'    => $result['email'],
                 'nomor' => $result['nomor'],
                 'role'     => $result['role'],
                 'id'       => $result['id'],

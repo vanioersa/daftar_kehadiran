@@ -160,7 +160,7 @@
                 <span class="icon">
                     <i class="fa-solid fa-envelope"></i>
                 </span>
-                <input type="email" id="email" placeholder="Email" name="email" class="form-control" required>
+                <input type="number" id="nomor" placeholder="Nomor" name="nomor" class="form-control" required>
             </div>
 
             <div class="input-group">
