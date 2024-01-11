@@ -6,142 +6,128 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Profile</title>
+    <style>
+        body {
+            background-color: #f7fafc;
+        }
+
+        .bubaba {
+            margin-left: 43%;
+        }
+
+        .buru {
+            margin-left: 30px;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .bubaba {
+                margin-left: 30%;
+            }
+
+            .buru {
+                margin-left: 0;
+            }
+        }
+    </style>
 </head>
 
-<style>
-    .profile-container {
-        max-width: 80%;
-        margin: auto;
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-top: 30px;
-    }
+<body class="min-h-screen">
 
-    .profile-container img {
-        display: block;
-        margin: auto;
-        margin-bottom: 20px;
-        max-width: 100%;
-    }
-
-    .profile-container form {
-        margin-top: 20px;
-    }
-
-    .text-buba {
-        font-size: xx-large;
-    }
-
-    @media (max-width: 768px) {
-        .profile-container {
-            max-width: 90%;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .profile-container {
-            max-width: 95%;
-        }
-    }
-</style>
-
-<body>
     <?php $this->load->view('sidebar_admin'); ?>
-    <?php $no = 0;
-    foreach ($user as $row) : $no++; ?>
-        <div class="profile-container">
-            <div>
-                <?php echo $this->session->flashdata('message'); ?>
-            </div>
 
-            <div>
-                <?php echo $this->session->flashdata('sukses'); ?>
-            </div>
+    <?php foreach ($user as $row) : ?>
 
-            <div class="row text-center">
-                <input name="id" type="hidden" value="<?php echo $row->id ?>">
-                <div class="text-buba">
-                    <b>Akun <?php echo $this->session->userdata('username'); ?></b>
+        <div style="border-radius: 20px;" class="container mx-auto p-5 my-10 bg-green-500 rounded-sm sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-full">
+            <input name="id" type="hidden" value="<?php echo $row->id ?>">
+
+            <p style="font-size: xx-large;" class="font-bold text-xl mb-4 text-center">Akun <?php echo $this->session->userdata('username'); ?></p>
+
+            <?php if (!empty($row->image)) : ?>
+                <img src="<?php echo base_url('./image/' . $row->image) ?>" class="mx-auto" height="150" width="250" alt="Profile Image">
+            <?php else : ?>
+                <img src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" class="mx-auto" height="150" width="150" alt="Default Profile Image" />
+            <?php endif; ?>
+
+            <br>
+            <h1><?php echo $this->session->flashdata('message'); ?></h1>
+            <h1><?php echo $this->session->flashdata('sukses'); ?></h1>
+            <br>
+
+            <form method="post" action="<?php echo base_url('admin/aksi_ubah_profile'); ?>" enctype="multipart/form-data">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="nama" class="block text-sm font-medium text-gray-600">Nama</label>
+                        <input type="text" id="nama" name="nama" class="mt-1 p-2 w-full bg-green-100 border rounded-md" value="<?php echo $row->nama; ?>">
+                    </div>
+
+                    <div>
+                        <label for="nomor" class="block text-sm font-medium text-gray-600">Nomor</label>
+                        <input type="number" class="mt-1 p-2 w-full bg-green-100 border rounded-md" id="nomor" name="nomor" value="<?php echo $row->nomor; ?>">
+                    </div>
                 </div>
 
-                <span class="border border-0 btn btn-link d-block mx-auto">
-                    <?php if (!empty($row->image)) : ?>
-                        <img src="<?php echo base_url('./image/' . $row->image) ?>" height="250" width="250">
-                    <?php else : ?>
-                        <img class="rounded-circle " height="150" width="150" src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" />
-                    <?php endif; ?>
-                </span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-600">Email</label>
+                        <input type="text" id="email" name="email" class="mt-1 p-2 w-full bg-green-100 border rounded-md" value="<?php echo $row->email; ?>">
+                    </div>
 
-                <br> <br>
+                    <div class="mb-4">
+                        <label for="foto" class="block text-sm font-medium text-gray-600">Foto</label>
+                        <input type="file" id="foto" name="foto" class="mt-1 p-2 w-full bg-green-100 border rounded-md">
+                    </div>
+                </div>
 
-                <input name="id" type="hidden" value="<?php echo $row->id; ?>">
-                <form method="post" action="<?php echo base_url('admin/aksi_ubah_profile'); ?>" enctype="multipart/form-data">
-                    <div class="row">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="jenis_kelamin" class="block text-sm font-medium text-gray-600">Jenis Kelamin</label>
+                        <select id="jenis_kelamin" name="jenis_kelamin" class="mt-1 p-2 w-full bg-green-100 border rounded-md" required>
+                            <option value="<?php echo $row->jenis_kelamin; ?>"><?php echo $row->jenis_kelamin; ?></option>
+                            <option value="laki-laki">Laki-laki</option>
+                            <option value="perempuan">Perempuan</option>
+                        </select>
+                    </div>
 
-                        <div class="col-md-6">
-                            <label for="" class="form-label fs-5"><b>Nama</b></label>
-                            <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $row->nama; ?>">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="" class="form-label fs-5"><b>Email</b></label>
-                            <input type="text" class="form-control" id="email" name="email" value="<?php echo $row->email; ?>">
-                        </div>
-                        <br>
-                        <div class="col-md-6">
-                            <label for="foto" class="form-label fs-5"><b>Foto</b></label>
-                            <input type="file" class="form-control" id="foto" name="foto">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="" class="form-label fs-5"><b>Jenis Kelamin</b></label>
-                            <select id="jenis_kelamin" name="jenis_kelamin" class="form-control" required>
-                                <option value="<?php echo $row->jenis_kelamin; ?>"><?php echo $row->jenis_kelamin; ?></option>
-                                <option value="laki-laki">Laki-laki</option>
-                                <option value="perempuan">Perempuan</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="password_lama" class="form-label fs-5"><b>Nomor</b></label>
-                            <input type="number" class="form-control" id="nomor" name="nomor" value="<?php echo $row->nomor; ?>">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="password_lama" class="form-label fs-5"><b>Password Lama</b></label>
-                            <div class="input-group mb-3">
-                                <input type="password" class="form-control" id="password_lama" name="password_lama" value="<?php echo $row->password; ?>">
-                                <button class="btn btn-outline-secondary" type="button" id="togglePasswordlama" onclick="togglePassword('password_lama', 'togglePasswordLama')"><i class="fas fa-eye-slash"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="password_baru" class="form-label fs-5"><b>Password Baru</b></label>
-                            <div class="input-group mb-3">
-                                <input type="password" class="form-control" id="password_baru" name="password_baru">
-                                <button class="btn btn-outline-secondary" type="button" id="togglePasswordBaru" onclick="togglePassword('password_baru', 'togglePasswordBaru')"><i class="fas fa-eye-slash"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="konfirmasi_password" class="form-label"><b>Konfirmasi Password</b></label>
-                            <div class="input-group mb-3">
-                                <input type="password" class="form-control" id="konfirmasi_password" name="konfirmasi_password">
-                                <button class="btn btn-outline-secondary" type="button" id="toggleKonfirmasiPassword" onclick="togglePassword('konfirmasi_password', 'toggleKonfirmasiPassword')"><i class="fas fa-eye-slash"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-success pl-10 pr-10" name="submit">Ubah</button>
-                            <button type="button" class="btn btn-danger pl-5 pr-5 ml-20" onclick="navigateTo('<?php echo base_url('admin/hapus_imagee'); ?>')">Hapus Foto</button>
+                    <div class="mb-4 relative">
+                        <label for="password_lama" class="block text-sm font-medium text-gray-600">Password Lama</label>
+                        <div class="relative">
+                            <input type="password" class="mt-1 p-2 w-full bg-green-100 border rounded-md" id="password_lama" name="password_lama">
+                            <button class="btn btn-outline-secondary absolute top-1/2 transform -translate-y-1/2 right-2" type="button" id="togglePasswordLama" onclick="togglePassword('password_lama', 'togglePasswordLama')">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div class="mb-4 relative">
+                        <label for="password_baru" class="block text-sm font-medium text-gray-600">Password Baru</label>
+                        <div class="relative">
+                            <input type="password" class="mt-1 p-2 w-full bg-green-100 border rounded-md" id="password_baru" name="password_baru">
+                            <button class="btn btn-outline-secondary absolute top-1/2 transform -translate-y-1/2 right-2" type="button" id="togglePasswordBaru" onclick="togglePassword('password_baru', 'togglePasswordBaru')">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 relative">
+                        <label for="konfirmasi_password" class="block text-sm font-medium text-gray-600">Konfirmasi Password</label>
+                        <div class="relative">
+                            <input type="password" class="mt-1 p-2 w-full bg-green-100 border rounded-md" id="konfirmasi_password" name="konfirmasi_password">
+                            <button class="btn btn-outline-secondary absolute top-1/2 transform -translate-y-1/2 right-2" type="button" id="toggleKonfirmasiPassword" onclick="togglePassword('konfirmasi_password', 'toggleKonfirmasiPassword')">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bubaba">
+                    <button type="submit" class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full mr-2" name="submit">Ubah</button>
+                    <button type="button" class="buru bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onclick="navigateTo('<?php echo base_url('admin/hapus_imagee'); ?>')">Hapus Foto</button>
+                </div>
+            </form>
         </div>
     <?php endforeach; ?>
 
@@ -152,24 +138,20 @@
             window.location.href = url;
         }
 
-        function togglePassword(inputId, buttonId) {
-            const inputElement = document.getElementById(inputId);
-            const buttonElement = document.getElementById(buttonId);
+        function togglePassword(inputId, toggleId) {
+            var passwordInput = document.getElementById(inputId);
+            var toggleButton = document.getElementById(toggleId);
 
-            if (inputElement.type === "password") {
-                inputElement.type = "text";
-                buttonElement.innerHTML = '<i class="fas fa-eye"></i>';
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.innerHTML = '<i class="fas fa-eye"></i>'; // Change to eye icon
             } else {
-                inputElement.type = "password";
-                buttonElement.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                passwordInput.type = "password";
+                toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>'; // Change to eye-slash icon
             }
         }
-
-        document.getElementById('logout-button').addEventListener('click', function(e) {
-            e.preventDefault();
-            showLogoutConfirmation();
-        });
     </script>
+
 </body>
 
 </html>

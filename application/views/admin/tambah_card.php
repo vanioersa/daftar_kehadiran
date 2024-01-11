@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Data Public Deskripsi</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         .babu {
@@ -20,44 +23,58 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .back-btn {
-            position: absolute;
-            bottom: 10px;
-            right: 50px;
+            background-color: #fff;
         }
 
         .buba {
             margin-bottom: 10px;
             font-weight: bold;
-            font-size: x-large;
+            font-size: 2rem;
+            text-align: center;
         }
 
         .form-group {
             margin-bottom: 20px;
-            width: 100%;
         }
 
         .group-form {
-            font-size: larger;
-            font-weight: bolder;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
         }
 
         .back-btn {
             position: absolute;
             bottom: 10px;
             right: 50px;
-        }
-
-        .buba {
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: xx-large;
+            padding: 10px 15px;
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
         }
 
         @media only screen and (max-width: 767px) {
@@ -68,7 +85,7 @@
             .back-btn {
                 margin-bottom: 5px;
                 margin-right: 60%;
-                width: 100px;
+                width: 80px;
             }
         }
     </style>

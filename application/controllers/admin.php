@@ -15,26 +15,19 @@ class Admin extends CI_Controller
 
     public function index()
     {
-        $data['batu'] = $this->m_model->get_data('user')->result();
+        $data['user'] = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->result();
         $this->load->view('admin/dashboard', $data);
     }
 
     public function public()
     {
         $data['public'] = $this->m_model->get_data('deskripsi_public')->result();
-        $data['total_records'] = $this->m_model->count_records('deskripsi_public');
-
         $this->load->view('admin/page_1', $data);
     }
 
     public function tambah_card_public()
     {
         $this->load->view('admin/tambah_card');
-    }
-
-    public function pesan()
-    {
-        $this->load->view('admin/pesan');
     }
 
     public function hapus_image($id)
@@ -216,25 +209,6 @@ class Admin extends CI_Controller
         echo json_encode($response);
     }
 
-    public function upload_img($value)
-    {
-        $kode = round(microtime(true) * 1000);
-        $config['upload_path'] = '../../image/';
-        $config['allowed_types'] = 'jpg|png|jpeg';
-        $config['max_size'] = '30000';
-        $config['file_name'] = $kode;
-
-        $this->load->library('upload', $config);
-
-        if (!$this->upload->do_upload($value)) {
-            return array(false, '');
-        } else {
-            $fn = $this->upload->data();
-            $nama = $fn['file_name'];
-            return array(true, $nama);
-        }
-    }
-
     public function profile()
     {
         $data['user'] = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->result();
@@ -254,17 +228,35 @@ class Admin extends CI_Controller
 
         $current_user = $this->m_model->get_user_by_id($this->session->userdata('id'));
 
-        if (!$current_user || md5($old_password) !== $current_user->password) {
-            $this->session->set_flashdata('message', 'Password lama tidak sesuai');
-            redirect(base_url('admin/profile'));
+        // Check if updating the password
+        if (!empty($password_baru)) {
+            // Verify old password
+            if (!$current_user || md5($old_password) !== $current_user->password) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Password lama tidak sesuai
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>Password lama tidak sesuai');
+                redirect(base_url('admin/profile'));
+            }
+
+            // Check if the new password matches the confirmation
+            if ($password_baru !== $konfirmasi_password) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Password baru dan konfirmasi password harus sama
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>');
+                redirect(base_url('admin/profile'));
+            }
+
+            $data['password'] = md5($password_baru);
         }
 
-        $data = [
-            'email' => $email,
-            'jenis_kelamin' => $jenis_kelamin,
-            'nama' => $nama,
-        ];
+        // Update other profile information
+        $data['email'] = $email;
+        $data['jenis_kelamin'] = $jenis_kelamin;
+        $data['nama'] = $nama;
 
+        // Update profile image if provided
         if ($image) {
             $kode = round(microtime(true) * 100);
             $file_name = $kode . '_' . $image;
@@ -277,19 +269,15 @@ class Admin extends CI_Controller
                 }
                 $data['image'] = $file_name;
             } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Gagal mengunggah foto
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>');
                 redirect(base_url('admin/profile'));
             }
         }
 
-        if (!empty($password_baru)) {
-            if ($password_baru === $konfirmasi_password) {
-                $data['password'] = md5($password_baru);
-            } else {
-                $this->session->set_flashdata('message', 'Password baru dan konfirmasi password harus sama');
-                redirect(base_url('admin/profile'));
-            }
-        }
-
+        // Update user data
         $update_result = $this->m_model->ubah_data('user', $data, array('id' => $this->session->userdata('id')));
 
         if ($update_result) {
@@ -299,10 +287,10 @@ class Admin extends CI_Controller
         </div>');
             redirect(base_url('admin/profile'));
         } else {
+            $this->session->set_flashdata('message', 'Gagal merubah data');
             redirect(base_url('admin/profile'));
         }
     }
-
 
     public function hapus_imagee()
     {
@@ -321,11 +309,33 @@ class Admin extends CI_Controller
         if ($eksekusi) {
             $this->session->set_flashdata('sukses', '<div class="alert alert-success alert-dismissible fade show" role="alert">Berhasil Menghapus Profile
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>');
+            </div>');
             redirect(base_url('admin/profile'));
         } else {
             $this->session->set_flashdata('error', 'Gagal...');
             redirect(base_url('admin/profile'));
         }
+    }
+
+    public function pesan()
+    {
+        $data['pesan'] = $this->m_model->get_data('pesan')->result();
+        $currentUserId = $this->session->userdata('id');
+        $data['user_names'] = $this->m_model->get_data_except_current_user('user', $currentUserId)->result();
+        $this->load->view('admin/pesan', $data);
+    }
+
+    public function simpan_pesan()
+    {
+        $pesan = $this->input->post('pesan');
+        $penerima = $this->input->post('penerima'); // Add this line to get the selected user ID
+        $user_data = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->row();
+        $pengirim = $user_data->nama;
+
+        if (!empty($pesan)) {
+            $this->m_model->simpan_pesan($pesan, $pengirim, $penerima);
+        }
+
+        redirect(base_url('admin/pesan'));
     }
 }

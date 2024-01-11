@@ -6,6 +6,12 @@ class M_model extends CI_Model
         return $this->db->get($table);
     }
 
+    public function get_data_except_current_user($table, $currentUserId)
+    {
+        $this->db->where('id !=', $currentUserId);
+        return $this->db->get($table);
+    }
+
     public function getwhere($table, $data)
     {
         return $this->db->get_where($table, $data);
@@ -56,15 +62,27 @@ class M_model extends CI_Model
         return false;
     }
 
-    public function count_records()
+    public function simpan_pesan($pesan, $pengirim, $penerima_array)
     {
-        $this->db->from('deskripsi_public');
-        $recordCount = $this->db->count_all_results();
-        $maxCount = 3;
-        $limitedCount = min($recordCount, $maxCount);
+        foreach ($penerima_array as $penerima) {
+            $data = array(
+                'pesan'    => $pesan,
+                'pengirim' => $pengirim,
+                'penerima' => $penerima,
+                'tanggal'  => date('Y-m-d H:i')
+            );
 
-        return $limitedCount;
+            // Ensure $penerima is a string before inserting
+            if (is_array($penerima)) {
+                $penerima = implode(', ', $penerima);
+            }
+
+            $this->db->insert('pesan', $data);
+        }
+
+        return true;
     }
+
 
     public function get_deskripsi_by_id($id)
     {

@@ -30,7 +30,7 @@
     }
 </style>
 
-<body class="text-gray-700 bg-white" style="font-family: 'Source Sans Pro', sans-serif">
+<body style="font-family: 'Source Sans Pro', sans-serif">
     <nav class="text-black">
         <div class="container mx-auto px-6 py-2 flex flex-col lg:flex-row justify-between items-center">
             <a href="<?php echo base_url('admin/profile') ?>">
