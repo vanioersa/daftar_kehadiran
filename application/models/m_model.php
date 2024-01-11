@@ -6,6 +6,20 @@ class M_model extends CI_Model
         return $this->db->get($table);
     }
 
+    public function get_dataa($table, $limit = 0, $offset = 0)
+    {
+        if ($limit > 0) {
+            $this->db->limit($limit, $offset);
+        }
+
+        return $this->db->get($table);
+    }
+
+    public function count_rows($table)
+    {
+        return $this->db->count_all($table);
+    }
+
     public function get_data_except_current_user($table, $currentUserId)
     {
         $this->db->where('id !=', $currentUserId);
@@ -67,7 +81,7 @@ class M_model extends CI_Model
         foreach ($penerima_array as $penerima) {
             $data = array(
                 'pesan'    => $pesan,
-                'pengirim' => $pengirim,
+                'id_user' => $pengirim,
                 'penerima' => $penerima,
                 'tanggal'  => date('Y-m-d H:i')
             );

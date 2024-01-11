@@ -8,6 +8,7 @@ class Admin extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('m_model');
+        $this->load->helper('my_helper');
         if ($this->session->userdata('loged_in') != true || $this->session->userdata('role') != 'admin') {
             redirect(base_url() . 'auth');
         }
@@ -317,20 +318,54 @@ class Admin extends CI_Controller
         }
     }
 
-    public function pesan()
+    public function pesan($page = 1)
     {
-        $data['pesan'] = $this->m_model->get_data('pesan')->result();
+        $data['per_page'] = 5; // Number of records per page
+        $offset = ($page - 1) * $data['per_page'];
+
+        $data['pesan'] = $this->m_model->get_dataa('pesan', $data['per_page'], $offset)->result();
         $currentUserId = $this->session->userdata('id');
         $data['user_names'] = $this->m_model->get_data_except_current_user('user', $currentUserId)->result();
+
+        // Load pagination library
+        $this->load->library('pagination');
+
+        // Configuration for pagination
+        $config['base_url'] = base_url('admin/pesan');
+        $config['total_rows'] = $this->m_model->count_rows('pesan');
+        $config['per_page'] = $data['per_page'];
+        $config['use_page_numbers'] = TRUE;
+        $config['uri_segment'] = 3; // The segment in the URL containing the page number
+        $config['full_tag_open'] = '<div class="pagination">';
+        $config['full_tag_close'] = '</div>';
+        $config['num_tag_open'] = '<span class="page-numbers">';
+        $config['num_tag_close'] = '</span>';
+        $config['cur_tag_open'] = '<span class="current">';
+        $config['cur_tag_close'] = '</span>';
+
+        $this->pagination->initialize($config);
+
+        $data['pagination'] = $this->pagination->create_links();
+
+        // Custom CSS styles for pagination
+        echo '<style>';
+        echo '.pagination { display: flex; justify-content: center; margin-top: 20px; }';
+        echo '.pagination a, .pagination span.page-numbers, .pagination span.current { color: #fff; padding: 10px 15px; margin: 0 5px; text-decoration: none; border-radius: 5px; }';
+        echo '.pagination a:hover { background-color: #007bff; }';
+        echo '.pagination span.page-numbers { background-color: #32d11d; }';
+        echo '.pagination span.current { background-color: green; }';
+        echo '</style>';
+
+        // Load the view with data
         $this->load->view('admin/pesan', $data);
     }
 
     public function simpan_pesan()
     {
         $pesan = $this->input->post('pesan');
-        $penerima = $this->input->post('penerima'); // Add this line to get the selected user ID
+        $penerima = $this->input->post('penerima');
         $user_data = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->row();
-        $pengirim = $user_data->nama;
+        $pengirim = $user_data->id;
 
         if (!empty($pesan)) {
             $this->m_model->simpan_pesan($pesan, $pengirim, $penerima);

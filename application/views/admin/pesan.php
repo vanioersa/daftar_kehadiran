@@ -39,44 +39,45 @@
         </form>
     </div>
     <br><br>
-    <div class="mt-4 mx-4 m-20">
-        <div class="w-full rounded-lg shadow-xs">
+    <div class="mt-4 mx-4">
+        <div class="w-full rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-800">
             <div class="w-full overflow-x-auto">
-                <table class="w-full">
+                <table class="w-full text-left border border-collapse hover:text-white border-blue-500">
                     <thead>
-                        <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                            <th class="px-4 py-3">Pengirim</th>
-                            <th class="px-4 py-3">Di Terima</th>
-                            <th class="px-4 py-3">Pesan</th>
-                            <th class="px-4 py-3">Tanggal</th>
+                        <tr class="text-xs font-semibold tracking-wide text-white bg-blue-500 dark:bg-gray-700">
+                            <th class="px-6 py-3">Pengirim</th>
+                            <th class="px-6 py-3">Nomor</th>
+                            <th class="px-6 py-3">Email</th>
+                            <th class="px-6 py-3">Di Terima</th>
+                            <th class="px-6 py-3">Pesan</th>
+                            <th class="px-6 py-3">Tanggal</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    <tbody class="bg-white hover:text-white dark:divide-gray-700 divide-y divide-gray-200">
                         <?php foreach ($pesan as $row) : ?>
-                            <tr class="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400">
-                                <td class="px-4 py-3">
-                                    <div class="flex items-center text-sm">
-                                        <div class="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                                            <?php if (!empty($row->image)) : ?>
-                                                <img src="<?php echo base_url('./image/' . $row->image) ?>" class="object-cover w-full h-full rounded-full" alt="" loading="lazy">
-                                            <?php else : ?>
-                                                <img src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" class="object-cover w-full h-full rounded-full" loading="lazy" />
-                                            <?php endif; ?>
-                                            <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold"><?php echo $row->pengirim; ?></p>
-                                        </div>
+                            <tr class="hover:bg-green-500 hover:text-white text-gray-700 dark:text-gray-400">
+                                <td class="px-2 py-4">
+                                    <div class="flex items-center">
+                                        <?php if (!empty($row->id_user)) : ?>
+                                            <img src="<?php echo base_url('./image/' . tampil_image_byid($row->id_user)) ?>" class="object-cover w-8 h-8 rounded-full mr-2" alt="Profile Picture" loading="lazy">
+                                        <?php else : ?>
+                                            <img src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" class="object-cover w-8 h-8 rounded-full mr-2" alt="Default Profile Picture" loading="lazy" />
+                                        <?php endif; ?>
+                                        <p class="font-semibold text-gray-800 dark:text-gray-300"><?php echo tampil_nama_byid($row->id_user) ?></p>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3"><?php echo $row->penerima; ?></td>
-                                <td class="px-4 py-3"><?php echo $row->pesan; ?></td>
-                                <td class="px-4 py-3"><?php echo $row->tanggal; ?></td>
+                                <td class="px-4 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo tampil_nomor_byid($row->id_user); ?></td>
+                                <td class="px-4 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo tampil_email_byid($row->id_user); ?></td>
+                                <td class="px-4 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo $row->penerima; ?></td>
+                                <td class="px-10 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo $row->pesan; ?></td>
+                                <td class="px-6 py-4 text-center text-gray-800 dark:text-gray-300"><?php echo $row->tanggal; ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-
+                <div class="flex items-center justify-center mt-4">
+                    <?php echo $pagination; ?>
+                </div>
             </div>
         </div>
     </div>
