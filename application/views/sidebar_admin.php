@@ -13,13 +13,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <style>
-    nav {
+    body {
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    .nav-day nav {
         background-color: #667eea;
+        color: #fff;
+    }
+
+    .nav-night nav {
+        background-color: #1a202c;
+        color: #cbd5e0;
     }
 
     .menu-item {
         border-bottom: 1px solid #fff;
         width: 100%;
+    }
+
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .chat-header {
+        background-color: #667eea;
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .toggle-button {
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .toggle-button i {
+        font-size: 1.5rem;
     }
 
     @media (min-width: 768px) {
@@ -30,7 +62,7 @@
     }
 </style>
 
-<body style="font-family: 'Source Sans Pro', sans-serif">
+<body class="nav-day">
     <nav class="text-black">
         <div class="container mx-auto px-6 py-2 flex flex-col lg:flex-row justify-between items-center">
             <a href="<?php echo base_url('admin/profile') ?>">
@@ -55,9 +87,13 @@
                     <li>
                         <button class="px-4 py-2 text-white hover:text-gray-800" onclick="navigateTo('<?php echo base_url('admin/pesan') ?>')">Pesan</button>
                     </li>
-                    <hr class="menu-item">
                     <li>
                         <button onclick="confirmLogout()" class="px-4 py-2 text-white hover:text-gray-800">Keluar</button>
+                    </li>
+                    <li>
+                        <button class="px-4 py-2 text-white hover:text-gray-800 toggle-button" onclick="toggleDayNightMode()">
+                            <i class="fas fa-cloud-moon"></i>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -76,7 +112,6 @@
 
         function confirmLogout() {
             Swal.fire({
-                // title: 'Are you sure?',
                 text: 'Apakah anda yakin ingin keluar!',
                 icon: 'warning',
                 showCancelButton: true,
@@ -88,6 +123,16 @@
                     window.location.href = "<?php echo base_url('auth/logout') ?>";
                 }
             });
+        }
+
+        function toggleDayNightMode() {
+            var body = document.body;
+            var nav = document.querySelector('nav');
+
+            body.classList.toggle('nav-day');
+            body.classList.toggle('nav-night');
+            nav.classList.toggle('nav-day');
+            nav.classList.toggle('nav-night');
         }
     </script>
 </body>

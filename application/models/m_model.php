@@ -6,12 +6,9 @@ class M_model extends CI_Model
         return $this->db->get($table);
     }
 
-    public function get_dataa($table, $limit = 0, $offset = 0)
+    public function get_dataa($table, $limit, $offset)
     {
-        if ($limit > 0) {
-            $this->db->limit($limit, $offset);
-        }
-
+        $this->db->limit($limit, $offset);
         return $this->db->get($table);
     }
 
@@ -20,9 +17,9 @@ class M_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    public function get_data_except_current_user($table, $currentUserId)
+    public function get_data_except_current_user($table, $user_id)
     {
-        $this->db->where('id !=', $currentUserId);
+        $this->db->where('id !=', $user_id);
         return $this->db->get($table);
     }
 
@@ -55,7 +52,42 @@ class M_model extends CI_Model
         return $this->db->affected_rows();
     }
 
-    public function insert_data($data)
+    public function check_email_exists($email)
+    {
+        $this->db->where('email', $email);
+        $query = $this->db->get('user');
+
+        return $query->num_rows() > 0;
+    }
+
+    public function get_user_password($user_id)
+    {
+        $query = $this->db->select('password')->where('id', $user_id)->get('users');
+
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            return $row->password;
+        } else {
+            return false;
+        }
+    }
+
+    public function check_password_match($password)
+    {
+        $query = $this->db->where('password', $password)->get('users');
+
+        return $query->num_rows() > 0;
+    }
+
+    public function check_nomor_exists($nomor)
+    {
+        $this->db->where('nomor', $nomor);
+        $query = $this->db->get('user');
+
+        return $query->num_rows() > 0;
+    }
+
+    public function insert_user($data)
     {
         $this->db->insert('user', $data);
         return $this->db->insert_id();
@@ -83,7 +115,7 @@ class M_model extends CI_Model
                 'pesan'    => $pesan,
                 'id_pengirim' => $pengirim,
                 'id_penerima' => $penerima,
-                'tanggal'  => date('Y-m-d H.i'),
+                'tanggal'  => date('d-m-Y'),
                 'jam'  => date('H.i')
             );
 
@@ -96,7 +128,6 @@ class M_model extends CI_Model
 
         return true;
     }
-
 
     public function get_deskripsi_by_id($id)
     {
