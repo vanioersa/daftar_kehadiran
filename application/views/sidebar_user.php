@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    <title>Peduli Lindungi alam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Peduli Lindungi Alam</title>
 </head>
-
 <style>
     body {
         font-family: 'Source Sans Pro', sans-serif;
@@ -70,9 +71,9 @@
 
 <body class="nav-day">
     <nav class="text-black">
-        <div class="container mx-auto py-2 flex flex-col lg:flex-row justify-between items-center">
+        <div class="container mx-auto px-6 py-2 flex flex-col lg:flex-row justify-between items-center">
             <div class="flex items-center font-bold text-2xl lg:text-2xl">
-                <a href="<?php echo base_url('admin/profile') ?>" class="flex items-center text-white" style="cursor: default;">
+                <a href="<?php echo base_url('user/profile') ?>" class="flex items-center text-white" style="cursor: default;">
                     <img src="https://png.pngtree.com/png-clipart/20230623/original/pngtree-environmental-protection-natural-environment-logo-vector-png-image_9204796.png" style="height: 60px;" alt="">
                     <p class="ml-2">Peduli Lindungi Alam</p>
                 </a>
@@ -85,21 +86,22 @@
             <div id="menu" class="hidden lg:flex lg:items-center">
                 <ul class="flex flex-col lg:flex-row lg:ml-auto">
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin') ?>')">Dashboard</button>
+                        <button class="px-4 py-2 text-white hover:text-green-800" onclick="navigateTo('<?php echo base_url('user') ?>')">Dashboard</button>
                     </li>
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin/public') ?>')">Public</button>
+                        <button class="px-4 py-2 text-white hover:text-green-800" onclick="navigateTo('<?php echo base_url('user/public') ?>')">Public</button>
+                    </li>
+                    <!-- <li>
+                        <button class="px-4 py-2 text-white hover:text-green-800" onclick="navigateTo('<?php echo base_url('admin/pesan') ?>')">Pesan</button>
+                    </li> -->
+                    <li>
+                        <button onclick="confirmLogout()" class="px-4 py-2 text-white hover:text-green-800">Keluar</button>
                     </li>
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin/pesan') ?>')">Pesan</button>
-                    </li>
-                    <li>
-                        <button onclick="confirmLogout()" class="px-4 py-2 text-white hover:text-green-500">Keluar</button>
-                    </li>
-                    <li>
-                        <button class="px-4 py-2 text-white hover:text-blue-800 toggle-button" onclick="toggleDayNightMode()">
-                            <i class="fas fa-cloud-moon"></i>
-                        </button>
+                        <button class="px-4 py-2 text-white hover:text-green-800 toggle-button" onclick="toggleDayNightMode()">
+                            <button class="px-4 py-2 text-white hover:text-blue-800 toggle-button" onclick="toggleDayNightMode()">
+                                <i class="fas fa-cloud-moon"></i>
+                            </button>
                     </li>
                 </ul>
             </div>

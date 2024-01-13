@@ -210,6 +210,31 @@ class Admin extends CI_Controller
         echo json_encode($response);
     }
 
+    public function hapus_data_deskripsi($id)
+    {
+        $deskripsi_public = $this->m_model->get_deskripsi_by_id($id);
+
+        if (!$deskripsi_public) {
+            $this->session->set_flashdata('error', 'Data deskripsi public tidak ditemukan.');
+            redirect('admiin/public');
+        }
+
+        $image_file = $deskripsi_public->image;
+        if ($image_file) {
+            $image_path = 'image/' . $image_file;
+            if (file_exists($image_path)) {
+                unlink($image_path);
+            }
+        }
+
+        // Hapus data dari tabel deskripsi public
+        $this->m_model->delete('deskripsi_public', 'id', $id);
+
+        // Tampilkan pesan sukses dan alihkan ke halaman data deskripsi public
+        $this->session->set_flashdata('success', 'Data deskripsi public berhasil dihapus.');
+        redirect('admin/public');
+    }
+
     public function profile()
     {
         $data['user'] = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->result();

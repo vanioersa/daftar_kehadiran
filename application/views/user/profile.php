@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             background-color: #f7fafc;
@@ -35,7 +35,7 @@
 
 <body>
 
-    <?php $this->load->view('sidebar_admin'); ?>
+    <?php $this->load->view('sidebar_user'); ?>
 
     <?php foreach ($user as $row) : ?>
 
@@ -55,7 +55,7 @@
             <h1><?php echo $this->session->flashdata('sukses'); ?></h1>
             <br>
 
-            <form method="post" action="<?php echo base_url('admin/aksi_ubah_profile'); ?>" enctype="multipart/form-data">
+            <form method="post" action="<?php echo base_url('user/aksi_ubah_profile'); ?>" enctype="multipart/form-data">
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
@@ -125,7 +125,7 @@
                 </div>
                 <div class="bubaba">
                     <button type="submit" class="bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full mr-2" name="submit">Ubah</button>
-                    <button type="button" class="buru bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onclick="navigateTo('<?php echo base_url('admin/hapus_imagee'); ?>')">Hapus Foto</button>
+                    <button type="button" class="buru bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onclick="navigateTo('<?php echo base_url('user/hapus_imagee'); ?>')">Hapus Foto</button>
                 </div>
             </form>
         </div>

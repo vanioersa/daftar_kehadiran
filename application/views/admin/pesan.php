@@ -72,27 +72,34 @@
         <form method="post" action="<?= base_url('admin/simpan_pesan'); ?>" id="pesanForm">
             <div class="px-6 py-5 font-semibold text-white border-b border-gray-100 flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <img src="<?= base_url('./image/' . tampil_image_byid($user_id)) ?>" class="object-cover w-10 h-10 rounded-full mr-2" alt="Profile Picture" loading="lazy">
+                    <img src="<?= base_url('./image/' . tampil_image_byid($user_id)) ?>" class="object-cover w-10 h-10 rounded-full mr-2" alt="Foto Profil" loading="lazy">
                     <p class="text-lg font-semibold">
                         <?php $user_id = $this->session->userdata('id');
                         echo tampil_nama_byid($user_id); ?>
                     </p>
                 </div>
-                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">Kirim Pesan</button>
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
             <div class="p-4 flex-grow flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
                 <div class="bg-white rounded-md p-6 flex-grow">
                     <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-300">Pesan:</h2>
-                    <textarea class="border rounded-md px-3 py-2 w-full mb-4" name="pesan" placeholder="Ketik pesan untuk ..."></textarea>
+                    <textarea class="border rounded-md px-3 py-2 w-full mb-4" name="pesan" placeholder="Tulis pesan untuk ..."></textarea>
                     <div class="flex items-center space-x-4">
                         <p class="text-gray-500">Pesan dikirim kepada:</p>
-                        <select id="penerima" name="penerima[]" class="border rounded-md px-3 py-2 w-1/2" <?php echo count($user_names) > 5 ? 'multiple size="5"' : ''; ?>>
-                            <?php foreach ($user_names as $user) : ?>
-                                <option value="<?= $user->id; ?>"><?= $user->nama; ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <?php if (!empty($user_names)) : ?>
+                            <select id="penerima" name="penerima[]" class="border rounded-md px-3 py-2 w-1/2" <?php echo count($user_names) > 5 ? 'multiple size="5"' : ''; ?>>
+                                <?php foreach ($user_names as $user) : ?>
+                                    <option value="<?= $user->id; ?>"><?= $user->nama; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php else : ?>
+                            <p>Tidak ada pengguna yang tersedia.</p>
+                        <?php endif; ?>
                     </div>
                 </div>
+
             </div>
         </form>
     </div>
