@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
     <title>Peduli Lindungi alam</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cd n.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <style>
@@ -91,7 +91,7 @@
                         <button onclick="confirmLogout()" class="px-4 py-2 text-white hover:text-gray-800">Keluar</button>
                     </li>
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-gray-800 toggle-button" onclick="toggleDayNightMode()">
+                        <button class="px-4 py-2 text-white hover:text-blue-800 toggle-button" onclick="toggleDayNightMode()">
                             <i class="fas fa-cloud-moon"></i>
                         </button>
                     </li>
