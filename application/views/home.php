@@ -41,12 +41,12 @@
         </h2>
         <div class="container mt-5">
             <?php if (!empty($public)) : ?>
-                <?php foreach ($public as $item) : ?>
+                <?php foreach ($public as $key => $item) : ?>
                     <div class="mb-10">
-                        <div class="card flex flex-col md:flex-row">
+                        <div class="card flex flex-col md:flex-row <?php echo ($key % 2 == 0) ? 'md:flex-row-reverse text-right' : ''; ?>">
                             <img src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" style="width: 500px; height: 250px;" alt="Monitoring">
-                            <div class="card-body flex-1 ml-4">
-                                <h5 style="font-weight: bold; font-size: x-large;" class="card-title mb-4"><?php echo $item->tempat; ?></h5>
+                            <div class="card-body flex-1 mr-4 ml-4">
+                                <h5 style="font-weight: bold; font-size: x-large;" class="card-title mb-4 "><?php echo $item->tempat; ?></h5>
                                 <p class="card-text"><?php echo $item->deskripsi; ?></p>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
             <?php endif; ?>
         </div>
     </section>
-    
+
     <section class="bg-green-500">
         <div class="container mx-auto px-6 py-20">
             <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">

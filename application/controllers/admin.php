@@ -378,4 +378,22 @@ class Admin extends CI_Controller
 
         redirect(base_url('admin/pesan'));
     }
+
+    public function table_pengguna()
+    {
+        // Load library paginasi
+        $this->load->library('pagination');
+
+        // Konfigurasi paginasi
+        $config['base_url'] = base_url('admin/table_pengguna');
+        $config['total_rows'] = $this->m_model->count_user_data_by_role('user');
+        $config['per_page'] = 20;
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['public'] = $this->m_model->get_user_data_by_role('user', $config['per_page'], $page);
+
+        $this->load->view('admin/table_pengguna', $data);
+    }
 }

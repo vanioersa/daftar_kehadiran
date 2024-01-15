@@ -29,6 +29,14 @@
         color: #fff;
     }
 
+    .nav-day button:hover {
+        color: #1a202c;
+    }
+
+    .nav-night button:hover {
+        color: #667eea;
+    }
+
     .nav-night nav {
         background-color: #1a202c;
         color: #cbd5e0;
@@ -86,22 +94,21 @@
             <div id="menu" class="hidden lg:flex lg:items-center">
                 <ul class="flex flex-col lg:flex-row lg:ml-auto">
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-green-800" onclick="navigateTo('<?php echo base_url('user') ?>')">Dashboard</button>
+                        <button class="px-4 py-2" onclick="navigateTo('<?php echo base_url('user') ?>')">Dashboard</button>
                     </li>
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-green-800" onclick="navigateTo('<?php echo base_url('user/public') ?>')">Public</button>
-                    </li>
-                    <!-- <li>
-                        <button class="px-4 py-2 text-white hover:text-green-800" onclick="navigateTo('<?php echo base_url('admin/pesan') ?>')">Pesan</button>
-                    </li> -->
-                    <li>
-                        <button onclick="confirmLogout()" class="px-4 py-2 text-white hover:text-green-800">Keluar</button>
+                        <button onclick="navigateTo('<?php echo base_url('user/pesan') ?>')" class="px-4 py-2">Pesan</button>
                     </li>
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-green-800 toggle-button" onclick="toggleDayNightMode()">
-                            <button class="px-4 py-2 text-white hover:text-blue-800 toggle-button" onclick="toggleDayNightMode()">
-                                <i class="fas fa-cloud-moon"></i>
-                            </button>
+                        <button onclick="navigateTo('<?php echo base_url('user/retting') ?>')" class="px-4 py-2">Retting</button>
+                    </li>
+                    <li>
+                        <button onclick="confirmLogout()" class="px-4 py-2">Keluar</button>
+                    </li>
+                    <li>
+                        <button class="px-4 py-2 toggle-button" onclick="toggleDayNightMode()">
+                            <i class="fas fa-cloud-moon"></i>
+                        </button>
                     </li>
                 </ul>
             </div>

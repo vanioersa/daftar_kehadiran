@@ -8,6 +8,7 @@ class User extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('m_model');
+        $this->load->helper('my_helper');
         if ($this->session->userdata('loged_in') != true || $this->session->userdata('role') != 'user') {
             redirect(base_url() . 'auth');
         }
@@ -18,9 +19,45 @@ class User extends CI_Controller
         $this->load->view('user/dashboard');
     }
 
-    public function page_1()
+    public function retting()
     {
-        $this->load->view('user/page_1');
+        $this->load->view('user/rating');
+    }
+
+    public function pesan($page = 1)
+    {
+        $data['per_page'] = 10;
+        $offset = ($page - 1) * $data['per_page'];
+        $user_id = $this->session->userdata('id');
+        $data['pesan'] = $this->m_model->get_dataa_by_user_id('pesan', $data['per_page'], $offset, $user_id);
+
+        $user_id = $this->session->userdata('id');
+        $data['user_id'] = $user_id;
+        $data['current_user_id'] = $user_id;
+        $user_data = $this->session->userdata('id');
+        $data['user_names'] = $this->m_model->get_data_except_current_user('user', $user_data)->result();
+
+        $total_rows = $this->m_model->count_rows('pesan');
+
+        $data['total_pages'] = ceil($total_rows / $data['per_page']);
+        $data['current_page'] = $page;
+
+        $this->load->view('user/page_1', $data);
+    }
+
+    public function simpan_pesan()
+    {
+        $pesan = $this->input->post('pesan');
+        $user_id = $this->session->userdata('id');
+
+        // Get all user IDs (excluding the current user)
+        $user_ids = $this->m_model->get_all_user_ids_except_current($user_id);
+
+        if (!empty($pesan)) {
+            $this->m_model->simpan_pesan($pesan, $user_id, $user_ids);
+        }
+
+        redirect(base_url('user/pesan'));
     }
 
     public function profile()
@@ -48,7 +85,7 @@ class User extends CI_Controller
                 Password lama tidak sesuai
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>Password lama tidak sesuai');
-                redirect(base_url('admin/profile'));
+                redirect(base_url('user/profile'));
             }
 
             if ($password_baru !== $konfirmasi_password) {
@@ -56,7 +93,7 @@ class User extends CI_Controller
                 Password baru dan konfirmasi password harus sama
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>');
-                redirect(base_url('admin/profile'));
+                redirect(base_url('user/profile'));
             }
 
             $data['password'] = md5($password_baru);

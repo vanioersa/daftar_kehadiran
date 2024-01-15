@@ -6,6 +6,23 @@ class M_model extends CI_Model
         return $this->db->get($table);
     }
 
+    // public function get_user_data_by_role($role)
+    // {
+    //     $this->db->where('role', $role);
+    //     return $this->db->get('user')->result();
+    // }
+
+    public function get_user_data_by_role($role, $limit, $offset)
+    {
+        $this->db->limit($limit, $offset);
+        return $this->db->get_where('user', array('role' => $role))->result();
+    }
+
+    public function count_user_data_by_role($role)
+    {
+        return $this->db->get_where('user', array('role' => $role))->num_rows();
+    }
+
     public function get_dataa($table, $limit, $offset)
     {
         $this->db->limit($limit, $offset);
@@ -107,6 +124,7 @@ class M_model extends CI_Model
 
         return false;
     }
+    
 
     public function simpan_pesan($pesan, $pengirim, $penerima_array)
     {
@@ -172,6 +190,62 @@ class M_model extends CI_Model
         } else {
             return false;
         }
+    }
+
+    public function get_dataa_by_user_id($table, $limit, $offset, $user_id)
+    {
+        $this->db->where('id_penerima', $user_id);
+        $this->db->or_where('id_pengirim', $user_id);
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('tanggal', 'desc');
+        return $this->db->get($table)->result();
+    }
+
+    public function get_user_messages($user_id, $limit, $offset)
+    {
+        $this->db->where('id_pengirim', $user_id);
+        $this->db->or_where('id_penerima', $user_id);
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('id', 'desc');
+        return $this->db->get('pesan');
+    }
+
+    public function count_user_messages($user_id)
+    {
+        $this->db->where('id_pengirim', $user_id);
+        $this->db->or_where('id_penerima', $user_id);
+        return $this->db->count_all_results('pesan');
+    }
+
+    public function get_admin_ids()
+    {
+        $this->db->select('id');
+        $this->db->where('role', 'admin');
+        $result = $this->db->get('user')->result();
+
+        $admin_ids = [];
+        foreach ($result as $admin) {
+            $admin_ids[] = $admin->id;
+        }
+
+        return $admin_ids;
+    }
+
+    public function simpan_pesan_user($pesan, $pengirim, $penerima_array)
+    {
+        foreach ($penerima_array as $penerima) {
+            $data = array(
+                'pesan'      => $pesan,
+                'id_pengirim' => $pengirim,
+                'id_penerima' => $penerima,
+                'tanggal'     => date('d-m-Y'),
+                'jam'         => date('H.i')
+            );
+
+            $this->db->insert('pesan', $data);
+        }
+
+        return true;
     }
 
     public function edit_deskripsi($id, $data)

@@ -32,10 +32,6 @@
         text-align: left;
     }
 
-    tr:hover {
-        background-color: #f0f5f9;
-    }
-
     .pagination {
         display: flex;
         justify-content: center;
@@ -61,7 +57,7 @@
     }
 
     .pagination .active a {
-        background-color: #4CAF50;
+        background-color: #3559E0;
     }
 </style>
 
@@ -99,52 +95,87 @@
                         <?php endif; ?>
                     </div>
                 </div>
-
             </div>
         </form>
     </div>
 
-    <div class="mt-4 mx-4">
+    <div class="mt-10 mx-10 mb-10">
         <div class="w-full rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-800">
             <div class="w-full overflow-x-auto">
-                <table class="w-full border border-collapse hover:border-blue-500">
+                <table class="w-full border border-collapse">
+                    <thead style="background-color: #667eea;" class="text-dark:bg-gray-700">
+                        <tr class="text-white dark:text-gray-400">
+                            <th class="px-2 py-4 w-1/6 text-left">Pengirim</th>
+                            <th class="px-2 py-4 w-2/3 text-center">Pesan</th>
+                            <th class="px-2 py-4 w-1/6 text-right">Penerima</th>
+                        </tr>
+                    </thead>
                     <tbody class="bg-white dark:divide-gray-700 divide-y divide-gray-200">
+                        <?php $no = 1; ?>
                         <?php foreach ($pesan as $row) : ?>
-                            <tr class="hover:bg-blue-300 text-gray-700 dark:text-gray-400">
-                                <td class="px-2 py-4 w-1/6">
-                                    <div class="flex items-center">
+                            <?php
+                            $rowClass = ($no % 2 == 0) ? 'bg-white hover:text-white' : 'bg-white hover:text-white';
+                            $hoverClass = ($no % 2 == 0) ? 'hover:bg-blue-500' : 'hover:bg-green-500 ';
+                            ?>
+                            <tr class="<?= $rowClass ?>  text-gray-700 dark:text-gray-400 <?= $hoverClass ?>">
+
+                                <td class="px-2 py-4">
+                                    <p>Pengirim: </p>
+                                    <div class="flex flex-col items-left">
+                                        <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_pengirim) ?></p>
                                         <?php if (!empty($row->id_pengirim)) : ?>
-                                            <img src="<?php echo base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="object-cover w-8 h-8 rounded-full mr-2" alt="Profile Picture" loading="lazy">
+                                            <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="object-cover w-12 h-12 rounded-full mt-2" alt="Profile Picture" loading="lazy">
                                         <?php else : ?>
-                                            <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-8 h-8 rounded-full mr-2" alt="Default Profile Picture" loading="lazy" />
+                                            <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-12 h-12 rounded-full mt-2" alt="Default Profile Picture" loading="lazy" />
                                         <?php endif; ?>
+                                        <p class="text-sm"><?= tampil_nomor_byid($row->id_pengirim) ?></p>
                                     </div>
                                 </td>
-                                <td class="px-2 py-4 w-2/6">
-                                    <div class="flex flex-col ml-2">
-                                        <div class="flex items-center">
-                                            <p class="font-semibold text-gray-800 dark:text-gray-300"><?php echo tampil_nama_byid($row->id_pengirim) ?></p>
-                                            <p class="text-gray-500 text-sm ml-2">(Untuk: <?php echo tampil_nama_byid($row->id_penerima) ?>)</p>
-                                            <p class="text-gray-500 text-sm ml-2"><?php echo $row->jam; ?></p>
-                                        </div>
-                                        <div class="bg-gray-100 p-2 mt-2 rounded">
-                                            <p class="text-gray-800 dark:text-gray-300"><?php echo $row->pesan; ?></p>
-                                        </div>
+
+                                <?php
+                                if (!function_exists('translateDay')) {
+                                    function translateDay($englishDay)
+                                    {
+                                        $daysTranslation = ['Monday' => 'Senin', 'Tuesday' => 'Selasa',  'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu', 'Sunday' => 'Minggu',];
+                                        return $daysTranslation[$englishDay];
+                                    }
+                                }
+
+                                if (!function_exists('translateMonth')) {
+                                    function translateMonth($englishMonth)
+                                    {
+                                        $monthsTranslation = ['January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April', 'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September', 'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember',];
+                                        return $monthsTranslation[$englishMonth];
+                                    }
+                                }
+                                echo '<td class="px-2 py-4">';
+                                echo '<div class="bg-gray-300 p-3 rounded">';
+                                $englishDate = date('l, j F Y', strtotime($row->tanggal));
+                                $translatedDate = translateDay(date('l', strtotime($englishDate))) . ', ' . date('j', strtotime($englishDate)) . ' ' . translateMonth(date('F', strtotime($englishDate))) . ' ' . date('Y', strtotime($englishDate));
+                                echo '<p class="text-gray-800 dark:text-gray-300">' . $row->pesan . '</p>';
+                                echo '<p class="text-sm text-gray-800 text-right">' . $translatedDate . ' ' . $row->jam . '</p>';
+                                echo '</div>';
+                                echo '</td>';
+                                ?>
+
+                                <td class="px-2 py-4 text-right">
+                                    <p>penerima: </p>
+                                    <div class="flex flex-col items-end">
+                                        <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_penerima) ?></p>
+                                        <?php if (!empty($row->id_penerima)) : ?>
+                                            <img src="<?= base_url('./image/' . tampil_image_byid($row->id_penerima)) ?>" class="object-cover w-12 h-12 rounded-full mt-2" alt="Profile Picture" loading="lazy">
+                                        <?php else : ?>
+                                            <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-12 h-12 rounded-full mt-2" alt="Default Profile Picture" loading="lazy" />
+                                        <?php endif; ?>
+                                        <p class="text-sm"><?= tampil_nomor_byid($row->id_penerima) ?></p>
                                     </div>
-                                </td>
-                                <td class="px-2 py-4 w-1/6 text-right">
-                                    <p class="text-gray-500 text-sm">Penerima: <?php echo tampil_nomor_byid($row->id_penerima) ?></p>
-                                    <?php if (!empty($row->id_penerima)) : ?>
-                                        <img src="<?php echo base_url('./image/' . tampil_image_byid($row->id_penerima)) ?>" class="object-cover w-8 h-8 rounded-full ml-2" alt="Profile Picture" loading="lazy">
-                                    <?php else : ?>
-                                        <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-8 h-8 rounded-full ml-2" alt="Default Profile Picture" loading="lazy" />
-                                    <?php endif; ?>
                                 </td>
                             </tr>
+                            <?php $no++; ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <div class="flex items-center justify-center mb-4">
+                <div class="flex items-center justify-center mt-2 mb-8">
                     <ul class="pagination">
                         <?php if ($current_page > 1) : ?>
                             <li><a href="<?= base_url('admin/pesan/' . ($current_page - 1)); ?>" class="page-link">&laquo; Previous</a></li>

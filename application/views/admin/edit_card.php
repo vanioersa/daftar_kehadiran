@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubah Data Public Deskripsi</title>
+    <title>Ubah Public Deskripsi</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
@@ -114,7 +114,7 @@
             <button type="submit" class="btn btn-primary text-bg-black" id="submit">Submit</button>
 
             <form action="<?php echo base_url('admin/hapus_image/' . $public->id) ?>" method="post" id="edit-form" enctype="multipart/form-data">
-                <input type="button" id="submitt" class="btn btn-danger buru" value="Hapus Foto" onclick="deleteImage('<?= $public->id ?>')">
+                <input type="button" id="submitt" class="bg-red-500 text-white px-4 py-2 rounded buru" value="Hapus Foto" onclick="deleteImage('<?= $public->id ?>')">
             </form>
         </form>
     </div>

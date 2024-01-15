@@ -80,7 +80,7 @@
 
     .input-group .eye-icon-container {
         position: absolute;
-        top: 35%;
+        top: 50%;
         right: 0px;
         transform: translateY(-50%);
         cursor: pointer;
@@ -139,13 +139,6 @@
             <h2>Pendaftaran User</h2>
             <p style="color: red; box-shadow: 0 3px 5px rgba(255, 0, 0, 0.3); text-align: center;"><?php echo $this->session->flashdata('error'); ?></p>
             <br>
-            
-                        <div class="input-group">
-                            <span class="icon">
-                                <i class="fa-solid fa-envelope"></i>
-                            </span>
-                            <input type="email" id="email" placeholder="Email" name="email" class="form-control" required>
-                        </div>
 
             <div class="input-group">
                 <span class="icon">

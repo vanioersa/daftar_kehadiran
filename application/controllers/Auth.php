@@ -190,11 +190,9 @@ class Auth extends CI_Controller
 
     public function submit_login()
     {
-        $email = $this->input->post('email', true);
         $nomor = $this->input->post('nomor', true);
         $password = $this->input->post('password', true);
 
-        $data = ['email' => $email];
         $data = ['nomor' => $nomor];
         $query = $this->m_model->getwhere('user', $data);
         $result = $query->row_array();
@@ -202,8 +200,7 @@ class Auth extends CI_Controller
         if (!empty($result) && md5($password) === $result['password']) {
             $data = [
                 'loged_in' => TRUE,
-                'email'    => $result['email'],
-                'nomor' => $result['nomor'],
+                'nomor'    => $result['nomor'],
                 'role'     => $result['role'],
                 'id'       => $result['id'],
             ];
@@ -216,7 +213,7 @@ class Auth extends CI_Controller
                 redirect(base_url() . "auth");
             }
         } else {
-            $this->session->set_flashdata('error', 'Login gagal. Email atau password salah.');
+            $this->session->set_flashdata('error', 'Login gagal. Nomor atau password salah.');
             redirect(base_url() . "auth");
         }
     }

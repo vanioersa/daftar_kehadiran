@@ -16,6 +16,65 @@
         font-family: 'Source Sans Pro', sans-serif;
         margin: 0;
         padding: 0;
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-day nav {
+        background-color: #667eea;
+        color: #fff;
+    }
+
+    .nav-day button:hover {
+        color: #1a202c;
+    }
+
+    .nav-night button:hover {
+        color: #667eea;
+    }
+    
+    .nav-night nav {
+        background-color: #1a202c;
+        color: #cbd5e0;
+    }
+
+    .menu-item {
+        border-bottom: 1px solid #fff;
+        width: 100%;
+    }
+
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .chat-header {
+        background-color: #667eea;
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .toggle-button {
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .toggle-button i {
+        font-size: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        .menu-item {
+            border-bottom: none;
+            width: auto;
+        }
+    }
+
+    body {
+        font-family: 'Source Sans Pro', sans-serif;
+        margin: 0;
+        padding: 0;
     }
 
     .nav-day nav,
@@ -88,6 +147,9 @@
                         <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin') ?>')">Dashboard</button>
                     </li>
                     <li>
+                        <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin/table_pengguna') ?>')">Pengguna</button>
+                    </li>
+                    <li>
                         <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin/public') ?>')">Public</button>
                     </li>
                     <li>
@@ -97,7 +159,7 @@
                         <button onclick="confirmLogout()" class="px-4 py-2 text-white hover:text-green-500">Keluar</button>
                     </li>
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-blue-800 toggle-button" onclick="toggleDayNightMode()">
+                        <button class="px-4 py-2 text-white hover:text-green-500 toggle-button" onclick="toggleDayNightMode()">
                             <i class="fas fa-cloud-moon"></i>
                         </button>
                     </li>
