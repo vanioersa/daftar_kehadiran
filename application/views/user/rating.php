@@ -14,7 +14,7 @@
     <div class="container mx-auto mt-8">
         <div class="max-w-sm mx-auto bg-blue-500 shadow-md rounded-md overflow-hidden">
             <div class="p-6">
-                <form id="myForm" action="submit_form.php" method="post">
+                <form id="myForm" action="<?= base_url('user/aksi_ratting'); ?>" method="post">
                     <div class="mb-6">
                         <label for="rating" class="block text-sm font-medium text-gray-600">Rating:</label>
                         <div class="flex items-center mt-1">

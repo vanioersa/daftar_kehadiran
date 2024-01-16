@@ -16,14 +16,26 @@ class Admin extends CI_Controller
 
     public function index()
     {
-        $data['user'] = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->result();
+        $data['pesan'] = $this->m_model->get_data('pesan')->result();
+        $data['current_user_id'] = $this->session->userdata('id');
+        $data['user_names'] = $this->m_model->get_data_except_current_users('user', $data['current_user_id'])->result();
+        $role = 'user';
+        $data['pengguna'] = $this->m_model->get_user_data_by_rolle($role);
+        $data['user'] = $this->m_model->get_by_id('user', 'id', $data['current_user_id'])->result();
+    
         $this->load->view('admin/dashboard', $data);
     }
-
+    
     public function public()
     {
         $data['public'] = $this->m_model->get_data('deskripsi_public')->result();
         $this->load->view('admin/page_1', $data);
+    }
+
+    public function detail_pengguna($id)
+    {
+        $data['user'] = $this->m_model->get_data_by_id('user', $id)->result();
+        $this->load->view('admin/detail', $data);
     }
 
     public function tambah_card_public()
@@ -197,7 +209,6 @@ class Admin extends CI_Controller
                         ];
                     }
                 } else {
-                    // Tidak ada perubahan data
                     $response = [
                         'status' => 'error',
                         'message' => 'Anda harus mengubah setidaknya satu data pada deskripsi Public.',
@@ -227,10 +238,8 @@ class Admin extends CI_Controller
             }
         }
 
-        // Hapus data dari tabel deskripsi public
         $this->m_model->delete('deskripsi_public', 'id', $id);
 
-        // Tampilkan pesan sukses dan alihkan ke halaman data deskripsi public
         $this->session->set_flashdata('success', 'Data deskripsi public berhasil dihapus.');
         redirect('admin/public');
     }
@@ -254,9 +263,7 @@ class Admin extends CI_Controller
 
         $current_user = $this->m_model->get_user_by_id($this->session->userdata('id'));
 
-        // Check if updating the password
         if (!empty($password_baru)) {
-            // Verify old password
             if (!$current_user || md5($old_password) !== $current_user->password) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                 Password lama tidak sesuai
@@ -265,7 +272,6 @@ class Admin extends CI_Controller
                 redirect(base_url('admin/profile'));
             }
 
-            // Check if the new password matches the confirmation
             if ($password_baru !== $konfirmasi_password) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                 Password baru dan konfirmasi password harus sama
@@ -277,12 +283,10 @@ class Admin extends CI_Controller
             $data['password'] = md5($password_baru);
         }
 
-        // Update other profile information
         $data['email'] = $email;
         $data['jenis_kelamin'] = $jenis_kelamin;
         $data['nama'] = $nama;
 
-        // Update profile image if provided
         if ($image) {
             $kode = round(microtime(true) * 100);
             $file_name = $kode . '_' . $image;
@@ -303,7 +307,6 @@ class Admin extends CI_Controller
             }
         }
 
-        // Update user data
         $update_result = $this->m_model->ubah_data('user', $data, array('id' => $this->session->userdata('id')));
 
         if ($update_result) {
@@ -345,23 +348,24 @@ class Admin extends CI_Controller
 
     public function pesan($page = 1)
     {
-        $data['per_page'] = 10; // Number of records per page
+        $data['per_page'] = 10;
         $offset = ($page - 1) * $data['per_page'];
 
         $data['pesan'] = $this->m_model->get_dataa('pesan', $data['per_page'], $offset)->result();
+
         $user_id = $this->session->userdata('id');
         $data['user_id'] = $user_id;
-        $user_data = $this->session->userdata('id');
-        $data['user_names'] = $this->m_model->get_data_except_current_user('user', $user_data)->result();
 
-        // Get total rows for pagination
+        $user_data = $this->session->userdata('id');
+        $data['user_names'] = $this->m_model->get_data_except_current_users('user', $user_data)->result();
+
+        $data['pesan'] = $this->m_model->get_messages_by_sender('pesan', $data['per_page'], $offset, $user_id)->result();
+
         $total_rows = $this->m_model->count_rows('pesan');
 
-        // Calculate total pages
         $data['total_pages'] = ceil($total_rows / $data['per_page']);
         $data['current_page'] = $page;
 
-        // Load the view with data
         $this->load->view('admin/pesan', $data);
     }
 
@@ -381,10 +385,8 @@ class Admin extends CI_Controller
 
     public function table_pengguna()
     {
-        // Load library paginasi
         $this->load->library('pagination');
 
-        // Konfigurasi paginasi
         $config['base_url'] = base_url('admin/table_pengguna');
         $config['total_rows'] = $this->m_model->count_user_data_by_role('user');
         $config['per_page'] = 20;

@@ -136,7 +136,7 @@
 <body>
     <div class="wrapper">
         <form method="post" action="<?php echo base_url('auth/submit_login') ?>" enctype="multipart/form-data">
-            <h2>Pendaftaran User</h2>
+            <h2>Masukkan Akun</h2>
             <p style="color: red; box-shadow: 0 3px 5px rgba(255, 0, 0, 0.3); text-align: center;"><?php echo $this->session->flashdata('error'); ?></p>
             <br>
 

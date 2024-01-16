@@ -120,7 +120,7 @@
                             <tr class="<?= $rowClass ?>  text-gray-700 dark:text-gray-400 <?= $hoverClass ?>">
 
                                 <td class="px-2 py-4">
-                                    <p>Pengirim: </p>
+                                    <!-- <p>Pengirim: </p> -->
                                     <div class="flex flex-col items-left">
                                         <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_pengirim) ?></p>
                                         <?php if (!empty($row->id_pengirim)) : ?>
@@ -159,7 +159,7 @@
                                 ?>
 
                                 <td class="px-2 py-4 text-right">
-                                    <p>penerima: </p>
+                                    <!-- <p>penerima: </p> -->
                                     <div class="flex flex-col items-end">
                                         <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_penerima) ?></p>
                                         <?php if (!empty($row->id_penerima)) : ?>

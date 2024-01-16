@@ -23,7 +23,6 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
-            background-color: #fff;
         }
 
         .buba {
@@ -93,7 +92,7 @@
 
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
-    <div class="babu container bg-green-500">
+    <div class="babu container">
         <h1 class="buba text-center">Tambah Public Deskripsi</h1>
 
         <form action="<?php echo base_url('admin/aksi_tambah_card') ?>" method="post" id="survey-form" class="survey-form ">

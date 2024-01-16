@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Peduli Lindungi Alam</title>
+    <script src="https://cdn.tailwindcss.com"></script> 
 </head>
 
 <style>
@@ -17,6 +18,14 @@
         margin: 0;
         padding: 0;
         transition: background-color 0.3s ease;
+    }
+
+    .nav-day nav,
+    .nav-night nav {
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        top: 0;
     }
 
     .nav-day nav {
@@ -127,7 +136,7 @@
     }
 </style>
 
-<body class="nav-day">
+<body class="nav-day md:pt-20 pt-28">
     <nav class="text-black">
         <div class="container mx-auto py-2 flex flex-col lg:flex-row justify-between items-center">
             <div class="flex items-center font-bold text-2xl lg:text-2xl">
@@ -146,9 +155,9 @@
                     <li>
                         <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin') ?>')">Dashboard</button>
                     </li>
-                    <li>
+                    <!-- <li>
                         <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin/table_pengguna') ?>')">Pengguna</button>
-                    </li>
+                    </li> -->
                     <li>
                         <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin/public') ?>')">Public</button>
                     </li>

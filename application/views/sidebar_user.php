@@ -24,6 +24,14 @@
         transition: all 0.3s ease;
     }
 
+    .nav-day nav,
+    .nav-night nav {
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        top: 0;
+    }
+
     .nav-day nav {
         background-color: #667eea;
         color: #fff;
@@ -77,7 +85,7 @@
     }
 </style>
 
-<body class="nav-day">
+<body class="nav-day md:pt-20 pt-28">
     <nav class="text-black">
         <div class="container mx-auto px-6 py-2 flex flex-col lg:flex-row justify-between items-center">
             <div class="flex items-center font-bold text-2xl lg:text-2xl">

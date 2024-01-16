@@ -6,16 +6,32 @@ class M_model extends CI_Model
         return $this->db->get($table);
     }
 
-    // public function get_user_data_by_role($role)
-    // {
-    //     $this->db->where('role', $role);
-    //     return $this->db->get('user')->result();
-    // }
-
     public function get_user_data_by_role($role, $limit, $offset)
     {
         $this->db->limit($limit, $offset);
         return $this->db->get_where('user', array('role' => $role))->result();
+    }
+
+    public function get_messages_by_sender($table, $limit, $offset, $sender_id)
+    {
+        $this->db->where('id_pengirim', $sender_id);
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('tanggal', 'desc');
+
+        return $this->db->get($table);
+    }
+
+    public function get_data_by_id($table, $id)
+    {
+        $this->db->where('id', $id);
+        return $this->db->get('user');
+    }
+
+    public function get_user_data_by_rolle($role)
+    {
+        $this->db->where('role', $role);
+        $query = $this->db->get('user');
+        return $query->result();
     }
 
     public function count_user_data_by_role($role)
@@ -38,6 +54,28 @@ class M_model extends CI_Model
     {
         $this->db->where('id !=', $user_id);
         return $this->db->get($table);
+    }
+
+    public function get_data_except_current_users($table, $user_id)
+    {
+        $this->db->where('id !=', $user_id);
+        $this->db->where('role', 'user');
+        return $this->db->get($table);
+    }
+
+
+    public function get_all_admin_ids_except_current($current_user_id)
+    {
+        $this->db->where('id !=', $current_user_id);
+        $this->db->where('role', 'admin');
+        $query = $this->db->get('user');
+
+        $admin_ids = array();
+        foreach ($query->result() as $row) {
+            $admin_ids[] = $row->id;
+        }
+
+        return $admin_ids;
     }
 
     public function getwhere($table, $data)
@@ -124,7 +162,7 @@ class M_model extends CI_Model
 
         return false;
     }
-    
+
 
     public function simpan_pesan($pesan, $pengirim, $penerima_array)
     {

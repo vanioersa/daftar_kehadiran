@@ -11,7 +11,7 @@
 </head>
 
 <body class="text-gray-700 bg-white" style="font-family: 'Source Sans Pro', sans-serif">
-    <nav style="background-color: #667eea" class="text-black">
+    <nav style="background-color: #667eea" class="text-black fixed w-full top-0 z-10">
         <div class="container mx-auto px-6 py-2 flex justify-between items-center">
             <a class="flex items-center font-bold text-2xl lg:text-2xl" href="">
                 <img src="https://png.pngtree.com/png-clipart/20230623/original/pngtree-environmental-protection-natural-environment-logo-vector-png-image_9204796.png" style="height: 60px;" alt="">
@@ -35,29 +35,43 @@
         </div>
     </nav>
 
-    <section class="container mx-auto px-6 p-10">
+    <section class="container mx-auto px-6 p-10 p-28">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
             Deskripsi Public
         </h2>
-        <div class="container mt-5">
-            <?php if (!empty($public)) : ?>
-                <?php foreach ($public as $key => $item) : ?>
+        <div class="container mt-20">
+            <?php
+            $maxItemsToShow = 3; // Set the maximum number of items to display
+            $itemCount = 0; // Initialize the counter variable
+
+            if (!empty($public)) :
+                foreach ($public as $key => $item) :
+                    // Check if the maximum number of items has been reached
+                    if ($itemCount >= $maxItemsToShow) {
+                        break;
+                    }
+            ?>
                     <div class="mb-10">
                         <div class="card flex flex-col md:flex-row <?php echo ($key % 2 == 0) ? 'md:flex-row-reverse text-right' : ''; ?>">
                             <img src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" style="width: 500px; height: 250px;" alt="Monitoring">
-                            <div class="card-body flex-1 mr-4 ml-4">
+                            <div class="card-body flex-1 mr-10 ml-10">
                                 <h5 style="font-weight: bold; font-size: x-large;" class="card-title mb-4 "><?php echo $item->tempat; ?></h5>
                                 <p class="card-text"><?php echo $item->deskripsi; ?></p>
                             </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            <?php else : ?>
+                <?php
+                    // Increment the counter variable
+                    $itemCount++;
+                endforeach;
+            else :
+                ?>
                 <div class="col-12">
                     <p>Tidak ada data yang tersedia</p>
                 </div>
             <?php endif; ?>
         </div>
+
     </section>
 
     <section class="bg-green-500">
@@ -105,7 +119,7 @@
             <div class="flex flex-wrap">
                 <div class="w-full text-center">
                     <!-- <a href="" class="text-4xl font-bold text-center text-gray-800 mb-8">Testimonials</a> -->
-                    <a href="" class="py-2 px-4 text-center inline-block hover:underline">© 2023 Peduli lingkungan alam. All rights reserved.</a>
+                    © 2023 <a href="" class="py-2 text-center inline-block hover:underline">Pengaduan Bencana alam.</a> All rights reserved.
                 </div>
             </div>
         </div>
