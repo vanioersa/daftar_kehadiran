@@ -41,16 +41,13 @@
         </h2>
         <div class="container mt-20">
             <?php
-            $maxItemsToShow = 3; // Set the maximum number of items to display
-            $itemCount = 0; // Initialize the counter variable
-
+            $maxItemsToShow = 3;
+            $itemCount = 0;
             if (!empty($public)) :
                 foreach ($public as $key => $item) :
-                    // Check if the maximum number of items has been reached
                     if ($itemCount >= $maxItemsToShow) {
                         break;
-                    }
-            ?>
+                    } ?>
                     <div class="mb-10">
                         <div class="card flex flex-col md:flex-row <?php echo ($key % 2 == 0) ? 'md:flex-row-reverse text-right' : ''; ?>">
                             <img src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" style="width: 500px; height: 250px;" alt="Monitoring">
@@ -61,7 +58,6 @@
                         </div>
                     </div>
                 <?php
-                    // Increment the counter variable
                     $itemCount++;
                 endforeach;
             else :
@@ -74,43 +70,41 @@
 
     </section>
 
-    <section class="bg-green-500">
+    <section class="bg-blue-400">
         <div class="container mx-auto px-6 py-20">
-            <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
+            <h2 class="text-4xl font-bold text-center text-white mb-8">
                 Rating
             </h2>
-            <div class="flex flex-wrap">
-                <div class="w-full md:w-1/3 px-2 mb-4">
-                    <div class="bg-white rounded shadow py-2">
-                        <p class="text-gray-800 text-base px-6 mb-5">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. A praesentium repellat omnis libero excepturi veritatis cum, accusantium minus? Commodi porro fuga ab a atque facilis dolores ipsa nesciunt iure animi!
-                        </p>
-                        <p class="text-gray-500 text-xs md:text-sm px-6">
-                            John Doe
-                        </p>
-                    </div>
+
+            <?php if (empty($reting)) : ?>
+                <p class="text-gray-800 text-base px-6 mb-5 text-center">
+                    No ratings available.
+                </p>
+            <?php else : ?>
+                <div class="flex flex-wrap">
+                    <?php $counter = 0; ?>
+                    <?php foreach ($reting as $row) : ?>
+                        <?php if ($counter < 6 && ($row->rating == 4 || $row->rating == 5)) : ?>
+                            <div class="w-full md:w-1/3 px-2 mb-4">
+                                <div class="bg-white rounded shadow py-2">
+                                    <p class="text-gray-800 text-base px-6 mb-5">
+                                        <?= $row->comment; ?>
+                                    </p>
+                                    <p class="text-gray-500 text-xs md:text-sm px-6 flex">
+                                        <span><?= tampil_nama_byid($row->id_user) ?></span>
+                                        <span class="ml-auto text-gray-800">
+                                            <?php for ($i = 1; $i <= $row->rating; $i++) : ?>
+                                                <span class="star-icon" style="color: gold; font-size: 1.5em;">&#9733;</span>
+                                            <?php endfor; ?>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <?php $counter++; ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
-                <div class="w-full md:w-1/3 px-2 mb-4">
-                    <div class="bg-white rounded shadow py-2">
-                        <p class="text-gray-800 text-base px-6 mb-5">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit corporis et assumenda illum, quas voluptate explicabo labore aut ipsam, nesciunt veritatis non, doloremque adipisci repellendus expedita? Sunt, ullam temporibus! Necessitatibus!
-                        </p>
-                        <p class="text-gray-500 text-xs md:text-sm px-6">
-                            Jane Doe
-                        </p>
-                    </div>
-                </div>
-                <div class="w-full md:w-1/3 px-2 mb-4">
-                    <div class="bg-white rounded shadow py-2">
-                        <p class="text-gray-800 text-base px-6 mb-5">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit corporis et assumenda illum, quas voluptate explicabo labore aut ipsam, nesciunt veritatis non, doloremque adipisci repellendus expedita? Sunt, ullam temporibus! Necessitatibus!
-                        </p>
-                        <p class="text-gray-500 text-xs md:text-sm px-6">
-                            James Doe
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -118,15 +112,13 @@
         <div class="container mx-auto px-6 pt-10 pb-6">
             <div class="flex flex-wrap">
                 <div class="w-full text-center">
-                    <!-- <a href="" class="text-4xl font-bold text-center text-gray-800 mb-8">Testimonials</a> -->
-                    © 2023 <a href="" class="py-2 text-center inline-block hover:underline">Pengaduan Bencana alam.</a> All rights reserved.
+                    Terdaftar © 2023 <a href="" style="cursor: default;" class="py-2 inline-block hover:underline">Layanan Pengaduan Bencana</a>. Semua hak dilindungi dan kami siap melayani untuk keamanan bersama.
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Add JavaScript to handle the toggle of the navigation menu
         document.getElementById('menuBtn').addEventListener('click', function() {
             var menu = document.getElementById('menu');
             menu.classList.toggle('hidden');

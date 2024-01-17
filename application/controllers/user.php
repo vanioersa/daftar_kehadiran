@@ -25,7 +25,13 @@ class User extends CI_Controller
 
     public function retting()
     {
-        $this->load->view('user/rating');
+        $user_id = $this->session->userdata('id');
+
+        $ratingResults = $this->m_model->get_rating_results($user_id);
+
+        $data['ratingResults'] = $ratingResults;
+
+        $this->load->view('user/rating', $data);
     }
 
     public function aksi_ratting()
@@ -35,54 +41,47 @@ class User extends CI_Controller
             $this->form_validation->set_rules('comment', 'Comment', 'required');
 
             if ($this->form_validation->run() == FALSE) {
+                // Check if 'rating' is not provided, redirect back to the form view
+                if (!$this->input->post('rating')) {
+                    redirect(base_url('user/retting'));
+                }
+
                 $this->load->view('your_form_view');
             } else {
-                // Retrieve user ID from the session
                 $user_id = $this->session->userdata('id');
 
-                // If user ID is not available, handle accordingly
                 if (!$user_id) {
-                    // Redirect or show an error message
-                    redirect('user/retting');
+                    redirect(base_url('user/retting'));
                 }
 
                 $rating = $this->input->post('rating');
                 $comment = $this->input->post('comment');
 
                 $data = array(
-                    'user_id' => $user_id, // Associate the user ID with the rating data
+                    'id_user' => $user_id,
                     'rating' => $rating,
                     'comment' => $comment,
                 );
 
                 $this->m_model->tambah_data('ratting', $data);
 
-                redirect('user/retting');
+                redirect(base_url('user/retting'));
             }
         } else {
-            redirect('user/retting');
+            redirect(base_url('user/retting'));
         }
     }
 
-    public function pesan($page = 1)
+    public function pesan()
     {
-        $data['per_page'] = 10;
-        $offset = ($page - 1) * $data['per_page'];
-
-        $data['pesan'] = $this->m_model->get_dataa('pesan', $data['per_page'], $offset)->result();
-
         $user_id = $this->session->userdata('id');
         $data['user_id'] = $user_id;
 
         $user_data = $this->session->userdata('id');
         $data['user_names'] = $this->m_model->get_data_except_current_users('user', $user_data)->result();
 
-        $data['pesan'] = $this->m_model->get_messages_by_sender('pesan', $data['per_page'], $offset, $user_id)->result();
-
-        $total_rows = $this->m_model->count_rows('pesan');
-
-        $data['total_pages'] = ceil($total_rows / $data['per_page']);
-        $data['current_page'] = $page;
+        // Get all messages without pagination
+        $data['pesan'] = $this->m_model->get_messages_by_sender_all('pesan', $user_id)->result();
 
         $this->load->view('user/page_1', $data);
     }

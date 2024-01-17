@@ -78,6 +78,27 @@ class M_model extends CI_Model
         return $admin_ids;
     }
 
+    public function get_rating_results($user_id)
+    {
+        // Assuming you have a table named 'ratting'
+        $this->db->where('id_user', $user_id);
+        $query = $this->db->get('ratting');
+
+        // Return the result as an array of objects
+        return $query->result();
+    }
+
+    public function get_messages_by_sender_all($table, $user_id) {
+        $this->db->select('*');
+        $this->db->from($table);
+        $this->db->where('id_pengirim', $user_id);
+        $this->db->or_where('id_penerima', $user_id);
+        $this->db->order_by('tanggal', 'asc');
+        $this->db->order_by('jam', 'asc');
+
+        return $this->db->get();
+    }
+
     public function getwhere($table, $data)
     {
         return $this->db->get_where($table, $data);

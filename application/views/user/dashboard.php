@@ -60,22 +60,30 @@
     <div class="mx-10 mx-10 my-10">
         <div class="w-full rounded-3xl overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800">
             <div class="w-full overflow-x-auto">
-                <?php foreach ($pesan as $row) : ?>
-                    <div class="message-container px-5 <?= ($row->id_pengirim == $current_user_id) ? 'justify-end' : 'justify-start' ?>">
-                        <div class="mt-3 <?= ($row->id_pengirim == $current_user_id) ? 'message-bubble-outgoing' : 'message-bubble-incoming' ?>">
-                            <p class="message-sender"><?= tampil_nama_byid($row->id_pengirim) ?></p>
-                            <p class="message-content"><?= $row->pesan ?></p>
-                            <?php
-                            $englishDate = date('j F Y', strtotime($row->tanggal));
-                            $translatedDate = date('j', strtotime($englishDate)) . '/' . date('n', strtotime($englishDate)) . '/' . date('Y', strtotime($englishDate));
-                            ?>
-                            <div class="message-metadata">
-                                <p class="message-date pr-10"><?= $translatedDate ?></p>
-                                <p class="message-time"><?= $row->jam ?></p>
+                <?php
+                $prevMessage = null;
+                foreach ($pesan as $row) :
+                    if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) :
+                ?>
+                        <div class="message-container px-5 <?= ($row->id_pengirim == $current_user_id) ? 'justify-end' : 'justify-start' ?>">
+                            <div class="mt-3 <?= ($row->id_pengirim == $current_user_id) ? 'message-bubble-outgoing' : 'message-bubble-incoming' ?>">
+                                <p class="message-sender"><?= tampil_nama_byid($row->id_pengirim) ?></p>
+                                <p class="message-content"><?= $row->pesan ?></p>
+                                <?php
+                                $englishDate = date('j F Y', strtotime($row->tanggal));
+                                $translatedDate = date('j', strtotime($englishDate)) . '/' . date('n', strtotime($englishDate)) . '/' . date('Y', strtotime($englishDate));
+                                ?>
+                                <div class="message-metadata">
+                                    <p class="message-date pr-10"><?= $translatedDate ?></p>
+                                    <p class="message-time"><?= $row->jam ?></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                <?php
+                    endif;
+                    $prevMessage = $row;
+                endforeach;
+                ?>
             </div>
         </div>
     </div>

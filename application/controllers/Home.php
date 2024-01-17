@@ -8,10 +8,12 @@ class Home extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('m_model');
+        $this->load->helper('my_helper');
     }
 
 	public function index()
 	{
+        $data['reting'] = $this->m_model->get_data('ratting')->result();
 		$data['public'] = $this->m_model->get_data('deskripsi_public')->result();
 		$this->load->view('home', $data);
 	}
