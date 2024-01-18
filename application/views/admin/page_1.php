@@ -34,12 +34,12 @@
             <?php if (!empty($public)) : ?>
                 <?php foreach ($public as $item) : ?>
                     <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 px-2 mb-4">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="rounded-lg overflow-hidden shadow-md bg-blue-100">
                             <a href="<?php echo base_url('admin/edit_card_public/' . $item->id); ?>">
                                 <div class="relative overflow-hidden pb-60">
                                     <img class="absolute h-full w-full object-cover object-center" src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" alt="Monitoring">
                                 </div>
-                                <div class="p-6">
+                                <div class="p-6">   
                                     <h4 class="text-xl font-bold mb-2">
                                         <?php echo $item->tempat; ?>
                                     </h4>

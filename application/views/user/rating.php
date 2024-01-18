@@ -89,33 +89,39 @@
 
     <div class="container my-8">
         <div class="max-w-md mx-auto bg-white shadow-md rounded-md overflow-hidden card">
-            <div class="p-6">
+            <div class="p-6 bg-blue-100">
                 <form id="myForm" action="<?= base_url('user/aksi_ratting'); ?>" method="post">
-                    <div class="mb-6 text-center rating-container">
-                        <label for="rating" class="block text-sm font-medium text-gray-600">Berikan Rating:</label>
-                        <div class="rating-stars">
-                            <?php for ($i = 5; $i >= 1; $i--) : ?>
-                                <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" class="hidden">
-                                <label for="star<?= $i ?>" class="star-icon" onclick="toggleStar(this)">&#9733;</label>
-                            <?php endfor; ?>
+                    <?php if (empty($ratingResults)) : ?>
+                        <div class="mb-6 text-center rating-container">
+                            <label for="rating" class="block text-sm font-medium text-gray-600">Beri Rating:</label>
+                            <div class="rating-stars">
+                                <?php for ($i = 5; $i >= 1; $i--) : ?>
+                                    <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" class="hidden">
+                                    <label for="star<?= $i ?>" class="star-icon" onclick="toggleStar(this)">&#9733;</label>
+                                <?php endfor; ?>
+                            </div>
+                            <output for="rating" class="rating-output">0</output>
                         </div>
-                        <output for="rating" class="rating-output">0</output>
-                    </div>
-                    <div class="mb-6">
-                        <label for="comment" class="block text-sm font-medium text-gray-600">Komentar:</label>
-                        <textarea id="comment" name="comment" rows="3" class="w-full p-2 mt-1 bg-gray-100 rounded-md comment-box"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 submit-button">
-                        Kirim
-                    </button>
+                        <div class="mb-6">
+                            <label for="comment" class="block text-sm font-medium text-gray-600">Komentar:</label>
+                            <textarea id="comment" name="comment" rows="3" class="w-full p-2 mt-1 bg-gray-100 rounded-md comment-box"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 submit-button">
+                            Kirim
+                        </button>
+                    <?php else : ?>
+                        <p>Anda telah memberikan rating sebelumnya. Terima kasih!</p>
+                    <?php endif; ?>
                 </form>
 
                 <div class="mt-8 rating-results">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">Hasil Rating:</h2>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Hasil Rating Dari (<?php foreach ($user as $row) : ?><?php echo $row->nama; ?><?php endforeach; ?>):</h2>
                     <?php foreach ($ratingResults as $result) : ?>
-                        <div class="mb-4 user-rating">
-                            <p>Rating: <span style="color: #fbbf24;"><?= get_star_icons($result->rating) ?></span></p>
-                            <p class="text-gray-600"><?= $result->comment ?></p>
+                        <div class="mb-4 card">
+                            <div class="bg-blue-300 p-4 rounded-md shadow-md">
+                                <p class="text-xl font-semibold text-gray-800 mb-2">Rating: <span style="color: #fbbf24;"><?= get_star_icons($result->rating) ?></span></p>
+                                <p class="text-gray-600"><?= $result->comment ?></p>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -140,7 +146,7 @@
         const output = document.querySelector('output[for="rating"]');
 
         ratingInputs.forEach(ratingInput => {
-            ratingInput.addEventListener('change', function () {
+            ratingInput.addEventListener('change', function() {
                 output.textContent = this.value;
             });
         });

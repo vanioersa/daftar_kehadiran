@@ -88,7 +88,8 @@ class M_model extends CI_Model
         return $query->result();
     }
 
-    public function get_messages_by_sender_all($table, $user_id) {
+    public function get_messages_by_sender_all($table, $user_id)
+    {
         $this->db->select('*');
         $this->db->from($table);
         $this->db->where('id_pengirim', $user_id);
@@ -184,16 +185,23 @@ class M_model extends CI_Model
         return false;
     }
 
+    public function get_user_count_by_role($role)
+    {
+        $this->db->where('role', $role);
+        return $this->db->count_all_results('user');
+    }
 
     public function simpan_pesan($pesan, $pengirim, $penerima_array)
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         foreach ($penerima_array as $penerima) {
             $data = array(
-                'pesan'    => $pesan,
+                'pesan'       => $pesan,
                 'id_pengirim' => $pengirim,
                 'id_penerima' => $penerima,
-                'tanggal'  => date('d-m-Y'),
-                'jam'  => date('H.i')
+                'tanggal'     => date('d-m-Y'),
+                'jam'         => date('H.i')
             );
 
             if (is_array($penerima)) {

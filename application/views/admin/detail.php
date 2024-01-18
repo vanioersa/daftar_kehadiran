@@ -12,7 +12,7 @@
 
     <?php $this->load->view('sidebar_admin'); ?>
     <div class="p-4 lg:p-10">
-    <div class="w-full max-w-md mx-auto bg-white rounded-md overflow-hidden shadow-md">
+    <div class="w-full max-w-md mx-auto bg-blue-200 rounded-md overflow-hidden shadow-md">
         <?php foreach ($user as $row) : ?>
             <div class="relative">
                 <img src="<?php echo base_url('./image/' . $row->image) ?>" alt="Profile Picture" class="w-full h-40 object-cover">

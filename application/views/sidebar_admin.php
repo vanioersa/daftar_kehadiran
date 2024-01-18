@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Peduli Lindungi Alam</title>
-    <script src="https://cdn.tailwindcss.com"></script> 
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <style>
@@ -40,7 +40,7 @@
     .nav-night button:hover {
         color: #667eea;
     }
-    
+
     .nav-night nav {
         background-color: #1a202c;
         color: #cbd5e0;
@@ -155,9 +155,6 @@
                     <li>
                         <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin') ?>')">Dashboard</button>
                     </li>
-                    <!-- <li>
-                        <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin/table_pengguna') ?>')">Pengguna</button>
-                    </li> -->
                     <li>
                         <button class="px-4 py-2 text-white hover:text-green-500" onclick="navigateTo('<?php echo base_url('admin/public') ?>')">Public</button>
                     </li>
@@ -174,10 +171,34 @@
                     </li>
                 </ul>
             </div>
+            <div id="date-time" class="text-white">
+            </div>
         </div>
     </nav>
 
     <script>
+        function updateDateTime() {
+            var dateTimeContainer = document.getElementById('date-time');
+            var now = new Date();
+
+            var options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                // second: 'numeric',
+                timeZone: 'Asia/Jakarta',
+            };
+
+            var formattedDateTime = now.toLocaleDateString('id-ID', options);
+            dateTimeContainer.textContent = formattedDateTime;
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+
         function navigateTo(url) {
             window.location.href = url;
         }

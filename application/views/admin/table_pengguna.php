@@ -13,7 +13,7 @@
     <div class="p-4 lg:p-10">
         <div class="w-full overflow-x-auto">
         <table class="w-full min-w-full bg-white text-center border border-gray-300">
-                <thead style="background-color: #667eea;">
+                <thead class="bg-green-500">
                     <tr>
                         <th class="py-2 px-4 border-b">NO</th>
                         <th class="py-2 px-4 border-b">Nama</th>
@@ -24,7 +24,7 @@
                 <tbody>
                     <?php $no = 0;
                     foreach ($public as $row) : $no++ ?>
-                        <tr class="hover:bg-blue-300" onclick="window.location='<?php echo base_url('admin/detail_pengguna/'.$row->id); ?>';">
+                        <tr class="hover:bg-green-100" onclick="window.location='<?php echo base_url('admin/detail_pengguna/'.$row->id); ?>';">
                             <td class="py-2 px-4 border-b"><?= $no ?>.</td>
                             <td class="py-2 px-4 border-b"><?= $row->nama ?></td>
                             <td class="py-2 px-4 border-b"><?= $row->email ?></td>

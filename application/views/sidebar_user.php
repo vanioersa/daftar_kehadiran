@@ -19,6 +19,14 @@
         padding: 0;
     }
 
+    body .nav-day {
+        background-color: blue;
+    }
+
+    body .nav-night {
+        background-color: blue;
+    }
+
     .nav-day nav,
     .nav-night nav {
         transition: all 0.3s ease;
@@ -120,10 +128,33 @@
                     </li>
                 </ul>
             </div>
+            <div id="date-time" class="text-white">
+            </div>
         </div>
     </nav>
 
     <script>
+        function updateDateTime() {
+            var dateTimeContainer = document.getElementById('date-time');
+            var now = new Date();
+
+            var options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                // second: 'numeric',
+                timeZone: 'Asia/Jakarta',
+            };
+
+            var formattedDateTime = now.toLocaleDateString('id-ID', options);
+            dateTimeContainer.textContent = formattedDateTime;
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
         function navigateTo(url) {
             window.location.href = url;
         }
@@ -142,7 +173,6 @@
                 cancelButtonText: 'tidak'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redirect to the logout URL
                     window.location.href = "<?php echo base_url('auth/logout') ?>";
                 }
             });

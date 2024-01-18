@@ -16,6 +16,7 @@ class User extends CI_Controller
 
     public function index()
     {
+        $data['user_count'] = $this->m_model->get_user_count_by_role('user');
         $data['pesan'] = $this->m_model->get_data('pesan')->result();
         $data['current_user_id'] = $this->session->userdata('id');
 
@@ -25,6 +26,7 @@ class User extends CI_Controller
 
     public function retting()
     {
+        $data['user'] = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->result();
         $user_id = $this->session->userdata('id');
 
         $ratingResults = $this->m_model->get_rating_results($user_id);
@@ -80,7 +82,6 @@ class User extends CI_Controller
         $user_data = $this->session->userdata('id');
         $data['user_names'] = $this->m_model->get_data_except_current_users('user', $user_data)->result();
 
-        // Get all messages without pagination
         $data['pesan'] = $this->m_model->get_messages_by_sender_all('pesan', $user_id)->result();
 
         $this->load->view('user/page_1', $data);
@@ -107,6 +108,11 @@ class User extends CI_Controller
 
     public function aksi_ubah_profile()
     {
+        $this->load->library('form_validation');
+
+        // Validasi nomor
+        $this->form_validation->set_rules('nomor', 'Nomor', 'required|numeric');
+
         $old_password = $this->input->post('password_lama');
         $image = $_FILES['foto']['name'];
         $foto_temp = $_FILES['foto']['tmp_name'];
@@ -115,23 +121,33 @@ class User extends CI_Controller
         $email = $this->input->post('email');
         $jenis_kelamin = $this->input->post('jenis_kelamin');
         $nama = $this->input->post('nama');
+        $nomor = $this->input->post('nomor');
+
+        // Validasi nomor
+        if ($this->form_validation->run() === FALSE) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Nomor tidak valid
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>');
+            redirect(base_url('user/profile'));
+        }
 
         $current_user = $this->m_model->get_user_by_id($this->session->userdata('id'));
 
         if (!empty($password_baru)) {
             if (!$current_user || md5($old_password) !== $current_user->password) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Password lama tidak sesuai
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>Password lama tidak sesuai');
+            Password lama tidak sesuai
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>Password lama tidak sesuai');
                 redirect(base_url('user/profile'));
             }
 
             if ($password_baru !== $konfirmasi_password) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Password baru dan konfirmasi password harus sama
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>');
+            Password baru dan konfirmasi password harus sama
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>');
                 redirect(base_url('user/profile'));
             }
 
@@ -141,6 +157,7 @@ class User extends CI_Controller
         $data['email'] = $email;
         $data['jenis_kelamin'] = $jenis_kelamin;
         $data['nama'] = $nama;
+        $data['nomor'] = $nomor;
 
         if ($image) {
             $kode = round(microtime(true) * 100);
@@ -155,9 +172,9 @@ class User extends CI_Controller
                 $data['image'] = $file_name;
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Gagal mengunggah foto
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>');
+            Gagal mengunggah foto
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>');
                 redirect(base_url('user/profile'));
             }
         }
