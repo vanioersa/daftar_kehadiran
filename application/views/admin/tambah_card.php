@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Public Deskripsi</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
@@ -92,7 +91,7 @@
 
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
-    <div class="babu container">
+    <div class="babu container bg-blue-200">
         <h1 class="buba text-center">Tambah Public Deskripsi</h1>
 
         <form action="<?php echo base_url('admin/aksi_tambah_card') ?>" method="post" id="survey-form" class="survey-form ">
@@ -111,13 +110,12 @@
                 <input type="file" id="foto" name="foto" class="form-control" required>
             </div>
 
-            <button type="submit" id="submit" class="btn btn-outline-danger">submit</button>
+            <button type="submit" id="submit" class="bg-blue-500 hover:bg-blue-700 px-5 py-2 text-white rounded">submit</button>
         </form>
     </div>
 
     <a class="btn btn-secondary back-btn" onclick="confirmGoBack()">Kembali</a>
 
-    <!-- Include jQuery before SweetAlert2 and your other scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
@@ -142,7 +140,6 @@
                 e.preventDefault();
 
                 if (e.submitter.id === "submit") {
-                    // Display SweetAlert confirmation before submitting
                     Swal.fire({
                         title: 'Konfirmasi',
                         text: 'Apakah Anda yakin ingin menambah data?',
@@ -152,7 +149,6 @@
                         cancelButtonText: 'Batal'
                     }).then(function(result) {
                         if (result.isConfirmed) {
-                            // If user clicks "Ya", proceed with AJAX submission
                             document.getElementById("submit").disabled = true;
 
                             $.ajax({
@@ -164,7 +160,6 @@
                                 dataType: "json",
                                 success: function(response) {
                                     if (response.status === 'success') {
-                                        // Show success SweetAlert and then redirect
                                         Swal.fire({
                                             title: 'Berhasil',
                                             text: response.message,
@@ -175,7 +170,6 @@
                                             window.location.href = response.redirect;
                                         });
                                     } else {
-                                        // Display error messages
                                         if (response.errors) {
                                             response.errors.forEach(function(error) {
                                                 Swal.fire({
@@ -195,8 +189,6 @@
                                                 timer: 2000
                                             });
                                         }
-
-                                        // Re-enable the submit button immediately upon encountering an error
                                         document.getElementById("submit").disabled = false;
                                     }
                                 }
@@ -204,7 +196,6 @@
                         }
                     });
                 } else if (e.submitter.id === "cancel") {
-                    // Handle the "Batal" button click event here
                     Swal.fire({
                         title: 'Aksi dibatalkan',
                         text: 'Anda membatalkan aksi penyimpanan data.',
@@ -212,7 +203,6 @@
                         showConfirmButton: false,
                         timer: 2000
                     });
-                    // Optionally, you can redirect or perform other actions when canceling
                 }
             });
         });

@@ -77,10 +77,6 @@
         }
 
         @media only screen and (max-width: 767px) {
-            .buru {
-                margin-left: 49%;
-            }
-
             .back-btn {
                 margin-bottom: 5px;
                 margin-right: 60%;
@@ -92,7 +88,7 @@
 
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
-    <div class="babu container bg-green-500">
+    <div class="babu container bg-blue-200">
         <h1 class="buba text-center">Ubah Public Deskripsi</h1>
 
         <form action="<?php echo base_url('admin/aksi_edit_card/' . $public->id) ?>" method="post" id="edit-form" class="survey-form" enctype="multipart/form-data">
@@ -111,10 +107,10 @@
                 <input type="file" id="foto" name="foto" value="<?php echo $public->image; ?>" class="form-control">
             </div>
 
-            <button type="submit" class="btn btn-primary text-bg-black" id="submit">Submit</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 px-5 py-2 text-white rounded" id="submit">Submit</button>
 
             <form action="<?php echo base_url('admin/hapus_image/' . $public->id) ?>" method="post" id="edit-form" enctype="multipart/form-data">
-                <input type="button" id="submitt" class="bg-red-500 text-white px-4 py-2 rounded buru" value="Hapus Foto" onclick="deleteImage('<?= $public->id ?>')">
+                <input type="button" id="submitt" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded buru" value="Hapus Foto" onclick="deleteImage('<?= $public->id ?>')">
             </form>
         </form>
     </div>
@@ -167,7 +163,6 @@
                                     showConfirmButton: false,
                                     timer: 2000
                                 }).then(function() {
-                                    // Redirect ke URL tujuan setelah berhasil
                                     window.location.href = response.redirect;
                                 });
                             } else if (response.status === 'error') {
@@ -199,7 +194,6 @@
                 e.preventDefault();
 
                 if (e.submitter.id === "submit") {
-                    // Use SweetAlert to confirm export
                     Swal.fire({
                         title: 'Konfirmasi',
                         text: 'Apakah Anda yakin ingin menyimpan perubahan?',

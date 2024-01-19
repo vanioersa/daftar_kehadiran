@@ -320,7 +320,7 @@ class Admin extends CI_Controller
             redirect(base_url('admin/profile'));
         }
     }
-
+    
     public function hapus_imagee()
     {
         $user_id = $this->session->userdata('id');

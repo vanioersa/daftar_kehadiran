@@ -15,22 +15,23 @@
         height: 430px;
         width: 700px;
     }
-    .baru{
+
+    .baru {
         width: 700px;
     }
 
     @media only screen and (max-width: 767px) {
-        .babubu{
+        .babubu {
             width: 100%;
         }
-        .baru{
-        width: 100%;
-    }
+
+        .baru {
+            width: 100%;
+        }
     }
 </style>
 
 <body>
-
     <?php $this->load->view('sidebar_admin'); ?>
 
     <div class="flex flex-col items-center max-w-screen-xl w-full h-full py-10 text-center overflow-hidden">
@@ -80,11 +81,11 @@
                 </div>
             </div>
 
-            <div class="max-h-screen overflow-y-auto p-5 bg-blue-100 rounded-md shadow-md babubu">
+            <div class="max-h-screen overflow-y-auto p-5 bg-white rounded-md shadow-md babubu">
                 <?php $prevMessage = null;
                 foreach ($pesan as $row) : if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) : ?>
                         <div class="flex <?= ($row->id_pengirim == $current_user_id) ? 'justify-end' : 'justify-start' ?> mb-2">
-                            <div class="<?= ($row->id_pengirim == $current_user_id) ? 'bg-green-300' : 'bg-gray-300' ?> rounded-md p-3 max-w-2xl">
+                            <div class="<?= ($row->id_pengirim == $current_user_id) ? 'bg-blue-300' : 'bg-blue-100' ?> rounded-md p-3 max-w-2xl">
                                 <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
                                 <p><?= $row->pesan ?></p>
                                 <?php

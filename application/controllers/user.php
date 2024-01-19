@@ -106,6 +106,60 @@ class User extends CI_Controller
         $this->load->view('user/profile', $data);
     }
 
+    public function aksi_ubah_password()
+    {
+        $old_password = $this->input->post('password_lama');
+        $password_baru = $this->input->post('password_baru');
+        $konfirmasi_password = $this->input->post('konfirmasi_password');
+
+        $current_user = $this->m_model->get_user_by_id($this->session->userdata('id'));
+
+        if (!empty($password_baru)) {
+            if (!$current_user || md5($old_password) !== $current_user->password) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Password lama tidak sesuai
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>Password lama tidak sesuai');
+                redirect(base_url('user/profile'));
+            }
+
+            if ($password_baru !== $konfirmasi_password) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Password baru dan konfirmasi password harus sama
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>');
+                redirect(base_url('user/profile'));
+            }
+
+            $this->updatePassword($password_baru);
+        } else {
+            // Handle the case where password_baru is empty (optional)
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Password baru tidak boleh kosong
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>');
+            redirect(base_url('user/profile'));
+        }
+    }
+
+    private function updatePassword($new_password)
+    {
+        $data['password'] = md5($new_password);
+
+        $update_result = $this->m_model->ubah_data('user', $data, array('id' => $this->session->userdata('id')));
+
+        if ($update_result) {
+            $this->session->set_flashdata('sukses', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            Berhasil Merubah password
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>');
+            redirect(base_url('user/profile'));
+        } else {
+            $this->session->set_flashdata('message', 'Gagal merubah password');
+            redirect(base_url('user/profile'));
+        }
+    }
+
     public function aksi_ubah_profile()
     {
         $this->load->library('form_validation');
@@ -113,11 +167,8 @@ class User extends CI_Controller
         // Validasi nomor
         $this->form_validation->set_rules('nomor', 'Nomor', 'required|numeric');
 
-        $old_password = $this->input->post('password_lama');
         $image = $_FILES['foto']['name'];
         $foto_temp = $_FILES['foto']['tmp_name'];
-        $password_baru = $this->input->post('password_baru');
-        $konfirmasi_password = $this->input->post('konfirmasi_password');
         $email = $this->input->post('email');
         $jenis_kelamin = $this->input->post('jenis_kelamin');
         $nama = $this->input->post('nama');
@@ -126,33 +177,13 @@ class User extends CI_Controller
         // Validasi nomor
         if ($this->form_validation->run() === FALSE) {
             $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-        Nomor tidak valid
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>');
+                Nomor tidak valid
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>');
             redirect(base_url('user/profile'));
         }
 
         $current_user = $this->m_model->get_user_by_id($this->session->userdata('id'));
-
-        if (!empty($password_baru)) {
-            if (!$current_user || md5($old_password) !== $current_user->password) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Password lama tidak sesuai
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>Password lama tidak sesuai');
-                redirect(base_url('user/profile'));
-            }
-
-            if ($password_baru !== $konfirmasi_password) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Password baru dan konfirmasi password harus sama
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>');
-                redirect(base_url('user/profile'));
-            }
-
-            $data['password'] = md5($password_baru);
-        }
 
         $data['email'] = $email;
         $data['jenis_kelamin'] = $jenis_kelamin;
@@ -172,9 +203,9 @@ class User extends CI_Controller
                 $data['image'] = $file_name;
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Gagal mengunggah foto
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>');
+                    Gagal mengunggah foto
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>');
                 redirect(base_url('user/profile'));
             }
         }
@@ -183,9 +214,9 @@ class User extends CI_Controller
 
         if ($update_result) {
             $this->session->set_flashdata('sukses', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-        Berhasil Merubah data
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>');
+                Berhasil Merubah data
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>');
             redirect(base_url('user/profile'));
         } else {
             $this->session->set_flashdata('message', 'Gagal merubah data');

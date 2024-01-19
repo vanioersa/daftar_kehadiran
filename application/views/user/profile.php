@@ -8,30 +8,31 @@
     <title>Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-
     <?php $this->load->view('sidebar_user'); ?>
 
     <?php foreach ($user as $row) : ?>
 
-        <div class="container mx-auto p-5 my-10 bg-blue-100 rounded-sm sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-full">
-            <input name="id" type="hidden" value="<?php echo $row->id ?>">
+        <div class="container mx-auto my-10 bg-blue-100 rounded-sm sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-full">
+
+            <!-- Profile Image Section -->
+            <div class="text-center">
+                <?php if (!empty($row->image)) : ?>
+                    <img src="<?php echo base_url('./image/' . $row->image) ?>" class="mx-auto mt-4 mb-2" height="150" width="250" alt="Profile Image">
+                <?php else : ?>
+                    <img src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" class="mx-auto mt-4 mb-2" height="150" width="150" alt="Default Profile Image" />
+                <?php endif; ?>
+            </div>
 
             <p class="font-bold text-xl mb-4 text-center">Akun <?php echo $this->session->userdata('username'); ?></p>
 
-            <?php if (!empty($row->image)) : ?>
-                <img src="<?php echo base_url('./image/' . $row->image) ?>" class="mx-auto" height="150" width="250" alt="Profile Image">
-            <?php else : ?>
-                <img src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" class="mx-auto" height="150" width="150" alt="Default Profile Image" />
-            <?php endif; ?>
-
-            <br>
             <h1><?php echo $this->session->flashdata('message'); ?></h1>
             <h1><?php echo $this->session->flashdata('sukses'); ?></h1>
-            <br>
 
+            <!-- Personal Information Form Section -->
             <form method="post" action="<?php echo base_url('user/aksi_ubah_profile'); ?>" enctype="multipart/form-data">
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -58,59 +59,76 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label for="jenis_kelamin" class="block text-sm font-medium text-gray-600">Jenis Kelamin</label>
-                        <select id="jenis_kelamin" name="jenis_kelamin" class="mt-1 p-2 w-full border rounded-md" required>
-                            <option value="<?php echo $row->jenis_kelamin; ?>"><?php echo $row->jenis_kelamin; ?></option>
-                            <option value="laki-laki">Laki-laki</option>
-                            <option value="perempuan">Perempuan</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4 relative">
-                        <label for="password_lama" class="block text-sm font-medium text-gray-600">Password Lama</label>
-                        <div class="relative">
-                            <input type="password" class="mt-1 p-2 w-full border rounded-md" id="password_lama" name="password_lama">
-                            <button class="btn btn-outline-secondary absolute top-7 transform -translate-y-1/2 right-2" type="button" id="togglePasswordLama" onclick="togglePassword('password_lama', 'togglePasswordLama')">
-                                <i class="fas fa-eye-slash"></i>
-                            </button>
-                        </div>
+                <div class="mb-4">
+                    <div class="flex justify-between items-center">
+                        <button type="button" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full mr-2" onclick="ubahProfile()">Ubah</button>
+                        <button type="button" class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-full" onclick="hapusFoto()">Hapus Foto</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                    <div class="mb-4 relative">
-                        <label for="password_baru" class="block text-sm font-medium text-gray-600">Password Baru</label>
-                        <div class="relative">
-                            <input type="password" class="mt-1 p-2 w-full border rounded-md" id="password_baru" name="password_baru">
-                            <button class="btn btn-outline-secondary absolute top-7 transform -translate-y-1/2 right-2" type="button" id="togglePasswordBaru" onclick="togglePassword('password_baru', 'togglePasswordBaru')">
-                                <i class="fas fa-eye-slash"></i>
-                            </button>
-                        </div>
-                    </div>
+            </form>
 
-                    <div class="mb-4 relative">
-                        <label for="konfirmasi_password" class="block text-sm font-medium text-gray-600">Konfirmasi Password</label>
-                        <div class="relative">
-                            <input type="password" class="mt-1 p-2 w-full border rounded-md" id="konfirmasi_password" name="konfirmasi_password">
-                            <button class="btn btn-outline-secondary absolute top-7 transform -translate-y-1/2 right-2" type="button" id="toggleKonfirmasiPassword" onclick="togglePassword('konfirmasi_password', 'toggleKonfirmasiPassword')">
-                                <i class="fas fa-eye-slash"></i>
-                            </button>
-                        </div>
+            <!-- Password Form Section -->
+            <form method="post" action="<?php echo base_url('user/aksi_ubah_password'); ?>" class="mt-6" id="ubahPasswordForm">
+
+                <div class="mb-4 relative">
+                    <label for="password_lama" class="block text-sm font-medium text-gray-600">Password Lama</label>
+                    <div class="relative">
+                        <input type="password" class="mt-1 p-2 w-full border rounded-md" id="password_lama" name="password_lama">
+                        <button class="btn btn-outline-secondary absolute top-7 transform -translate-y-1/2 right-2" type="button" id="togglePasswordLama" onclick="togglePassword('password_lama', 'togglePasswordLama')">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-4 relative">
+                    <label for="password_baru" class="block text-sm font-medium text-gray-600">Password Baru</label>
+                    <div class="relative">
+                        <input type="password" class="mt-1 p-2 w-full border rounded-md" id="password_baru" name="password_baru">
+                        <button class="btn btn-outline-secondary absolute top-7 transform -translate-y-1/2 right-2" type="button" id="togglePasswordBaru" onclick="togglePassword('password_baru', 'togglePasswordBaru')">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-4 relative">
+                    <label for="konfirmasi_password" class="block text-sm font-medium text-gray-600">Konfirmasi Password</label>
+                    <div class="relative">
+                        <input type="password" class="mt-1 p-2 w-full border rounded-md" id="konfirmasi_password" name="konfirmasi_password">
+                        <button class="btn btn-outline-secondary absolute top-7 transform -translate-y-1/2 right-2" type="button" id="toggleKonfirmasiPassword" onclick="togglePassword('konfirmasi_password', 'toggleKonfirmasiPassword')">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center">
-                    <button type="button" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full mr-2" onclick="ubahProfile()">Ubah</button>
-                    <button type="button" class="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-full" onclick="hapusFoto()">Hapus Foto</button>
+                    <button type="button" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full mr-2" onclick="confirmPasswordChange()">Ubah Password</button>
                 </div>
+
             </form>
+
         </div>
     <?php endforeach; ?>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
+        function confirmPasswordChange() {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin mengubah password?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: "Ubah",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('ubahPasswordForm').submit();
+                }
+            });
+        }
+
         function navigateTo(url) {
             window.location.href = url;
         }
@@ -134,8 +152,8 @@
                 text: "Anda yakin ingin mengubah profile?",
                 icon: "question",
                 showCancelButton: true,
-                confirmButtonColor: "#28a745",
-                cancelButtonColor: "#dc3545",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
                 confirmButtonText: "Ubah",
                 cancelButtonText: "Batal"
             }).then((result) => {
@@ -144,7 +162,7 @@
                         title: "Berhasil",
                         text: "Profil berhasil diubah",
                         icon: "success",
-                        timer: 2000, // Timer dalam milidetik (2000ms = 2 detik)
+                        timer: 2000,
                         timerProgressBar: true,
                         showConfirmButton: false
                     });
@@ -171,7 +189,7 @@
                         title: "Berhasil",
                         text: "Foto profil berhasil dihapus",
                         icon: "success",
-                        timer: 2000, // Timer dalam milidetik (2000ms = 2 detik)
+                        timer: 2000,
                         timerProgressBar: true,
                         showConfirmButton: false
                     });

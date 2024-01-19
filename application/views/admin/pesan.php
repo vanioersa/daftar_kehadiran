@@ -10,8 +10,9 @@
 </head>
 <style>
     .table-container {
-        max-width: 600px;
+        max-width: screen;
         margin: 0 auto;
+        overflow-x: auto;
     }
 
     table {
@@ -59,6 +60,42 @@
     .pagination .active a {
         background-color: #3559E0;
     }
+
+    @media (max-width: 640px) {
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: max-content;
+        }
+
+        th,
+        td {
+            white-space: nowrap;
+        }
+
+        thead {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background-color: #f8f8f8;
+        }
+
+        tbody {
+            max-height: 300px;
+            width: 100%;
+            display: block;
+            overflow-y: auto;
+        }
+    }
+
+    .scrollable-table {
+        max-height: 300px;
+        overflow-y: auto;
+    }
 </style>
 
 <body>
@@ -99,106 +136,103 @@
         </form>
     </div>
 
-    <?php
-    function translateDay($englishDay)
+    <?php function translateDay($englishDay)
     {
         $daysTranslation = ['Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu', 'Sunday' => 'Minggu',];
-
         return $daysTranslation[$englishDay];
     }
-
     function translateMonth($englishMonth)
     {
         $monthsTranslation = [
-            'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April', 'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September', 'October' => 'Oktober', 'December' => 'Desember'
-        ];
-
+            'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April', 'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September', 'October' => 'Oktober', 'December' => 'Desember'];
         return $monthsTranslation[$englishMonth];
-    }
-    ?>
+    } ?>
     <div class="mt-10 mx-10 mb-10">
         <div class="w-full rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-800">
-            <div class="w-full overflow-x-auto">
-                <div class="flex flex-col h-screen">
-                    <div class="flex-1 overflow-x-hidden overflow-y-scroll">
-                        <table class="min-w-full bg-white">
-                            <tbody>
-                                <?php
-                                $prevMessage = null;
-                                $displayTable = false;
+            <div class="w-full table-container">
+                <div class="scrollable-table">
+                    <table class="min-w-full bg-white">
+                        <tbody>
+                            <?php
+                            $prevMessage = null;
+                            $rowCounter = 0;
 
-                                foreach ($pesan as $row) :
-                                    $rowClass = 'border-b';
-                                    $englishDate = date('l, j F Y', strtotime($row->tanggal));
-                                    $translatedDate = translateDay(date('l', strtotime($englishDate))) . ', ' . date('j', strtotime($englishDate)) . ' ' . translateMonth(date('F', strtotime($englishDate))) . ' ' . date('Y', strtotime($englishDate));
+                            foreach ($pesan as $row) :
+                                $rowClass = 'border-b';
+                                $englishDate = date('l, j F Y', strtotime($row->tanggal));
+                                $translatedDate = translateDay(date('l', strtotime($englishDate))) . ', ' . date('j', strtotime($englishDate)) . ' ' . translateMonth(date('F', strtotime($englishDate))) . ' ' . date('Y', strtotime($englishDate));
 
-                                    if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) {
-                                        continue;
-                                    }
-                                    $displayTable = true;
-                                ?>
-                                    <tr class="<?= $rowClass ?>">
-                                        <td class="w-1/5 p-4">
-                                            <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
-                                                <div class="flex flex-col items-left">
-                                                    <p class="font-semibold dark:text-gray-300"></p>
-                                                    <p class="text-sm"></p>
-                                                </div>
-                                            <?php else : ?>
-                                                <div class="flex flex-col items-left">
-                                                    <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_pengirim) ?></p>
-                                                    <?php if (!empty($row->id_pengirim)) : ?>
-                                                        <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="object-cover w-12 h-12 rounded-full mt-2" alt="Profile Picture" loading="lazy">
-                                                    <?php else : ?>
-                                                        <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-12 h-12 rounded-full mt-2" alt="Default Profile Picture" loading="lazy" />
-                                                    <?php endif; ?>
-                                                    <p class="text-sm"><?= tampil_nomor_byid($row->id_pengirim) ?></p>
-                                                </div>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="w-2/3 p-4">
-                                            <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
-                                                <div class="flex flex-col bg-gray-300 p-3 rounded">
-                                                    <p class="text-gray-800 dark:text-gray-300"></p>
-                                                    <p class="text-sm text-gray-800 text-right"></p>
-                                                </div>
-                                            <?php else : ?>
-                                                <div class="flex flex-col bg-gray-300 p-3 rounded">
-                                                    <p class="text-gray-800 dark:text-gray-300"><?= $row->pesan ?></p>
-                                                    <p class="text-sm text-gray-800 text-right"><?= $translatedDate ?> <?= $row->jam ?></p>
-                                                </div>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="w-1/5 p-4 text-right">
-                                            <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
-                                                <div class="flex flex-col items-end">
-                                                    <p class="font-semibold dark:text-gray-300"></p>
-                                                    <p class="text-sm"></p>
-                                                </div>
-                                            <?php else : ?>
-                                                <div class="flex flex-col items-end">
-                                                    <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_penerima) ?></p>
-                                                    <?php if (!empty($row->id_penerima)) : ?>
-                                                        <img src="<?= base_url('./image/' . tampil_image_byid($row->id_penerima)) ?>" class="object-cover w-12 h-12 rounded-full mt-2" alt="Profile Picture" loading="lazy">
-                                                    <?php else : ?>
-                                                        <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-12 h-12 rounded-full mt-2" alt="Default Profile Picture" loading="lazy" />
-                                                    <?php endif; ?>
-                                                    <p class="text-sm"><?= tampil_nomor_byid($row->id_penerima) ?></p>
-                                                </div>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                    <?php $prevMessage = $row; ?>
-                                <?php endforeach; ?>
+                                if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) {
+                                    continue;
+                                }
 
-                            </tbody>
-                        </table>
-                    </div>
+                                if ($rowCounter >= 5) {
+                                    break;
+                                }
+
+                                $rowCounter++;
+                            ?>
+                                <tr class="<?= $rowClass ?>">
+                                    <td class="w-1/5 p-4">
+                                        <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
+                                            <div class="flex flex-col items-left">
+                                                <p class="font-semibold dark:text-gray-300"></p>
+                                                <p class="text-sm"></p>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="flex flex-col items-left">
+                                                <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_pengirim) ?></p>
+                                                <?php if (!empty($row->id_pengirim)) : ?>
+                                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="object-cover w-12 h-12 rounded-full mt-2" alt="Profile Picture" loading="lazy">
+                                                <?php else : ?>
+                                                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-12 h-12 rounded-full mt-2" alt="Default Profile Picture" loading="lazy" />
+                                                <?php endif; ?>
+                                                <p class="text-sm"><?= tampil_nomor_byid($row->id_pengirim) ?></p>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="w-2/3 p-4">
+                                        <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
+                                            <div class="flex flex-col bg-gray-300 p-3 rounded">
+                                                <p class="text-gray-800 dark:text-gray-300"></p>
+                                                <p class="text-sm text-gray-800 text-right"></p>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="flex flex-col bg-gray-300 p-3 rounded">
+                                                <p class="text-gray-800 dark:text-gray-300"><?= $row->pesan ?></p>
+                                                <p class="text-sm text-gray-800 text-right"><?= $translatedDate ?> <?= $row->jam ?></p>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="w-1/5 p-4 text-right">
+                                        <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
+                                            <div class="flex flex-col items-end">
+                                                <p class="font-semibold dark:text-gray-300"></p>
+                                                <p class="text-sm"></p>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="flex flex-col items-end">
+                                                <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_penerima) ?></p>
+                                                <?php if (!empty($row->id_penerima)) : ?>
+                                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_penerima)) ?>" class="object-cover w-12 h-12 rounded-full mt-2" alt="Profile Picture" loading="lazy">
+                                                <?php else : ?>
+                                                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-12 h-12 rounded-full mt-2" alt="Default Profile Picture" loading="lazy" />
+                                                <?php endif; ?>
+                                                <p class="text-sm"><?= tampil_nomor_byid($row->id_penerima) ?></p>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php
+                                $prevMessage = $row;
+                            endforeach;
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>

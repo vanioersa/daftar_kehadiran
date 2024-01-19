@@ -106,7 +106,7 @@
                             <label for="comment" class="block text-sm font-medium text-gray-600">Komentar:</label>
                             <textarea id="comment" name="comment" rows="3" class="w-full p-2 mt-1 bg-gray-100 rounded-md comment-box"></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 submit-button">
+                        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800 submit-button">
                             Kirim
                         </button>
                     <?php else : ?>
@@ -120,7 +120,7 @@
                         <div class="mb-4 card">
                             <div class="bg-blue-300 p-4 rounded-md shadow-md">
                                 <p class="text-xl font-semibold text-gray-800 mb-2">Rating: <span style="color: #fbbf24;"><?= get_star_icons($result->rating) ?></span></p>
-                                <p class="text-gray-600"><?= $result->comment ?></p>
+                                <p class="text-gray-800"><?= $result->comment ?></p>
                             </div>
                         </div>
                     <?php endforeach; ?>
