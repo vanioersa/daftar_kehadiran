@@ -9,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
 </head>
+
 <style>
     body {
         font-family: 'Source Sans Pro', sans-serif;
@@ -71,52 +72,27 @@
         font-size: 1.5rem;
     }
 
-    .card {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s;
+    .rating-container {
+        margin-bottom: 20px;
     }
 
-    .card:hover {
-        transform: scale(1.02);
+    .rating-container h3 {
+        color: #333;
+        margin-bottom: 10px;
     }
 
-    .card img {
-        width: 100%;
-        height: auto;
-        border-radius: 8px 8px 0 0;
+    .star-icon {
+        margin-top: 10px;
+        color: gold;
+        font-size: 1.5em;
     }
-
-    .card-body {
-        padding: 20px;
-    }
-
-    .card-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #4a5568;
-    }
-
-    .card-text {
-        color: #718096;
-    }
-
-    .bg-blue-400 {
-        background-color: #667eea;
-    }
-
-    .text-white {
-        color: #fff;
-    }
-
-    .underline {
-        text-decoration: underline;
-        cursor: default;
+    .babuh {
+        margin-left: 45%;
     }
 
     @media (min-width: 768px) {
-        .menu-item {
-            border-bottom: none;
-            width: 100%;
+        .babuh {
+            margin-left: 55%;
         }
     }
 </style>
@@ -126,7 +102,7 @@
         <div class="container mx-auto my-3 py-2 flex flex-col lg:flex-row justify-between items-center">
             <div class="flex items-center font-bold text-2xl lg:text-2xl">
                 <a href="" class="flex items-center text-white" style="cursor: default;">
-                    <img id="logoImage" src="image/logo1.png" style="height: 40px;" alt="">
+                    <img id="logoImage" src="<?= base_url('image/logo1.png') ?>" style="height: 40px;" alt="">
                     <p class="ml-2">Layanan Pengaduan Bencana</p>
                 </a>
             </div>
@@ -152,88 +128,52 @@
         </div>
     </nav>
 
-    <section class="container mx-auto px-6 p-10">
-        <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">Deskripsi</h2>
-        <div class="container mt-20">
-            <?php $maxItemsToShow = 3;
-            $itemCount = 0;
-            if (!empty($public)) :
-                foreach ($public as $key => $item) :
-                    if ($itemCount >= $maxItemsToShow) {
-                        break;
-                    } ?>
-                    <div class="mb-10">
-                        <div class="card flex flex-col md:flex-row <?php echo ($key % 2 == 0) ? 'md:flex-row-reverse text-right' : ''; ?>">
-                            <img src="<?php echo (!empty($item->image) && file_exists('./image/' . $item->image)) ? base_url('./image/' . $item->image) : base_url('./image/foto.png'); ?>" style="width: 500px; height: 250px;" alt="Monitoring">
-                            <div class="card-body flex-1 mr-10 ml-10">
-                                <h5 style="font-weight: bold; font-size: x-large;" class="card-title mb-4 "><?php echo $item->tempat; ?></h5>
-                                <p class="card-text"><?php echo $item->deskripsi; ?></p>
-                            </div>
-                        </div>
-                    </div>
-                <?php $itemCount++;
-                endforeach;
-            else : ?>
-                <div class="col-12">
-                    <p>Tidak ada data yang tersedia</p>
-                </div>
-            <?php endif; ?>
-        </div>
-    </section>
-
-    <section class="bg-blue-400">
+    <section>
         <div class="container mx-auto px-6 py-20">
-            <h2 class="text-4xl font-bold text-center text-white mb-8">
+            <h2 class="text-4xl font-bold text-center mb-8">
                 Rating
             </h2>
-
-            <?php if (empty($reting)) : ?>
-                <p class="text-gray-800 text-base px-6 mb-5 text-center">
-                    No ratings available.
-                </p>
-            <?php else : ?>
-                <div class="flex flex-wrap">
-                    <?php $counter = 0; ?>
-                    <?php foreach ($reting as $row) : ?>
-                        <?php if ($counter < 3 && ($row->rating == 4 || $row->rating == 5)) : ?>
-                            <div class="w-full md:w-1/3 px-2 mb-4">
-                                <div class="bg-white rounded shadow py-2">
-                                    <p class="text-gray-800 text-base px-6 mb-5">
-                                        <?= $row->comment; ?>
-                                    </p>
-                                    <p class="text-gray-500 text-xs md:text-sm px-6 flex">
-                                        <span><?= tampil_nama_byid($row->id_user) ?></span>
-                                        <span class="ml-auto text-gray-800">
-                                            <?php for ($i = 1; $i <= $row->rating; $i++) : ?>
-                                                <span class="star-icon" style="color: gold; font-size: 1.5em;">&#9733;</span>
-                                            <?php endfor; ?>
-                                        </span>
-                                    </p>
+            <?php if (!empty($reting)) : ?>
+                <?php $groupedRatings = [];
+                foreach ($reting as $row) {
+                    $rating = $row->rating;
+                    if (!isset($groupedRatings[$rating])) {
+                        $groupedRatings[$rating] = [];
+                    }
+                    $groupedRatings[$rating][] = $row;
+                }
+                krsort($groupedRatings);
+                foreach ($groupedRatings as $rating => $rows) : ?>
+                    <div class="rating-container mb-8">
+                        <h3 class="text-2xl font-semibold mb-4">Rating <?= $rating ?> Bintang</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <?php foreach ($rows as $row) : ?>
+                                <div class="rating-card mb-4">
+                                    <div class="bg-white rounded shadow p-6">
+                                        <p class="text-gray-800 text-base rating-content">
+                                            <?= $row->comment; ?>
+                                        </p>
+                                        <p class="text-gray-500 text-xs md:text-sm rating-content mt-4">
+                                            <span><?= tampil_nama_byid($row->id_user) ?></span>
+                                            <span class="babuh ml-auto text-gray-800">
+                                                <?php for ($i = 1; $i <= $row->rating; $i++) : ?>
+                                                    <span class="star-icon">&#9733;</span>
+                                                <?php endfor; ?>
+                                            </span>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <?php $counter++; ?>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </div>
-
-                <?php if (count($reting) > 3) : ?>
-                    <div class="text-center mt-4">
-                        <a href="<?= base_url('home/ratting') ?>" class="text-white underline">Lihat Selengkapnya &rarr;</a>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <p class="text-gray-800 text-base px-6 mb-5 text-center">
+                    Tidak ada data yang tersedia.
+                </p>
             <?php endif; ?>
         </div>
     </section>
-
-    <footer class="bg-green-100">
-        <div class="container mx-auto px-6 pt-10 pb-6">
-            <div class="flex flex-wrap">
-                <div class="w-full text-center">
-                    Terdaftar © 2023 <a href="" style="cursor: default;" class="py-2 inline-block hover:underline">Layanan Pengaduan Bencana</a>. Semua hak dilindungi dan kami siap melayani untuk keamanan bersama.
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <script>
         function updateDateTime() {
@@ -277,9 +217,9 @@
             nav.classList.toggle('nav-night');
 
             if (body.classList.contains('nav-day')) {
-                logo.src = 'image/logo1.png';
+                logo.src = '<?= base_url('image/logo1.png') ?>';
             } else {
-                logo.src = 'image/logo2.png';
+                logo.src = '<?= base_url('image/logo2.png') ?>';
             }
         }
     </script>

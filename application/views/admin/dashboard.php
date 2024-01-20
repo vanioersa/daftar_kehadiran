@@ -44,7 +44,7 @@
 
         <div class="flex md:flex-row flex-col md:space-y-0 space-y-4 w-full">
             <div class="baru">
-                <div class="p-4 lg:p-10">
+                <div class="px-10 lg:px-5">
                     <div class="w-full overflow-x-auto">
                         <?php if (!empty($pengguna)) : ?>
                             <table class="w-full min-w-full bg-white text-center border border-gray-300">
@@ -52,24 +52,21 @@
                                     <tr>
                                         <th class="py-2 px-4 border-b">NO</th>
                                         <th class="py-2 px-4 border-b">Nama</th>
-                                        <th class="py-2 px-4 border-b">Email</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
-                                    $no = 0;
+                                    <?php $no = 0;
                                     foreach ($pengguna as $row) :
                                         $no++;
-                                    ?>
-                                        <tr class="hover:bg-blue-100">
+                                        if ($no > 10) break; ?>
+                                        <tr class="hover:bg-blue-100" onclick="window.location='<?= base_url('admin/detail_pengguna/' . $row->id) ?>'">
                                             <td class="py-2 px-4 border-b"><?= $no ?>.</td>
                                             <td class="py-2 px-4 border-b"><?= $row->nama ?></td>
-                                            <td class="py-2 px-4 border-b"><?= $row->email ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                 </tbody>
                             </table>
-                            <?php if (count($pengguna) > 0) : ?>
+                            <?php if (count($pengguna) > 10) : ?>
                                 <div class="w-full mt-4 flex justify-center mb-5">
                                     <a href="<?php echo base_url('admin/table_pengguna') ?>" class="text-blue-500 hover:underline">Lihat Selengkapnya &rarr;</a>
                                 </div>

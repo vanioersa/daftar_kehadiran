@@ -167,13 +167,6 @@
 
             <div class="input-group">
                 <span class="icon">
-                    <i class="fa-solid fa-envelope"></i>
-                </span>
-                <input type="email" id="email" placeholder="Email" name="email" class="form-control" required>
-            </div>
-
-            <div class="input-group">
-                <span class="icon">
                     <i class="fa-solid fa-camera"></i>
                 </span>
                 <input type="file" id="image" name="image" class="form-control" required>

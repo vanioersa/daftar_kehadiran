@@ -163,17 +163,16 @@ class User extends CI_Controller
     public function aksi_ubah_profile()
     {
         $this->load->library('form_validation');
-
+    
         // Validasi nomor
         $this->form_validation->set_rules('nomor', 'Nomor', 'required|numeric');
-
+    
         $image = $_FILES['foto']['name'];
         $foto_temp = $_FILES['foto']['tmp_name'];
-        $email = $this->input->post('email');
         $jenis_kelamin = $this->input->post('jenis_kelamin');
         $nama = $this->input->post('nama');
         $nomor = $this->input->post('nomor');
-
+    
         // Validasi nomor
         if ($this->form_validation->run() === FALSE) {
             $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -182,19 +181,16 @@ class User extends CI_Controller
                 </div>');
             redirect(base_url('user/profile'));
         }
-
-        $current_user = $this->m_model->get_user_by_id($this->session->userdata('id'));
-
-        $data['email'] = $email;
+    
         $data['jenis_kelamin'] = $jenis_kelamin;
         $data['nama'] = $nama;
         $data['nomor'] = $nomor;
-
+    
         if ($image) {
             $kode = round(microtime(true) * 100);
             $file_name = $kode . '_' . $image;
             $upload_path = './image/' . $file_name;
-
+    
             if (move_uploaded_file($foto_temp, $upload_path)) {
                 $old_file = $this->m_model->get_foto_by_id($this->session->userdata('id'));
                 if ($old_file && file_exists('./image/' . $old_file)) {
@@ -209,9 +205,9 @@ class User extends CI_Controller
                 redirect(base_url('user/profile'));
             }
         }
-
+    
         $update_result = $this->m_model->ubah_data('user', $data, array('id' => $this->session->userdata('id')));
-
+    
         if ($update_result) {
             $this->session->set_flashdata('sukses', '<div class="alert alert-success alert-dismissible fade show" role="alert">
                 Berhasil Merubah data
@@ -223,7 +219,7 @@ class User extends CI_Controller
             redirect(base_url('user/profile'));
         }
     }
-
+    
     public function hapus_imagee()
     {
         $user_id = $this->session->userdata('id');

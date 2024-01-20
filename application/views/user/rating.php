@@ -119,6 +119,7 @@
                     <?php foreach ($ratingResults as $result) : ?>
                         <div class="mb-4 card">
                             <div class="bg-blue-300 p-4 rounded-md shadow-md">
+                                <p class="text-lg font-semibold text-gray-800 mb-2"><?= tampil_nama_byid($result->id_user) ?></p>
                                 <p class="text-xl font-semibold text-gray-800 mb-2">Rating: <span style="color: #fbbf24;"><?= get_star_icons($result->rating) ?></span></p>
                                 <p class="text-gray-800"><?= $result->comment ?></p>
                             </div>

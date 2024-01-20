@@ -17,4 +17,12 @@ class Home extends CI_Controller
 		$data['public'] = $this->m_model->get_data('deskripsi_public')->result();
 		$this->load->view('home', $data);
 	}
+    
+	public function ratting()
+	{
+        $data['reting'] = $this->m_model->get_data('ratting')->result();
+		$this->load->view('rating', $data);
+	}
+
+    
 }

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 10, 2024 at 02:42 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Generation Time: Jan 20, 2024 at 02:00 AM
+-- Server version: 10.10.2-MariaDB
+-- PHP Version: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,9 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `deskripsi_public` (
   `id` int(11) NOT NULL,
-  `tempat` varchar(100) DEFAULT NULL,
-  `deskripsi` varchar(100) DEFAULT NULL,
-  `image` varchar(100) DEFAULT NULL
+  `tempat` varchar(255) DEFAULT NULL,
+  `deskripsi` longblob DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -42,9 +42,24 @@ CREATE TABLE `deskripsi_public` (
 
 CREATE TABLE `pesan` (
   `id` int(11) NOT NULL,
-  `pesan_dari` varchar(100) DEFAULT NULL,
-  `pesan_ke` varchar(100) DEFAULT NULL,
-  `pengirim` varchar(100) DEFAULT NULL
+  `id_pengirim` varchar(255) DEFAULT NULL,
+  `id_penerima` varchar(255) DEFAULT NULL,
+  `pesan` longblob DEFAULT NULL,
+  `tanggal` varchar(255) DEFAULT NULL,
+  `jam` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratting`
+--
+
+CREATE TABLE `ratting` (
+  `id` int(11) NOT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `rating` varbinary(255) DEFAULT NULL,
+  `comment` longblob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -55,11 +70,13 @@ CREATE TABLE `pesan` (
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
-  `nama` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `jenis_kelamin` varchar(100) DEFAULT NULL,
-  `password` varchar(100) DEFAULT NULL,
-  `role` varchar(100) DEFAULT NULL
+  `nama` varchar(255) DEFAULT NULL,
+  `nomor` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `jenis_kelamin` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -76,6 +93,12 @@ ALTER TABLE `deskripsi_public`
 -- Indexes for table `pesan`
 --
 ALTER TABLE `pesan`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ratting`
+--
+ALTER TABLE `ratting`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -98,6 +121,12 @@ ALTER TABLE `deskripsi_public`
 -- AUTO_INCREMENT for table `pesan`
 --
 ALTER TABLE `pesan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratting`
+--
+ALTER TABLE `ratting`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

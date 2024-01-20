@@ -31,10 +31,8 @@ class Auth extends CI_Controller
     {
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('nomor', 'Nomor', 'required|callback_check_nomor_exists');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]|callback_check_password_not_same_as_email');
-
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('auth/register');
         } else {
@@ -50,12 +48,11 @@ class Auth extends CI_Controller
             } else {
                 $upload_data = $this->upload->data();
                 $nomor_exists = $this->m_model->check_nomor_exists($this->input->post('nomor'));
-                $email_exists = $this->m_model->check_email_exists($this->input->post('email'));
 
-                if ($nomor_exists || $email_exists) {
+                if ($nomor_exists) {
                     $response = [
                         'status'   => 'error',
-                        'message'  => $nomor_exists ? 'Nomor sudah digunakan.' : 'Email sudah digunakan.',
+                        'message'  => 'Nomor sudah digunakan.',
                         'redirect' => base_url('auth'),
                     ];
                     $this->load->view('auth/register', $response);
@@ -63,7 +60,6 @@ class Auth extends CI_Controller
                     $data = array(
                         'nama'          => $this->input->post('nama'),
                         'nomor'         => $this->input->post('nomor'),
-                        'email'         => $this->input->post('email'),
                         'jenis_kelamin' => $this->input->post('jenis_kelamin'),
                         'password'      => md5($this->input->post('password')),
                         'role'          => 'user',
@@ -88,24 +84,10 @@ class Auth extends CI_Controller
         }
     }
 
-    public function check_password_not_same_as_email($password)
-    {
-        $email = $this->input->post('email');
-
-        if ($password == $email) {
-            $this->form_validation->set_message('check_password_not_same_as_email', 'Password tidak boleh sama dengan Email.');
-            return FALSE;
-        } else {
-            return TRUE;
-        }
-    }
-
-
     public function submittt()
     {
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('nomor', 'Nomor', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
 
@@ -124,11 +106,10 @@ class Auth extends CI_Controller
             } else {
                 $upload_data = $this->upload->data();
                 $nomor_exists = $this->m_model->check_nomor_exists($this->input->post('nomor'));
-                $email_exists = $this->m_model->check_email_exists($this->input->post('email'));
-                if ($nomor_exists || $email_exists) {
+                if ($nomor_exists) {
                     $response = [
                         'status'   => 'error',
-                        'message'  => $nomor_exists ? 'Nomor sudah digunakan.' : 'Email sudah digunakan.',
+                        'message'  => 'Nomor sudah digunakan.',
                         'redirect' => base_url('auth'),
                     ];
                     $this->load->view('auth/registerrr', $response);
@@ -136,7 +117,6 @@ class Auth extends CI_Controller
                     $data = array(
                         'nama'          => $this->input->post('nama'),
                         'nomor'         => $this->input->post('nomor'),
-                        'email'         => $this->input->post('email'),
                         'jenis_kelamin' => $this->input->post('jenis_kelamin'),
                         'password'      => md5($this->input->post('password')),
                         'role'          => 'admin',
@@ -159,19 +139,6 @@ class Auth extends CI_Controller
                     }
                 }
             }
-        }
-    }
-
-    public function check_email_exists($email)
-    {
-        $this->load->model('m_model');
-        $exists = $this->m_model->check_email_exists($email);
-
-        if ($exists) {
-            $this->form_validation->set_message('check_email_exists', 'Email sudah digunakan.');
-            return FALSE;
-        } else {
-            return TRUE;
         }
     }
 

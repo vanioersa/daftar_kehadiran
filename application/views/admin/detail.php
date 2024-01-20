@@ -21,7 +21,7 @@
             </div>
             <div class="p-6">
                 <h2 class="font-bold text-xl mb-2 text-center"><?php echo $row->nama; ?></h2>
-                <p class="text-gray-700 text-base mb-4 text-center"><?php echo $row->email; ?> | <?php echo $row->jenis_kelamin; ?></p>
+                <p class="text-gray-700 text-base mb-4 text-center"><?php echo $row->jenis_kelamin; ?></p>
                 <p class="text-gray-700 text-base text-center"><?php echo $row->nomor; ?></p>
             </div>
         <?php endforeach; ?>
