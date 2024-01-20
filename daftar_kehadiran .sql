@@ -72,7 +72,6 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `nama` varchar(255) DEFAULT NULL,
   `nomor` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `jenis_kelamin` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
