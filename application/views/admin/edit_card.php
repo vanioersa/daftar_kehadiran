@@ -15,7 +15,7 @@
             overflow: hidden;
         }
 
-        .babu {
+        .content {
             max-width: 600px;
             margin: 80px auto;
             padding: 20px;
@@ -25,7 +25,7 @@
             background-color: #fff;
         }
 
-        .buba {
+        .title {
             margin-bottom: 10px;
             font-weight: bold;
             font-size: 2rem;
@@ -53,33 +53,32 @@
             background-color: white;
         }
 
-        button {
+        button,
+        .back-btn {
             padding: 10px 15px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
         }
 
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
         .back-btn {
-            position: absolute;
-            bottom: 10px;
-            right: 50px;
-            padding: 10px 15px;
             background-color: #6c757d;
             color: #fff;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
         }
 
         @media only screen and (max-width: 767px) {
             .back-btn {
-                margin-bottom: 5px;
-                margin-right: 60%;
+                margin-right: 1%;
                 width: 80px;
             }
         }
@@ -88,8 +87,8 @@
 
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
-    <div class="babu container bg-blue-200">
-        <h1 class="buba text-center">Ubah Public Deskripsi</h1>
+    <div class="content bg-blue-200">
+        <h1 class="title">Ubah Public Deskripsi</h1>
 
         <form action="<?php echo base_url('admin/aksi_edit_card/' . $public->id) ?>" method="post" id="edit-form" class="survey-form" enctype="multipart/form-data">
             <div class="form-group">
@@ -107,18 +106,15 @@
                 <input type="file" id="foto" name="foto" value="<?php echo $public->image; ?>" class="form-control">
             </div>
 
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 px-5 py-2 text-white rounded" id="submit">Submit</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded" id="submit">Ubah</button>
 
             <form action="<?php echo base_url('admin/hapus_image/' . $public->id) ?>" method="post" id="edit-form" enctype="multipart/form-data">
                 <input type="button" id="submitt" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded buru" value="Hapus Foto" onclick="deleteImage('<?= $public->id ?>')">
             </form>
         </form>
+        <button class="back-btn" onclick="confirmGoBack()">Kembali</button>
     </div>
-    <a class="btn btn-secondary back-btn" onclick="confirmGoBack()">Kembali</a>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
@@ -226,7 +222,6 @@
                                             showConfirmButton: false,
                                             timer: 2000
                                         }).then(function() {
-                                            // Redirect ke URL tujuan setelah berhasil
                                             window.location.href = response.redirect;
                                         });
                                     } else if (response.status === 'error') {

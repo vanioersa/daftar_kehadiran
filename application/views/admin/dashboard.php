@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
@@ -10,99 +10,108 @@
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<style>
-    .babubu {
-        height: 430px;
-        width: 700px;
-    }
-
-    .baru {
-        width: 700px;
-    }
-
-    @media only screen and (max-width: 767px) {
-        .babubu {
-            width: 100%;
-        }
-
-        .baru {
-            width: 100%;
-        }
-    }
-</style>
 
 <body>
+
     <?php $this->load->view('sidebar_admin'); ?>
 
-    <div class="flex flex-col items-center max-w-screen-xl w-full h-full py-10 text-center overflow-hidden">
+    <div class="max-w-screen-xl w-full mx-auto mt-8 p-4">
 
-        <?php foreach ($user as $row) : ?>
-            <div class="mb-4">
-                <h1 class="font-bold text-4xl">Selamat datang <?php echo $row->nama; ?></h1>
-            </div>
-        <?php endforeach; ?>
+        <div class="mb-8 text-center">
+            <?php foreach ($user as $row) : ?>
+                <h1 class="font-bold text-4xl text-blue-700">Selamat datang, <?= $row->nama; ?></h1>
+                <p class="text-gray-600">Role: <?= $row->role; ?></p>
+            <?php endforeach; ?>
+        </div>
 
-        <div class="flex md:flex-row flex-col md:space-y-0 space-y-4 w-full">
-            <div class="baru">
-                <div class="px-10 lg:px-5">
-                    <div class="w-full overflow-x-auto">
-                        <?php if (!empty($pengguna)) : ?>
-                            <table class="w-full min-w-full bg-white text-center border border-gray-300">
-                                <thead class="bg-blue-500 text-white">
-                                    <tr>
-                                        <th class="py-2 px-4 border-b">NO</th>
-                                        <th class="py-2 px-4 border-b">Nama</th>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Bagian Daftar Pengguna -->
+            <div class="bg-white p-6 rounded-md shadow-md">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-700">Daftar Pengguna</h2>
+                <div class="w-full overflow-x-auto">
+                    <?php if (!empty($pengguna)) : ?>
+                        <table class="w-full min-w-full bg-white text-center border border-gray-300">
+                            <thead class="bg-blue-700 text-white">
+                                <tr>
+                                    <th class="py-2 px-4 border-b">No</th>
+                                    <th class="py-2 px-4 border-b">Nama</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $no = 0;
+                                foreach ($pengguna as $row) :
+                                    $no++;
+                                    if ($no > 10) break; ?>
+                                    <tr class="hover:bg-blue-100" onclick="window.location='<?= base_url('admin/detail_pengguna/' . $row->id) ?>'">
+                                        <td class="py-2 px-4 border-b"><?= $no ?></td>
+                                        <td class="py-2 px-4 border-b text-blue-700"><?= $row->nama ?></td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php $no = 0;
-                                    foreach ($pengguna as $row) :
-                                        $no++;
-                                        if ($no > 10) break; ?>
-                                        <tr class="hover:bg-blue-100" onclick="window.location='<?= base_url('admin/detail_pengguna/' . $row->id) ?>'">
-                                            <td class="py-2 px-4 border-b"><?= $no ?>.</td>
-                                            <td class="py-2 px-4 border-b"><?= $row->nama ?></td>
-                                        </tr>
-                                    <?php endforeach ?>
-                                </tbody>
-                            </table>
-                            <?php if (count($pengguna) > 10) : ?>
-                                <div class="w-full mt-4 flex justify-center mb-5">
-                                    <a href="<?php echo base_url('admin/table_pengguna') ?>" class="text-blue-500 hover:underline">Lihat Selengkapnya &rarr;</a>
-                                </div>
-                            <?php endif; ?>
-                        <?php else : ?>
-                            <p class="text-center text-gray-500">Maaf, tidak ada pengguna.</p>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                        <?php if (count($pengguna) > 10) : ?>
+                            <div class="w-full mt-4 flex justify-center mb-5">
+                                <a href="<?php echo base_url('admin/table_pengguna') ?>" class="text-blue-500 hover:underline">Lihat Lebih Banyak &rarr;</a>
+                            </div>
                         <?php endif; ?>
-                    </div>
+                    <?php else : ?>
+                        <p class="text-center text-gray-500">Maaf, tidak ada pengguna.</p>
+                    <?php endif; ?>
                 </div>
             </div>
 
-            <div class="max-h-screen overflow-y-auto p-5 bg-white rounded-md shadow-md babubu">
-                <?php $prevMessage = null;
-                foreach ($pesan as $row) : if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) : ?>
-                        <div class="flex <?= ($row->id_pengirim == $current_user_id) ? 'justify-end' : 'justify-start' ?> mb-2">
-                            <div class="<?= ($row->id_pengirim == $current_user_id) ? 'bg-blue-300' : 'bg-blue-100' ?> rounded-md p-3 max-w-2xl">
-                                <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
-                                <p><?= $row->pesan ?></p>
-                                <?php
-                                $englishDate = date('j F Y', strtotime($row->tanggal));
-                                $translatedDate = date('j', strtotime($englishDate)) . '/' . date('n', strtotime($englishDate)) . '/' . date('Y', strtotime($englishDate));
-                                ?>
-                                <div class="flex justify-between mt-2 text-sm text-gray-600">
-                                    <p><?= $translatedDate ?></p>
-                                    <p><?= $row->jam ?></p>
+            <div class="bg-white p-6 rounded-md shadow-md">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-700">Informasi Rating</h2>
+                <div class="grid grid-cols-1 gap-4">
+                    <?php usort($reting, function ($a, $b) {
+                        return $b->rating - $a->rating;
+                    });
+                    $count = 0;
+                    foreach ($reting as $row) :
+                        if ($count < 3) : ?>
+                            <div class="bg-blue-700 p-6 text-white rounded-md shadow-md">
+                                <p class="font-semibold text-lg"><?= tampil_nama_byid($row->id_user) ?></p>
+                                <p class="mt-2"><span class="text-yellow-500"><?php echo str_repeat('&#9733;', $row->rating); ?></span></p>
+                                <p class="mt-2">Komentar: <?= $row->comment ?></p>
+                            </div>
+                        <?php else : ?>
+                            <?php if ($count === 3) : ?>
+                                <div class="text-blue-700 p-4 text-center">
+                                    <p class="text-lg font-semibold">Lihat Lebih Banyak...</p>
+                                    <a href="<?php echo base_url('admin/ratting') ?>" class="hover:underline">Lihat Semua &rarr;</a>
+                                </div>
+                            <?php endif; ?>
+                    <?php endif;
+                        $count++;
+                    endforeach; ?>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-md shadow-md">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-700">Riwayat Pesan</h2>
+                <div class="max-h-screen overflow-y-auto text-blue-700">
+                    <?php $prevMessage = null;
+                    foreach ($pesan as $row) : if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) :
+                            $englishDate = date('j F Y', strtotime($row->tanggal));
+                            $translatedDate = date('j/n/Y', strtotime($englishDate)); ?>
+                            <div class="<?= ($row->id_pengirim == $current_user_id) ? 'text-right' : 'text-left' ?> mb-4">
+                                <div class="<?= ($row->id_pengirim == $current_user_id) ? 'bg-blue-200' : 'bg-gray-300' ?> rounded-md p-3 max-w-2xl inline-block mx-auto">
+                                    <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
+                                    <p class="mt-2"><?= $row->pesan ?></p>
+                                    <div class="flex justify-between mt-2 text-sm text-gray-600">
+                                        <p><?= $translatedDate ?></p>
+                                        <p><?= $row->jam ?></p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                <?php endif;
-                    $prevMessage = $row;
-                endforeach;
-                ?>
+                    <?php endif;
+                        $prevMessage = $row;
+                    endforeach;
+                    ?>
+                </div>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>

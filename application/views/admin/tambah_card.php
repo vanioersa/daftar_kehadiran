@@ -15,16 +15,17 @@
             overflow: hidden;
         }
 
-        .babu {
+        .content {
             max-width: 600px;
             margin: 80px auto;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
+            background-color: #fff;
         }
 
-        .buba {
+        .title {
             margin-bottom: 10px;
             font-weight: bold;
             font-size: 2rem;
@@ -52,37 +53,32 @@
             background-color: white;
         }
 
-        button {
+        button,
+        .back-btn {
             padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button {
             background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
         }
 
         .back-btn {
-            position: absolute;
-            bottom: 10px;
-            right: 50px;
-            padding: 10px 15px;
             background-color: #6c757d;
             color: #fff;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
         }
 
         @media only screen and (max-width: 767px) {
-            .buru {
-                margin-left: 49%;
-            }
-
             .back-btn {
-                margin-bottom: 5px;
-                margin-right: 60%;
+                margin-right: 1%;
                 width: 80px;
             }
         }
@@ -91,10 +87,10 @@
 
 <body>
     <?php $this->load->view('sidebar_admin'); ?>
-    <div class="babu container bg-blue-200">
-        <h1 class="buba text-center">Tambah Public Deskripsi</h1>
+    <div class="content bg-blue-200">
+        <h1 class="title">Tambah Public Deskripsi</h1>
 
-        <form action="<?php echo base_url('admin/aksi_tambah_card') ?>" method="post" id="survey-form" class="survey-form ">
+        <form action="<?php echo base_url('admin/aksi_tambah_card') ?>" method="post" id="survey-form" class="survey-form">
             <div class="form-group">
                 <label class="group-form" for="deskripsi">Deskripsi</label>
                 <input type="text" id="deskripsi" name="deskripsi" class="form-control" required>
@@ -110,11 +106,11 @@
                 <input type="file" id="foto" name="foto" class="form-control" required>
             </div>
 
-            <button type="submit" id="submit" class="bg-blue-500 hover:bg-blue-700 px-5 py-2 text-white rounded">submit</button>
+            <button type="submit" id="submit" class="bg-blue-500 hover:bg-blue-700 px-5 py-2 text-white rounded">Tambah</button>
         </form>
+        <a class="btn btn-secondary back-btn" onclick="confirmGoBack()">Kembali</a>
     </div>
 
-    <a class="btn btn-secondary back-btn" onclick="confirmGoBack()">Kembali</a>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

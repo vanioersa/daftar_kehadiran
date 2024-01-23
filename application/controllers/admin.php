@@ -16,6 +16,7 @@ class Admin extends CI_Controller
 
     public function index()
     {
+        $data['reting'] = $this->m_model->get_data('ratting')->result();
         $data['pesan'] = $this->m_model->get_data('pesan')->result();
         $data['current_user_id'] = $this->session->userdata('id');
         $data['user_names'] = $this->m_model->get_data_except_current_users('user', $data['current_user_id'])->result();
@@ -25,6 +26,12 @@ class Admin extends CI_Controller
     
         $this->load->view('admin/dashboard', $data);
     }
+
+    public function ratting()
+	{
+        $data['reting'] = $this->m_model->get_data('ratting')->result();
+		$this->load->view('admin/rating', $data);
+	}
     
     public function public()
     {

@@ -185,10 +185,15 @@ class M_model extends CI_Model
         return false;
     }
 
-    public function get_user_count_by_role($role)
+    public function get_user_by_role($role)
     {
         $this->db->where('role', $role);
         return $this->db->count_all_results('user');
+    }
+
+    public function get_comment_count()
+    {
+        return $this->db->count_all_results('ratting');
     }
 
     public function simpan_pesan($pesan, $pengirim, $penerima_array)
