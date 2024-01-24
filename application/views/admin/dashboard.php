@@ -15,7 +15,7 @@
 
     <?php $this->load->view('sidebar_admin'); ?>
 
-    <div class="max-w-screen-xl w-full mx-auto mt-8 p-4">
+    <div class="w-screen-xl w-full mx-auto my-8 p-4">
 
         <div class="mb-8 text-center">
             <?php foreach ($user as $row) : ?>
@@ -24,8 +24,7 @@
             <?php endforeach; ?>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Bagian Daftar Pengguna -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <div class="bg-white p-6 rounded-md shadow-md">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Daftar Pengguna</h2>
                 <div class="w-full overflow-x-auto">
@@ -63,35 +62,44 @@
             <div class="bg-white p-6 rounded-md shadow-md">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Informasi Rating</h2>
                 <div class="grid grid-cols-1 gap-4">
-                    <?php usort($reting, function ($a, $b) {
+                    <?php
+                    usort($reting, function ($a, $b) {
                         return $b->rating - $a->rating;
                     });
+
                     $count = 0;
-                    foreach ($reting as $row) :
-                        if ($count < 3) : ?>
-                            <div class="bg-blue-700 p-6 text-white rounded-md shadow-md">
-                                <p class="font-semibold text-lg"><?= tampil_nama_byid($row->id_user) ?></p>
-                                <p class="mt-2"><span class="text-yellow-500"><?php echo str_repeat('&#9733;', $row->rating); ?></span></p>
-                                <p class="mt-2">Komentar: <?= $row->comment ?></p>
-                            </div>
-                        <?php else : ?>
-                            <?php if ($count === 3) : ?>
-                                <div class="text-blue-700 p-4 text-center">
-                                    <p class="text-lg font-semibold">Lihat Lebih Banyak...</p>
-                                    <a href="<?php echo base_url('admin/ratting') ?>" class="hover:underline">Lihat Semua &rarr;</a>
+
+                    if (empty($reting)) {
+                        echo '<div class="text-center md:py-56"><p class="text-gray-600">Maaf, tidak ada data yang tersedia.</p></div>';
+                    } else {
+                        foreach ($reting as $row) :
+                            if ($count < 3) : ?>
+                                <div class="bg-blue-700 p-6 text-white rounded-md shadow-md">
+                                    <p class="font-semibold text-lg"><?= tampil_nama_byid($row->id_user) ?></p>
+                                    <p class="mt-2"><span class="text-yellow-500"><?php echo str_repeat('&#9733;', $row->rating); ?></span></p>
+                                    <p class="mt-2">Komentar: <?= $row->comment ?></p>
                                 </div>
-                            <?php endif; ?>
+                            <?php else : ?>
+                                <?php if ($count === 3) : ?>
+                                    <div class="text-blue-700 p-4 text-center">
+                                        <a href="<?php echo base_url('admin/ratting') ?>" class="hover:underline">Lihat Lebih Banyak &rarr;</a>
+                                    </div>
+                                <?php endif; ?>
                     <?php endif;
-                        $count++;
-                    endforeach; ?>
+                            $count++;
+                        endforeach;
+                    }
+                    ?>
                 </div>
             </div>
 
             <div class="bg-white p-6 rounded-md shadow-md">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Riwayat Pesan</h2>
-                <div class="max-h-screen overflow-y-auto text-blue-700">
-                    <?php $prevMessage = null;
-                    foreach ($pesan as $row) : if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) :
+                <div style="max-height: 450px;" class="overflow-y-auto text-blue-700 px-2 py-3">
+                    <?php
+                    $prevMessage = null;
+                    foreach ($pesan as $row) :
+                        if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) :
                             $englishDate = date('j F Y', strtotime($row->tanggal));
                             $translatedDate = date('j/n/Y', strtotime($englishDate)); ?>
                             <div class="<?= ($row->id_pengirim == $current_user_id) ? 'text-right' : 'text-left' ?> mb-4">
@@ -106,8 +114,7 @@
                             </div>
                     <?php endif;
                         $prevMessage = $row;
-                    endforeach;
-                    ?>
+                    endforeach; ?>
                 </div>
             </div>
         </div>

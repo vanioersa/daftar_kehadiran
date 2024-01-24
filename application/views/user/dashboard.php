@@ -82,83 +82,101 @@
 <body>
     <?php $this->load->view('sidebar_user'); ?>
 
-    <div class="min-w-screen-xl h-full md:py-10 md:px-16 py-12 px-5 text-center overflow-hidden">
-        <?php foreach ($user as $row) : ?>
-            <h1 class="font-bold text-4xl mb-4">Selamat datang <?php echo $row->nama; ?></h1>
-        <?php endforeach; ?>
+    <div class="w-screen-xl w-full text-center mx-auto my-8 p-4">
 
-        <div class="md:flex gap-3 mb-5">
-            <div class="flex items-start justify-between mb-4 flex-1 bg-blue-500 text-white px-3 py-6 rounded-md shadow-md mr-2 card">
-                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                    <i class="fas fa-users w-10 md:text-xl text-blue-800 dark:text-white"></i>
-                </div>
-                <div class="text-center md:text-left mt-2">
-                    <p class="md:text-base text-xs text-gray-300">Total Pengguna aplikasi</p>
-                    <p class="md:text-xl text-lg text-right font-bold md:text-right"><?= $users; ?></p>
-                </div>
-            </div>
-            <a href="<?= base_url('user/rating_pengguna') ?>" style="cursor: default;" class="flex items-start justify-between mb-4 flex-1 bg-blue-500 text-white px-3 py-6 rounded-md shadow-md ml-2 card">
-                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
-                    <i class="fas fa-chart-bar w-10 md:text-xl text-blue-800 dark:text-white"></i>
-                </div>
-                <div class="text-center md:text-left mt-2">
-                    <p class="md:text-base text-xs text-gray-300">Hasil rating seluruh pengguna</p>
-                    <p class="md:text-xl text-lg text-right font-bold md:text-right"><?= $comment_count ?></p>
-                </div>
-            </a>
-        </div>
-
-        <p class="mb-5 text-3xl font-bold section-title">Informasi</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <?php $count = 0;
-            foreach ($public as $row) : ?>
-                <?php if ($count < 3) : ?>
-                    <div class="info-card mb-4">
-                        <p class="font-bold text-xl mb-3"><?= $row->tempat ?></p>
-                        <p class="text-gray-300 leading-6"><?= $row->deskripsi ?></p>
-                    </div>
-                <?php endif; ?>
-                <?php $count++; ?>
+        <div class="mb-8 text-center">
+            <?php foreach ($user as $row) : ?>
+                <h1 class="font-bold text-4xl text-blue-700">Selamat datang, <?= $row->nama; ?></h1>
             <?php endforeach; ?>
         </div>
 
-        <?php if (count($public) > 3) : ?>
-            <a href="<?= base_url('user/public') ?>" class="cta-link">Lihat Selengkapnya &rarr;</a>
-        <?php endif; ?>
-
-        <p class="mb-5 text-3xl font-bold section-title">Pesan</p>
-        <div class="max-h-screen overflow-y-auto bg-white rounded-md shadow-md w-full md:w-auto p-5">
-            <?php if (empty($pesan)) {
-                echo '<p class="text-gray-500">Tidak ada pesan</p>';
-            } else {
-                $prevMessage = null;
-                foreach ($pesan as $row) :
-                    if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) : ?>
-                        <div class="mb-6 flex <?= ($row->id_pengirim == $current_user_id) ? 'justify-end items-end' : 'justify-start items-end' ?>">
-                            <div class="message-card <?= ($row->id_pengirim == $current_user_id) ? 'bg-green-300 text-right' : 'bg-gray-300 text-left' ?> rounded-md p-3 max-w-2xl overflow-auto">
-                                <div class="flex items-center <?= ($row->id_pengirim == $current_user_id) ? 'flex-row-reverse' : '' ?>">
-                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="profile-picture w-10 h-10 rounded-full <?= ($row->id_pengirim == $current_user_id) ? 'ml-4' : 'mr-1' ?>" alt="Profile Picture" loading="lazy">
-                                    <div class="ml-3">
-                                        <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
-                                        <p><?= $row->pesan ?></p>
-                                    </div>
-                                </div>
-                                <?php
-                                $englishDate = date('j F Y', strtotime($row->tanggal));
-                                $translatedDate = date('j', strtotime($englishDate)) . '/' . date('n', strtotime($englishDate)) . '/' . date('Y', strtotime($englishDate));
-                                ?>
-                                <div class="flex justify-between mt-2 text-sm text-gray-600">
-                                    <p><?= $translatedDate ?></p>
-                                    <p><?= $row->jam ?></p>
-                                </div>
-                            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="bg-white p-6 rounded-md shadow-md">
+                <div class="flex items-start justify-between flex-1">
+                    <div class="bg-blue-500 text-white px-3 py-6 rounded-md shadow-md card">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
+                            <i class="fas fa-users w-10 md:text-xl text-blue-800 dark:text-white"></i>
                         </div>
-            <?php endif;
-                    $prevMessage = $row;
-                endforeach;
-            } ?>
-        </div>
+                        <div class="text-center md:text-left mt-2">
+                            <p class="md:text-base text-xs text-gray-300">Total Pengguna aplikasi</p>
+                            <p class="md:text-xl text-lg text-right font-bold md:text-right"><?= $users; ?></p>
+                        </div>
+                    </div>
+                    <a href="<?= base_url('user/rating_pengguna') ?>" style="cursor: default;" class="bg-blue-500 text-white px-3 py-6 rounded-md shadow-md card">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
+                            <i class="fas fa-chart-bar w-10 md:text-xl text-blue-800 dark:text-white"></i>
+                        </div>
+                        <div class="text-center md:text-left mt-2">
+                            <p class="md:text-base text-xs text-gray-300">Hasil rating seluruh pengguna</p>
+                            <p class="md:text-xl text-lg text-right font-bold md:text-right"><?= $comment_count ?></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
 
+            <div class="bg-white p-6 rounded-md shadow-md">
+                <h2 class="text-4xl font-semibold mb-4 text-blue-700">Informasi</h2>
+                <div class="grid grid-cols-1 gap-4">
+                    <?php if (!empty($public)) : ?>
+                        <?php $count = 0;
+                        foreach ($public as $row) : ?>
+                            <?php if ($count < 2) : ?>
+                                <div class="info-card mb-4">
+                                    <p class="font-bold text-2xl mb-3"><?= $row->tempat ?></p>
+                                    <p class="text-gray-300 leading-6"><?= $row->deskripsi ?></p>
+                                </div>
+                            <?php endif; ?>
+                            <?php $count++; ?>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <p class="text-gray-600">Maaf, tidak ada data yang tersedia.</p>
+                    <?php endif; ?>
+                </div>
+
+                <?php if (count($public) > 2) : ?>
+                    <a href="<?= base_url('user/public') ?>" class="cta-link">Lihat Selengkapnya &rarr;</a>
+                <?php endif; ?>
+            </div>
+
+            <div class="bg-white p-6 rounded-md shadow-md">
+    <h2 class="text-2xl font-semibold mb-4 text-blue-700">Pesan</h2>
+    <div style="max-height: 490px;" class="overflow-y-auto text-blue-700 px-2 py-3">
+        <?php
+        $prevMessage = null;
+        foreach ($pesan as $row) :
+            $isCurrentUserMessage = ($row->id_pengirim == $current_user_id || $row->id_penerima == $current_user_id);
+
+            if ($isCurrentUserMessage && (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan))) :
+                $englishDate = date('j F Y', strtotime($row->tanggal));
+                $translatedDate = date('j/n/Y', strtotime($englishDate));
+                $formattedTime = date('H.i', strtotime($row->jam));
+
+                $profileImage = base_url('./image/' . tampil_image_byid($row->id_pengirim));
+                $isMessageFromCurrentUser = ($row->id_pengirim == $current_user_id);
+                $messageAlignmentClass = $isMessageFromCurrentUser ? 'bg-blue-200 text-left' : 'bg-gray-300 text-left';
+                $textAlignmentClass = $isMessageFromCurrentUser ? 'text-right' : 'text-left';
+                $imageAlignmentClass = $isMessageFromCurrentUser ? 'ml-4' : 'ml-4'; ?>
+
+                <div class="<?= $textAlignmentClass ?> mb-4">
+                    <div class="<?= $messageAlignmentClass ?> rounded-md p-3 max-w-2xl inline-block mx-auto">
+                        <div class="flex items-center mb-2">
+                            <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
+                            <img src="<?= $profileImage ?>" class="w-10 h-10 rounded-full <?= $imageAlignmentClass ?>" alt="Profile Picture" loading="lazy">
+                        </div>
+                        <p class="mt-2"><?= $row->pesan ?></p>
+                        <div class="flex justify-between mt-2 text-sm text-gray-600">
+                            <p><?= $translatedDate ?></p>
+                            <p><?= $formattedTime ?></p>
+                        </div>
+                    </div>
+                </div>
+        <?php endif;
+            $prevMessage = $row;
+        endforeach; ?>
+    </div>
+</div>
+
+        </div>
     </div>
 </body>
 

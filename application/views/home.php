@@ -126,6 +126,14 @@
             font-weight: bold;
             margin-top: 1rem;
         }
+
+        #reportText {
+            margin-bottom: 50px;
+        }
+
+        .roundued{
+            border-radius: 50px;
+        }
     </style>
 </head>
 
@@ -135,7 +143,7 @@
             <div class="flex items-center font-bold text-2xl lg:text-2xl">
                 <a href="<?= base_url('admin/profile') ?>" class="flex items-center text-white" style="cursor: default;">
                     <img src="<?= base_url('image/logo1.png') ?>" style="height: 40px;" alt="">
-                    <p id="serviceText" class="ml-2">Layanan Pengaduan Bencana</p>
+                    <p class="ml-2">Layanan Pengaduan Bencana</p>
                 </a>
             </div>
             <div class="lg:hidden">
@@ -146,13 +154,8 @@
             <div id="menu" class="hidden lg:flex lg:items-center">
                 <ul class="flex flex-col lg:flex-row lg:ml-auto">
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-green-500 toggle-button" onclick="toggleDayNightMode()">
-                            <i class="fas fa-cloud-moon"></i>
-                        </button>
-                    </li>
-                    <li>
                         <button class="px-4 py-2 text-white hover:text-green-500 toggle-button" onclick="toggleLanguage()">
-                            <i class="fas fa-language"></i>
+                            <span id="languageIcon"><img src="image/icon-indonesia.png" alt="Indonesia Flag" width="30" height="15"></span>
                         </button>
                     </li>
                 </ul>
@@ -167,7 +170,7 @@
 
         <h1 id="welcomeText">Selamat Datang di Layanan Pelaporan Bencana</h1>
         <p id="reportText">Laporkan bencana dan dapatkan bantuan dengan cepat. Keselamatan Anda adalah prioritas kami.</p>
-        <button id="buttonContent" class="px-4 py-2 bg-blue-600 hover:bg-blue-400 text-white hover:text-black" onclick="navigateTo('<?php echo base_url('auth') ?>')">Masuk</button>
+        <a id="buttonContent" class="px-8 py-4 roundued text-xl bg-blue-600 hover:bg-blue-500 text-white hover:text-black" href="<?php echo base_url('auth') ?>">Masuk</a>
     </div>
 
     <div class="additional-content">
@@ -185,8 +188,14 @@
         function toggleLanguage() {
             language = (language === 'id') ? 'en' : 'id';
             updateContent();
-            updateNavigationColor();
             updateDateTime();
+            updateLanguageIcon();
+            updateNavigationColor();
+        }
+
+        function updateLanguageIcon() {
+            var languageIcon = document.getElementById('languageIcon');
+            languageIcon.innerHTML = (language === 'en') ? '<img src="image/icon-inggris.png" alt="English Flag" width="30" height="15">' : '<img src="image/icon-indonesia.png" alt="Indonesia Flag" width="30" height="15">';
         }
 
         function updateNavigationColor() {
@@ -197,34 +206,16 @@
             nav.classList.remove('nav-day', 'nav-night');
 
             if (language === 'en') {
-                body.classList.add('nav-day');
+                body.classList.add('nav-night');
                 nav.classList.add('nav-day');
             } else {
-                body.classList.add('nav-night');
+                body.classList.add('nav-day');
                 nav.classList.add('nav-night');
             }
         }
 
-        function toggleDayNightMode() {
-            var body = document.body;
-            var logo = document.getElementById('logoImage');
-
-            body.classList.toggle('nav-day');
-            body.classList.toggle('nav-night');
-
-            var nav = document.querySelector('nav');
-            nav.classList.toggle('nav-day');
-            nav.classList.toggle('nav-night');
-
-            if (body.classList.contains('nav-day')) {
-                logo.src = "<?= base_url('image/logo1.png') ?>";
-            } else {
-                logo.src = "<?= base_url('image/logo2.png') ?>";
-            }
-        }
-
         function updateContent() {
-            document.body.className = language;
+            document.body.className = language;reportText
 
             var welcomeText = document.getElementById('welcomeText');
             var reportText = document.getElementById('reportText');
@@ -239,14 +230,12 @@
                 infoTitle.textContent = "Additional Information";
                 infoContent.textContent = "Here you can find additional information about the disaster reporting service. We are ready to assist you with any information you need.";
                 buttonContent.textContent = "Login";
-                serviceText.textContent = "Disaster Reporting Service";
             } else {
                 welcomeText.textContent = "Selamat Datang di Layanan Pelaporan Bencana";
                 reportText.textContent = "Laporkan bencana dan dapatkan bantuan dengan cepat. Keselamatan Anda adalah prioritas kami.";
                 infoTitle.textContent = "Informasi Tambahan";
                 infoContent.textContent = "Di sini Anda dapat menemukan informasi tambahan mengenai layanan pengaduan bencana. Kami siap membantu Anda dengan segala informasi yang Anda butuhkan.";
                 buttonContent.textContent = "Masuk";
-                serviceText.textContent = "Layanan Pengaduan Bencana";
             }
 
             welcomeText.style.paddingTop = "75px";

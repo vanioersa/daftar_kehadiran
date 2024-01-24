@@ -18,7 +18,7 @@
         <div class="container mx-auto my-10 bg-blue-100 rounded-sm sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-full p-6 shadow-md">
             <div class="text-center">
                 <?php if (!empty($row->image)) : ?>
-                    <img src="<?= base_url('./image/' . $row->image) ?>" class="mx-auto mt-4 mb-2 h-48 w-auto rounded-full" alt="Profile Image">
+                    <img src="<?= base_url('./image/' . $row->image) ?>" class="mx-auto mt-4 mb-2 h-48 object-cover w-52 rounded-full" alt="Profile Image">
                 <?php else : ?>
                     <img src="https://slabsoft.com/wp-content/uploads/2022/05/pp-wa-kosong-default.jpg" class="mx-auto mt-4 mb-2 h-48 w-auto rounded-full" alt="Default Profile Image" />
                 <?php endif; ?>

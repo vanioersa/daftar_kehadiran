@@ -17,7 +17,6 @@
                     <tr>
                         <th class="py-2 px-4 border-b">NO</th>
                         <th class="py-2 px-4 border-b">Nama</th>
-                        <th class="py-2 px-4 border-b">Email</th>
                         <th class="py-2 px-4 border-b">Jenis Kelamin</th>
                     </tr>
                 </thead>
@@ -27,7 +26,6 @@
                         <tr class="hover:bg-green-100" onclick="window.location='<?php echo base_url('admin/detail_pengguna/'.$row->id); ?>';">
                             <td class="py-2 px-4 border-b"><?= $no ?>.</td>
                             <td class="py-2 px-4 border-b"><?= $row->nama ?></td>
-                            <td class="py-2 px-4 border-b"><?= $row->email ?></td>
                             <td class="py-2 px-4 border-b"><?= $row->jenis_kelamin ?></td>
                         </tr>
                     <?php endforeach ?>

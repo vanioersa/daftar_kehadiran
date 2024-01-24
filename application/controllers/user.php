@@ -96,7 +96,13 @@ class User extends CI_Controller
         $user_data = $this->session->userdata('id');
         $data['user_names'] = $this->m_model->get_data_except_current_users('user', $user_data)->result();
 
-        $data['pesan'] = $this->m_model->get_messages_by_sender_all('pesan', $user_id)->result();
+        $data['pesan'] = $this->m_model->get_messages_by_sender('pesan', $user_id)->result();
+
+        usort($data['pesan'], function ($a, $b) {
+            $dateA = strtotime($a->jam . ' ' . $a->tanggal);
+            $dateB = strtotime($b->jam . ' ' . $b->tanggal);
+            return $dateB - $dateA;
+        });
 
         $this->load->view('user/page_1', $data);
     }

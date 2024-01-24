@@ -23,19 +23,26 @@ class Admin extends CI_Controller
         $role = 'user';
         $data['pengguna'] = $this->m_model->get_user_data_by_rolle($role);
         $data['user'] = $this->m_model->get_by_id('user', 'id', $data['current_user_id'])->result();
-    
+
         $this->load->view('admin/dashboard', $data);
     }
 
     public function ratting()
-	{
+    {
         $data['reting'] = $this->m_model->get_data('ratting')->result();
-		$this->load->view('admin/rating', $data);
-	}
-    
+        $this->load->view('admin/rating', $data);
+    }
+
     public function public()
     {
         $data['public'] = $this->m_model->get_data('deskripsi_public')->result();
+        usort($data['public'], function ($a, $b) {
+            $dateA = isset($a->tanggal) && $a->tanggal ? strtotime($a->tanggal) : 0;
+            $dateB = isset($b->tanggal) && $b->tanggal ? strtotime($b->tanggal) : 0;
+
+            return $dateB - $dateA;
+        });
+
         $this->load->view('admin/page_1', $data);
     }
 
@@ -48,6 +55,78 @@ class Admin extends CI_Controller
     public function tambah_card_public()
     {
         $this->load->view('admin/tambah_card');
+    }
+
+    public function aksi_tambah_card()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tempat = $this->input->post('tempat');
+        $deskripsi = $this->input->post('deskripsi');
+        $image = $_FILES['foto']['name'];
+        $waktu_kejadian = $this->input->post('waktu_kejadian');
+
+        $errors = [];
+
+        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $file_info = pathinfo($image);
+        $extension = isset($file_info['extension']) ? strtolower($file_info['extension']) : null;
+
+        if (empty($image) || !in_array($extension, $allowed_extensions)) {
+            $errors[] = 'Foto harus diunggah dengan format JPG, JPEG, PNG, atau GIF.';
+        }
+
+        if (empty($waktu_kejadian)) {
+            $errors[] = 'Waktu kejadian harus diisi.';
+        }
+
+        if (count($errors) > 0) {
+            $response = [
+                'status' => 'error',
+                'message' => implode(' ', $errors),
+            ];
+        } else {
+            $image_temp = $_FILES['foto']['tmp_name'];
+            $kode = round(microtime(true) * 100);
+            $file_name = $kode . '_' . $image;
+            $upload_path = './image/' . $file_name;
+
+            if (move_uploaded_file($image_temp, $upload_path)) {
+                $current_date = date('Y-m-d');
+                $current_time = date('H:i:s');
+
+                $data = [
+                    'image' => $file_name,
+                    'deskripsi' => $deskripsi,
+                    'tempat' => $tempat,
+                    'tanggal' => $current_date,
+                    'jam' => $current_time,
+                    'waktu_kejadian' => $waktu_kejadian, // Use the user-input waktu_kejadian
+                ];
+
+                $inserted = $this->m_model->tambah_data('deskripsi_public', $data);
+
+                if ($inserted) {
+                    $response = [
+                        'status' => 'success',
+                        'message' => 'Data berhasil ditambahkan.',
+                        'redirect' => base_url('admin/public'),
+                    ];
+                } else {
+                    $response = [
+                        'status' => 'error',
+                        'message' => 'Gagal menambahkan data. Silakan coba lagi.',
+                    ];
+                    unlink($upload_path);
+                }
+            } else {
+                $response = [
+                    'status' => 'error',
+                    'message' => 'Gagal mengunggah foto. Silakan coba lagi.',
+                ];
+            }
+        }
+        echo json_encode($response);
     }
 
     public function hapus_image($id)
@@ -87,65 +166,6 @@ class Admin extends CI_Controller
             ];
         }
         header('Content-Type: application/json');
-        echo json_encode($response);
-    }
-
-    public function aksi_tambah_card()
-    {
-        $tempat = $this->input->post('tempat');
-        $deskripsi = $this->input->post('deskripsi');
-        $image = $_FILES['foto']['name'];
-
-        $errors = [];
-
-        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
-        $file_info = pathinfo($image);
-        $extension = isset($file_info['extension']) ? strtolower($file_info['extension']) : null;
-
-        if (empty($image) || !in_array($extension, $allowed_extensions)) {
-            $errors[] = 'Foto harus diunggah dengan format JPG, JPEG, PNG, atau GIF.';
-        }
-
-        if (count($errors) > 0) {
-            $response = [
-                'status' => 'error',
-                'message' => implode(' ', $errors),
-            ];
-        } else {
-            $image_temp = $_FILES['foto']['tmp_name'];
-            $kode = round(microtime(true) * 100);
-            $file_name = $kode . '_' . $image;
-            $upload_path = './image/' . $file_name;
-
-            if (move_uploaded_file($image_temp, $upload_path)) {
-                $data = [
-                    'image' => $file_name,
-                    'deskripsi' => $deskripsi,
-                    'tempat' => $tempat,
-                ];
-
-                $inserted = $this->m_model->tambah_data('deskripsi_public', $data);
-
-                if ($inserted) {
-                    $response = [
-                        'status' => 'success',
-                        'message' => 'Data berhasil ditambahkan.',
-                        'redirect' => base_url('admin/public'),
-                    ];
-                } else {
-                    $response = [
-                        'status' => 'error',
-                        'message' => 'Gagal menambahkan data. Silakan coba lagi.',
-                    ];
-                    unlink($upload_path);
-                }
-            } else {
-                $response = [
-                    'status' => 'error',
-                    'message' => 'Gagal mengunggah foto. Silakan coba lagi.',
-                ];
-            }
-        }
         echo json_encode($response);
     }
 
@@ -396,25 +416,15 @@ class Admin extends CI_Controller
         }
     }
 
-    public function pesan($page = 1)
+    public function pesan()
     {
-        $data['per_page'] = 10;
-        $offset = ($page - 1) * $data['per_page'];
-
-        $data['pesan'] = $this->m_model->get_dataa('pesan', $data['per_page'], $offset)->result();
+        $data['pesan'] = $this->m_model->get_all_messages('pesan')->result();
 
         $user_id = $this->session->userdata('id');
         $data['user_id'] = $user_id;
 
         $user_data = $this->session->userdata('id');
         $data['user_names'] = $this->m_model->get_data_except_current_users('user', $user_data)->result();
-
-        $data['pesan'] = $this->m_model->get_messages_by_sender('pesan', $data['per_page'], $offset, $user_id)->result();
-
-        $total_rows = $this->m_model->count_rows('pesan');
-
-        $data['total_pages'] = ceil($total_rows / $data['per_page']);
-        $data['current_page'] = $page;
 
         $this->load->view('admin/pesan', $data);
     }

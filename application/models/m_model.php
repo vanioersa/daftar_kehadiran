@@ -12,14 +12,15 @@ class M_model extends CI_Model
         return $this->db->get_where('user', array('role' => $role))->result();
     }
 
-    public function get_messages_by_sender($table, $limit, $offset, $sender_id)
-    {
-        $this->db->where('id_pengirim', $sender_id);
-        $this->db->limit($limit, $offset);
-        $this->db->order_by('tanggal', 'desc');
+    public function get_all_messages($table)
+{
+    $this->db->select('*');
+    $this->db->from($table);
+    $this->db->order_by('tanggal', 'DESC');
+    $this->db->order_by('jam', 'DESC');
 
-        return $this->db->get($table);
-    }
+    return $this->db->get();
+}
 
     public function get_data_by_id($table, $id)
     {
@@ -88,7 +89,7 @@ class M_model extends CI_Model
         return $query->result();
     }
 
-    public function get_messages_by_sender_all($table, $user_id)
+    public function get_messages_by_sender($table, $user_id)
     {
         $this->db->select('*');
         $this->db->from($table);
@@ -206,7 +207,7 @@ class M_model extends CI_Model
                 'id_pengirim' => $pengirim,
                 'id_penerima' => $penerima,
                 'tanggal'     => date('d-m-Y'),
-                'jam'         => date('H.i')
+                'jam'         => date('H.i.s')
             );
 
             if (is_array($penerima)) {

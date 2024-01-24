@@ -142,13 +142,14 @@
                 <div class="scrollable-table">
                     <table class="min-w-full bg-white">
                         <tbody>
-                            <?php $prevMessage = null;
+                            <?php
+                            $prevMessage = null;
                             $rowCounter = 0;
-
                             foreach ($pesan as $row) :
                                 $rowClass = 'border-b';
                                 $englishDate = date('l, j F Y', strtotime($row->tanggal));
                                 $translatedDate = translateDay(date('l', strtotime($englishDate))) . ', ' . date('j', strtotime($englishDate)) . ' ' . translateMonth(date('F', strtotime($englishDate))) . ' ' . date('Y', strtotime($englishDate));
+                                $displayTime = date('H:i', strtotime($row->jam));
 
                                 if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) {
                                     continue;
@@ -157,8 +158,8 @@
                                 if ($rowCounter >= 5) {
                                     break;
                                 }
-
-                                $rowCounter++; ?>
+                                $rowCounter++;
+                            ?>
                                 <tr class="<?= $rowClass ?>">
                                     <td class="w-1/5 p-4">
                                         <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
@@ -187,7 +188,7 @@
                                         <?php else : ?>
                                             <div class="flex flex-col bg-gray-300 p-3 rounded">
                                                 <p class="text-gray-800 dark:text-gray-300"><?= $row->pesan ?></p>
-                                                <p class="text-sm text-gray-800 text-right"><?= $translatedDate ?> <?= $row->jam ?></p>
+                                                <p class="text-sm text-gray-800 text-right"><?= $translatedDate ?> <?= $displayTime ?></p>
                                             </div>
                                         <?php endif; ?>
                                     </td>
@@ -210,14 +211,17 @@
                                         <?php endif; ?>
                                     </td>
                                 </tr>
-                            <?php $prevMessage = $row;
-                            endforeach; ?>
+                            <?php
+                                $prevMessage = $row;
+                            endforeach;
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
