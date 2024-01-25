@@ -50,7 +50,7 @@
 
         input[type="text"],
         input[type="file"],
-        input[type="date"] {
+        input[type="datetime-local"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -104,7 +104,7 @@
 
             <div class="form-group">
                 <label class="group-form" for="waktu_kejadian">Waktu Kejadian</label>
-                <input type="date" id="waktu_kejadian" name="waktu_kejadian" class="form-control" required min="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" max="<?php echo date('Y-m-d', strtotime('+1 month')); ?>">
+                <input type="datetime-local" id="waktu_kejadian" name="waktu_kejadian" class="form-control" required>
             </div>
 
             <div class="form-group">

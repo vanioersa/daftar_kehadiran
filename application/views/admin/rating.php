@@ -21,7 +21,7 @@
     }
 
     .star-icon {
-        color: gold;
+        color: #fbbf24;
         font-size: 1.5em;
     }
 

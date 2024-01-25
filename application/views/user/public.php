@@ -19,12 +19,24 @@
             <?php foreach ($public as $row) : ?>
                 <div class="bg-blue-500 text-white p-5 rounded-md shadow-md mb-4">
                     <img src="<?= base_url('./image/' . $row->image) ?>" class="object-cover w-full h-56 mb-4 rounded-md" alt="Foto Profil" loading="lazy">
-                    <p class="font-bold text-lg mb-2"><?= $row->tempat ?></p>
+                    <p class="font-bold text-center text-2xl mb-2"><?= $row->tempat ?></p>
                     <p class="text-gray-200"><?= $row->deskripsi ?></p>
+
+                    <?php $formattedDate = date('l, d F Y', strtotime($row->waktu_kejadian));
+                    $formattedTime = date('H.i', strtotime($row->waktu_kejadian));
+                    $formattedDate = str_replace(array_keys($dayNames), array_values($dayNames), $formattedDate);
+                    $formattedDate = str_replace(array_keys($monthNames), array_values($monthNames), $formattedDate); ?>
+
+                    <div class="flex items-center justify-between mt-4">
+                        <p class="text-gray-300 formatted-date"><?= $formattedDate ?></p>
+                        <p class="text-gray-300 formatted-time"><?= $formattedTime ?> WIB</p>
+                    </div>
+
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
+
 </body>
 
 </html>

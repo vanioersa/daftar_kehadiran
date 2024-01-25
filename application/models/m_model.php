@@ -138,6 +138,13 @@ class M_model extends CI_Model
         return $query->num_rows() > 0;
     }
 
+    public function get_data_sorted($table, $field, $order = 'ASC') {
+        $this->db->select('*');
+        $this->db->from($table);
+        $this->db->order_by($field, $order);
+        return $this->db->get();
+    }
+
     public function get_user_password($user_id)
     {
         $query = $this->db->select('password')->where('id', $user_id)->get('users');

@@ -34,7 +34,9 @@ class User extends CI_Controller
 
     public function public()
     {
-        $data['public'] = $this->m_model->get_data('deskripsi_public')->result();
+        $data['public'] = $this->m_model->get_data_sorted('deskripsi_public', 'waktu_kejadian', 'DESC')->result();
+        $data['dayNames'] = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu',];
+        $data['monthNames'] = ['January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April', 'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September', 'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember',];
         $this->load->view('user/public', $data);
     }
 
@@ -53,15 +55,14 @@ class User extends CI_Controller
     public function aksi_ratting()
     {
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
-            $this->form_validation->set_rules('rating', 'Rating', 'required|numeric|greater_than_equal_to[1]|less_than_equal_to[5]');
+            $this->form_validation->set_rules('rating', 'Rating', 'numeric|greater_than_equal_to[1]|less_than_equal_to[5]');
             $this->form_validation->set_rules('comment', 'Comment', 'required');
 
             if ($this->form_validation->run() == FALSE) {
-                // Check if 'rating' is not provided, redirect back to the form view
                 if (!$this->input->post('rating')) {
                     redirect(base_url('user/retting'));
                 }
-
+                
                 $this->load->view('your_form_view');
             } else {
                 $user_id = $this->session->userdata('id');

@@ -17,6 +17,12 @@
             margin: 0 auto;
         }
 
+        .star-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .star-icon {
             font-size: 2.5em;
             cursor: pointer;
@@ -49,37 +55,16 @@
             background-color: #34d399;
         }
 
-        .rating-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .rating-stars {
-            display: flex;
-            margin-top: 10px;
-        }
-
-        .star-label {
-            font-size: 1.5em;
-            margin: 0 5px;
-        }
-
-        .rating-output {
-            font-size: 2em;
-            font-weight: bold;
-            color: #fbbf24;
-            margin-top: 10px;
-        }
-
         .rating-results {
             margin-top: 20px;
         }
 
-        .user-rating {
+        .rating-results .card {
             margin-top: 10px;
-            font-size: 1.2em;
+        }
+
+        .rating-results .card .bg-blue-300 {
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -87,20 +72,20 @@
 <body>
     <?php $this->load->view('sidebar_user'); ?>
 
-    <div class="container my-8">
-        <div class="max-w-md mx-auto bg-white shadow-md rounded-md overflow-hidden card">
-            <div class="p-6 bg-blue-100">
+    <div class="mx-auto md:my-10 my-14">
+        <div class="max-w-md bg-white shadow-md rounded-md overflow-hidden card">
+            <div class="p-6 bg-blue-200">
                 <form id="myForm" action="<?= base_url('user/aksi_ratting'); ?>" method="post">
                     <?php if (empty($ratingResults)) : ?>
                         <div class="mb-6 text-center rating-container">
-                            <label for="rating" class="block text-sm font-medium text-gray-600">Beri Rating:</label>
-                            <div class="rating-stars">
-                                <?php for ($i = 5; $i >= 1; $i--) : ?>
-                                    <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" class="hidden">
-                                    <label for="star<?= $i ?>" class="star-icon" onclick="toggleStar(this)">&#9733;</label>
+                            <label for="rating" class="block text-2xl font-bold text-gray-600 mb-2">Beri Rating:</label>
+                            <div class="star-container">
+                                <?php for ($i = 1; $i <= 5; $i++) : ?>
+                                    <span class="star-icon" onclick="setRating(<?= $i ?>)">&#9733;</span>
                                 <?php endfor; ?>
                             </div>
-                            <output for="rating" class="rating-output">0</output>
+                            <input type="hidden" id="rating" name="rating" value="0">
+                            <output for="rating" class="rating-output text-3xl font-bold">0</output>
                         </div>
                         <div class="mb-6">
                             <label for="comment" class="block text-sm font-medium text-gray-600">Komentar:</label>
@@ -114,14 +99,31 @@
                     <?php endif; ?>
                 </form>
 
+                <?php function get_star_icons_fa($rating)
+                {
+                    $stars = '';
+                    $fullStars = floor($rating);
+                    $halfStar = ceil($rating - $fullStars);
+
+                    for ($i = 0; $i < $fullStars; $i++) {
+                        $stars .= '<i class="fas fa-star"></i>';
+                    }
+
+                    if ($halfStar) {
+                        $stars .= '<i class="fas fa-star-half-alt"></i>';
+                    }
+
+                    return $stars;
+                } ?>
                 <div class="mt-8 rating-results">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Hasil Rating Dari (<?php foreach ($user as $row) : ?><?php echo $row->nama; ?><?php endforeach; ?>):</h2>
                     <?php foreach ($ratingResults as $result) : ?>
-                        <div class="mb-4 card">
+                        <div class="card">
                             <div class="bg-blue-300 p-4 rounded-md shadow-md">
                                 <p class="text-lg font-semibold text-gray-800 mb-2"><?= tampil_nama_byid($result->id_user) ?></p>
-                                <p class="text-xl font-semibold text-gray-800 mb-2">Rating: <span style="color: #fbbf24;"><?= get_star_icons($result->rating) ?></span></p>
-                                <p class="text-gray-800"><?= $result->comment ?></p>
+                                <p class="text-xl text-gray-800 mb-2"><?= $result->comment ?></p>
+
+                                <p class="font-semibold text-gray-800"><span class="star-icons" style="color: #fbbf24;"><?= get_star_icons_fa($result->rating) ?></span></p>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -131,26 +133,17 @@
     </div>
 
     <script>
-        function toggleStar(star) {
-            const ratingInputs = document.querySelectorAll('input[name="rating"]');
+        function setRating(rating) {
+            const ratingIcons = document.querySelectorAll('.star-icon');
             const output = document.querySelector('output[for="rating"]');
 
-            star.classList.toggle('clicked');
-
-            const clickedStars = document.querySelectorAll('.star-icon.clicked');
-            const rating = clickedStars.length;
+            ratingIcons.forEach((icon, index) => {
+                icon.classList.toggle('clicked', index < rating);
+            });
 
             output.textContent = rating;
+            document.getElementById('rating').value = rating;
         }
-
-        const ratingInputs = document.querySelectorAll('input[name="rating"]');
-        const output = document.querySelector('output[for="rating"]');
-
-        ratingInputs.forEach(ratingInput => {
-            ratingInput.addEventListener('change', function() {
-                output.textContent = this.value;
-            });
-        });
     </script>
 </body>
 

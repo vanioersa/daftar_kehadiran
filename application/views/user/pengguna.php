@@ -15,15 +15,12 @@
         font-family: 'Source Sans Pro', sans-serif;
         background-color: #f5f5f5;
         color: #333;
-    }
-
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
+        width: screen;
     }
 
     .rating-container {
         margin-bottom: 20px;
+        width: screen;
     }
 
     .rating-container h3 {
@@ -52,8 +49,8 @@
     }
 
     .profile-picture {
-        width: 3rem;
-        height: 3rem;
+        width: 2.5rem;
+        height: 2.5rem;
         border-radius: 50%;
         object-fit: cover;
         margin-right: 0.5rem;
@@ -67,7 +64,7 @@
 
 <body>
     <?php $this->load->view('sidebar_user'); ?>
-    <section class="container mx-auto px-6 py-10">
+    <section class="container mx-auto px-6 py-10 w-screen">
         <h2 class="text-4xl font-bold text-center mb-8">Rating</h2>
         <?php if (!empty($reting)) : ?>
             <?php $groupedRatings = [];
@@ -85,17 +82,17 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <?php foreach ($rows as $row) : ?>
                             <div class="rating-card mb-4">
-                                <div class="bg-blue-500 text-white rounded shadow p-6">
-                                    <p class="text-base rating-content"><?= $row->comment; ?></p>
-                                    <div class="flex items-center justify-between mt-4">
-                                        <div class="flex items-center">
-                                            <?php if (!empty($row->id_user)) : ?>
-                                                <img src="<?= base_url('./image/' . tampil_image_byid($row->id_user)) ?>" class="profile-picture" alt="Profile Picture" loading="lazy">
-                                            <?php else : ?>
-                                                <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="profile-picture" alt="Default Profile Picture" loading="lazy" />
-                                            <?php endif; ?>
-                                            <span class="text-lg"><?= tampil_nama_byid($row->id_user) ?></span>
-                                        </div>
+                                <div class="bg-blue-500 text-white rounded shadow p-6 flex flex-col">
+                                    <div class="flex items-center mb-4">
+                                        <?php if (!empty($row->id_user)) : ?>
+                                            <img src="<?= base_url('./image/' . tampil_image_byid($row->id_user)) ?>" class="profile-picture" alt="Profile Picture" loading="lazy">
+                                        <?php else : ?>
+                                            <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="profile-picture" alt="Default Profile Picture" loading="lazy" />
+                                        <?php endif; ?>
+                                        <span class="text-lg"><?= tampil_nama_byid($row->id_user) ?></span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-base rating-content flex-grow"><?= $row->comment; ?></p>
                                         <div class="flex items-center">
                                             <?php for ($i = 1; $i <= $row->rating; $i++) : ?>
                                                 <span class="star-icon">&#9733;</span>

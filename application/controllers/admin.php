@@ -92,16 +92,15 @@ class Admin extends CI_Controller
             $upload_path = './image/' . $file_name;
 
             if (move_uploaded_file($image_temp, $upload_path)) {
-                $current_date = date('Y-m-d');
-                $current_time = date('H:i:s');
+                $waktu_kejadian_datetime = date('d-m-Y H.i', strtotime($waktu_kejadian));
 
                 $data = [
                     'image' => $file_name,
                     'deskripsi' => $deskripsi,
                     'tempat' => $tempat,
-                    'tanggal' => $current_date,
-                    'jam' => $current_time,
-                    'waktu_kejadian' => $waktu_kejadian, // Use the user-input waktu_kejadian
+                    'tanggal' => date('d-m-Y'),
+                    'jam' => date('H.i.s'),
+                    'waktu_kejadian' => $waktu_kejadian_datetime,
                 ];
 
                 $inserted = $this->m_model->tambah_data('deskripsi_public', $data);

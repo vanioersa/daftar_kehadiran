@@ -73,14 +73,14 @@
                         echo '<div class="text-center md:py-56"><p class="text-gray-600">Maaf, tidak ada data yang tersedia.</p></div>';
                     } else {
                         foreach ($reting as $row) :
-                            if ($count < 3) : ?>
+                            if ($count < 1) : ?>
                                 <div class="bg-blue-700 p-6 text-white rounded-md shadow-md">
                                     <p class="font-semibold text-lg"><?= tampil_nama_byid($row->id_user) ?></p>
-                                    <p class="mt-2"><span class="text-yellow-500"><?php echo str_repeat('&#9733;', $row->rating); ?></span></p>
+                                    <p class="mt-2"><span style="color: #fbbf24;"><?php echo str_repeat('&#9733;', $row->rating); ?></span></p>
                                     <p class="mt-2">Komentar: <?= $row->comment ?></p>
                                 </div>
                             <?php else : ?>
-                                <?php if ($count === 3) : ?>
+                                <?php if ($count === 1) : ?>
                                     <div class="text-blue-700 p-4 text-center">
                                         <a href="<?php echo base_url('admin/ratting') ?>" class="hover:underline">Lihat Lebih Banyak &rarr;</a>
                                     </div>
@@ -95,9 +95,8 @@
 
             <div class="bg-white p-6 rounded-md shadow-md">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Riwayat Pesan</h2>
-                <div style="max-height: 450px;" class="overflow-y-auto text-blue-700 px-2 py-3">
-                    <?php
-                    $prevMessage = null;
+                <div style="max-height: 290px;" class="overflow-y-auto text-blue-700 px-2 py-3">
+                    <?php $prevMessage = null;
                     foreach ($pesan as $row) :
                         if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) :
                             $englishDate = date('j F Y', strtotime($row->tanggal));
@@ -107,8 +106,8 @@
                                     <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
                                     <p class="mt-2"><?= $row->pesan ?></p>
                                     <div class="flex justify-between mt-2 text-sm text-gray-600">
-                                        <p><?= $translatedDate ?></p>
-                                        <p><?= $row->jam ?></p>
+                                        <p class="pr-3"><?= $translatedDate ?></p>
+                                        <p><?= date('H.i', strtotime($row->jam)) ?></p>
                                     </div>
                                 </div>
                             </div>
