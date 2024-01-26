@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
-    <title>Document</title>
+    <title>Layanan Pengaduan Bencana</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -40,15 +40,15 @@
                                 <?php $no = 0;
                                 foreach ($pengguna as $row) :
                                     $no++;
-                                    if ($no > 10) break; ?>
-                                    <tr class="hover:bg-blue-100" onclick="window.location='<?= base_url('admin/detail_pengguna/' . $row->id) ?>'">
+                                    if ($no > 5) break; ?>
+                                    <tr class="hover:bg-blue-100" <?php if ($no <= 5 && count($pengguna) <= 5) echo 'onclick="window.location=' . "'" . base_url('admin/detail_pengguna/' . $row->id) . "'" . '"' ?>>
                                         <td class="py-2 px-4 border-b"><?= $no ?></td>
                                         <td class="py-2 px-4 border-b text-blue-700"><?= $row->nama ?></td>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>
                         </table>
-                        <?php if (count($pengguna) > 10) : ?>
+                        <?php if (count($pengguna) > 5) : ?>
                             <div class="w-full mt-4 flex justify-center mb-5">
                                 <a href="<?php echo base_url('admin/table_pengguna') ?>" class="text-blue-500 hover:underline">Lihat Lebih Banyak &rarr;</a>
                             </div>
@@ -62,8 +62,7 @@
             <div class="bg-white p-6 rounded-md shadow-md">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Informasi Rating</h2>
                 <div class="grid grid-cols-1 gap-4">
-                    <?php
-                    usort($reting, function ($a, $b) {
+                    <?php usort($reting, function ($a, $b) {
                         return $b->rating - $a->rating;
                     });
 
@@ -88,34 +87,62 @@
                     <?php endif;
                             $count++;
                         endforeach;
-                    }
-                    ?>
+                    } ?>
                 </div>
             </div>
 
             <div class="bg-white p-6 rounded-md shadow-md">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Riwayat Pesan</h2>
-                <div style="max-height: 290px;" class="overflow-y-auto text-blue-700 px-2 py-3">
-                    <?php $prevMessage = null;
+                <div style="max-height: 290px;" class="overflow-y-auto px-2 py-3">
+                    <?php
+                    $prevDate = null;
+                    $uniqueMessages = [];
+                    $today = date('j/n/Y');
+                    $yesterday = date('j/n/Y', strtotime('-1 day'));
+                    usort($pesan, function ($a, $b) {
+                        return strtotime($b->tanggal . ' ' . $b->jam) - strtotime($a->tanggal . ' ' . $a->jam);
+                    });
                     foreach ($pesan as $row) :
-                        if (!$prevMessage || ($prevMessage->id_pengirim != $row->id_pengirim) || ($prevMessage->pesan != $row->pesan)) :
-                            $englishDate = date('j F Y', strtotime($row->tanggal));
-                            $translatedDate = date('j/n/Y', strtotime($englishDate)); ?>
-                            <div class="<?= ($row->id_pengirim == $current_user_id) ? 'text-right' : 'text-left' ?> mb-4">
-                                <div class="<?= ($row->id_pengirim == $current_user_id) ? 'bg-blue-200' : 'bg-gray-300' ?> rounded-md p-3 max-w-2xl inline-block mx-auto">
-                                    <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
-                                    <p class="mt-2"><?= $row->pesan ?></p>
-                                    <div class="flex justify-between mt-2 text-sm text-gray-600">
-                                        <p class="pr-3"><?= $translatedDate ?></p>
-                                        <p><?= date('H.i', strtotime($row->jam)) ?></p>
+                        $englishDate = date('j F Y', strtotime($row->tanggal));
+                        $translatedDate = date('j/n/Y', strtotime($englishDate));
+                        $displayDate = '';
+                        if ($translatedDate == $today) {
+                            $displayDate = 'Hari Ini';
+                        } elseif ($translatedDate == $yesterday) {
+                            $displayDate = 'Kemarin';
+                        } else {
+                            $displayDate = $translatedDate;
+                        }
+                        $messageKey = $translatedDate . '_' . $row->jam . '_' . $row->pesan;
+                        if (!in_array($messageKey, $uniqueMessages)) : ?>
+                            <?php if ($translatedDate != $prevDate) : ?>
+                                <p class="my-5 text-gray-500 mx-auto text-center bg-blue-100 shadow w-20">
+                                    <?= $displayDate ?>
+                                </p>
+                            <?php endif; ?>
+
+                            <div class="mb-2">
+                                <?php if (!empty($row->id_pengirim)) : ?>
+                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="w-10 h-10 rounded-full <?= ($row->id_pengirim == $id_user) ? 'float-right ml-2' : 'float-left mr-2' ?>" alt="Profile Picture" loading="lazy">
+                                <?php else : ?>
+                                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="w-8 h-8 rounded-full mr-2" alt="Default Profile Picture" loading="lazy">
+                                <?php endif; ?>
+
+                                <div class="flex items-start <?= ($row->id_pengirim == $id_user) ? 'justify-end text-right' : 'justify-start text-left' ?>">
+                                    <div class="<?= ($row->id_pengirim == $id_user) ? 'bg-blue-700 text-white' : 'bg-gray-300 text-black' ?> rounded-md p-3 max-w-2xl inline-block">
+                                        <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
+                                        <p><?= $row->pesan ?></p>
+                                        <p class="text-xs <?= ($row->id_pengirim == $id_user) ? 'text-left' : 'text-right' ?>"><?= date('H:i', strtotime($row->jam)) ?></p>
                                     </div>
                                 </div>
                             </div>
-                    <?php endif;
-                        $prevMessage = $row;
+                    <?php $uniqueMessages[] = $messageKey;
+                            $prevDate = $translatedDate;
+                        endif;
                     endforeach; ?>
                 </div>
             </div>
+
         </div>
     </div>
 </body>

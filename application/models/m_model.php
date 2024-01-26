@@ -13,14 +13,14 @@ class M_model extends CI_Model
     }
 
     public function get_all_messages($table)
-{
-    $this->db->select('*');
-    $this->db->from($table);
-    $this->db->order_by('tanggal', 'DESC');
-    $this->db->order_by('jam', 'DESC');
+    {
+        $this->db->select('*');
+        $this->db->from($table);
+        $this->db->order_by('tanggal', 'DESC');
+        $this->db->order_by('jam', 'DESC');
 
-    return $this->db->get();
-}
+        return $this->db->get();
+    }
 
     public function get_data_by_id($table, $id)
     {
@@ -138,7 +138,16 @@ class M_model extends CI_Model
         return $query->num_rows() > 0;
     }
 
-    public function get_data_sorted($table, $field, $order = 'ASC') {
+    public function get_user_messagess($user_id)
+    {
+        $this->db->where('(id_pengirim = ' . $user_id . ' OR id_penerima = ' . $user_id . ')');
+        $this->db->order_by('tanggal', 'DESC');
+        $this->db->order_by('jam', 'DESC');
+        return $this->db->get('pesan');
+    }
+
+    public function get_data_sorted($table, $field, $order = 'ASC')
+    {
         $this->db->select('*');
         $this->db->from($table);
         $this->db->order_by($field, $order);

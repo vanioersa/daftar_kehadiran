@@ -149,7 +149,7 @@
                                 $rowClass = 'border-b';
                                 $englishDate = date('l, j F Y', strtotime($row->tanggal));
                                 $translatedDate = translateDay(date('l', strtotime($englishDate))) . ', ' . date('j', strtotime($englishDate)) . ' ' . translateMonth(date('F', strtotime($englishDate))) . ' ' . date('Y', strtotime($englishDate));
-                                $displayTime = date('H:i', strtotime($row->jam));
+                                $displayTime = date('H.i', strtotime($row->jam));
 
                                 if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) {
                                     continue;

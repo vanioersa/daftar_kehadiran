@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesan Untuk User</title>
+    <title>Layanan Pengaduan Bencana</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
@@ -144,7 +144,8 @@
     function translateMonth($englishMonth)
     {
         $monthsTranslation = [
-            'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April', 'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September', 'October' => 'Oktober', 'December' => 'Desember'];
+            'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April', 'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September', 'October' => 'Oktober', 'December' => 'Desember'
+        ];
         return $monthsTranslation[$englishMonth];
     } ?>
     <div class="mt-10 mx-10 mb-10">
@@ -156,11 +157,12 @@
                             <?php
                             $prevMessage = null;
                             $rowCounter = 0;
-
                             foreach ($pesan as $row) :
                                 $rowClass = 'border-b';
                                 $englishDate = date('l, j F Y', strtotime($row->tanggal));
                                 $translatedDate = translateDay(date('l', strtotime($englishDate))) . ', ' . date('j', strtotime($englishDate)) . ' ' . translateMonth(date('F', strtotime($englishDate))) . ' ' . date('Y', strtotime($englishDate));
+
+                                $displayTime = date('H.i', strtotime($row->jam));
 
                                 if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) {
                                     continue;
@@ -169,7 +171,6 @@
                                 if ($rowCounter >= 5) {
                                     break;
                                 }
-
                                 $rowCounter++;
                             ?>
                                 <tr class="<?= $rowClass ?>">
@@ -200,7 +201,7 @@
                                         <?php else : ?>
                                             <div class="flex flex-col bg-gray-300 p-3 rounded">
                                                 <p class="text-gray-800 dark:text-gray-300"><?= $row->pesan ?></p>
-                                                <p class="text-sm text-gray-800 text-right"><?= $translatedDate ?> <?= $row->jam ?></p>
+                                                <p class="text-sm text-gray-800 text-right"><?= $translatedDate ?> <?= $displayTime ?></p>
                                             </div>
                                         <?php endif; ?>
                                     </td>

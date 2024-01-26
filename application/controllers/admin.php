@@ -18,12 +18,11 @@ class Admin extends CI_Controller
     {
         $data['reting'] = $this->m_model->get_data('ratting')->result();
         $data['pesan'] = $this->m_model->get_data('pesan')->result();
-        $data['current_user_id'] = $this->session->userdata('id');
-        $data['user_names'] = $this->m_model->get_data_except_current_users('user', $data['current_user_id'])->result();
+        $data['id_user'] = $this->session->userdata('id');
+        $data['user_names'] = $this->m_model->get_data_except_current_users('user', $data['id_user'])->result();
         $role = 'user';
         $data['pengguna'] = $this->m_model->get_user_data_by_rolle($role);
-        $data['user'] = $this->m_model->get_by_id('user', 'id', $data['current_user_id'])->result();
-
+        $data['user'] = $this->m_model->get_by_id('user', 'id', $data['id_user'])->result();
         $this->load->view('admin/dashboard', $data);
     }
 
@@ -444,16 +443,7 @@ class Admin extends CI_Controller
 
     public function table_pengguna()
     {
-        $this->load->library('pagination');
-
-        $config['base_url'] = base_url('admin/table_pengguna');
-        $config['total_rows'] = $this->m_model->count_user_data_by_role('user');
-        $config['per_page'] = 20;
-
-        $this->pagination->initialize($config);
-
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['public'] = $this->m_model->get_user_data_by_role('user', $config['per_page'], $page);
+        $data['public'] = $this->m_model->get_user_data_by_rolle('user');
 
         $this->load->view('admin/table_pengguna', $data);
     }

@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700" rel="stylesheet" />
+
+    <link rel="stylesheet" href="path/to/your/css/style.css" />
+    <script defer src="path/to/your/js/script.js"></script>
     <style>
         body {
             font-family: 'Source Sans Pro', sans-serif;
@@ -59,6 +62,15 @@
             width: 100%;
         }
 
+        .nav-day button:hover {
+            color: #fff;
+        }
+
+        .nav-night button:hover {
+            color: #fff;
+        }
+
+
         .chat-container {
             display: flex;
             flex-direction: column;
@@ -85,6 +97,21 @@
             .menu-item {
                 border-bottom: none;
                 width: 100%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .flex-col {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .toggle-button {
+                margin-top: 1rem;
+            }
+
+            .main-content {
+                padding-top: 2rem;
             }
         }
 
@@ -121,6 +148,25 @@
             color: white;
         }
 
+        #buttonContent {
+            padding: 1rem 2rem;
+            border-radius: 999px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #buttonContent:hover {
+            background-color: #4a90e2;
+            color: #fff;
+        }
+
+        #currentDateTime {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
         #currentDateTime {
             font-size: 1.5rem;
             font-weight: bold;
@@ -131,7 +177,7 @@
             margin-bottom: 50px;
         }
 
-        .roundued{
+        .roundued {
             border-radius: 50px;
         }
     </style>
@@ -155,7 +201,7 @@
                 <ul class="flex flex-col lg:flex-row lg:ml-auto">
                     <li>
                         <button class="px-4 py-2 text-white hover:text-green-500 toggle-button" onclick="toggleLanguage()">
-                            <span id="languageIcon"><img src="image/icon-indonesia.png" alt="Indonesia Flag" width="30" height="15"></span>
+                            <span id="languageIcon"><i class="fa-solid fa-sun"></i></span>
                         </button>
                     </li>
                 </ul>
@@ -168,7 +214,7 @@
             <i class="fa-solid fa-bars"></i>
         </button>
 
-        <h1 id="welcomeText">Selamat Datang di Layanan Pelaporan Bencana</h1>
+        <h1 id="welcomeText">Selamat Datang di Layanan Pengaduan Bencana</h1>
         <p id="reportText">Laporkan bencana dan dapatkan bantuan dengan cepat. Keselamatan Anda adalah prioritas kami.</p>
         <a id="buttonContent" class="px-8 py-4 roundued text-xl bg-blue-600 hover:bg-blue-500 text-white hover:text-black" href="<?php echo base_url('auth') ?>">Masuk</a>
     </div>
@@ -187,15 +233,13 @@
 
         function toggleLanguage() {
             language = (language === 'id') ? 'en' : 'id';
-            updateContent();
-            updateDateTime();
             updateLanguageIcon();
             updateNavigationColor();
         }
 
         function updateLanguageIcon() {
             var languageIcon = document.getElementById('languageIcon');
-            languageIcon.innerHTML = (language === 'en') ? '<img src="image/icon-inggris.png" alt="English Flag" width="30" height="15">' : '<img src="image/icon-indonesia.png" alt="Indonesia Flag" width="30" height="15">';
+            languageIcon.innerHTML = (language === 'en') ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
         }
 
         function updateNavigationColor() {
@@ -212,37 +256,6 @@
                 body.classList.add('nav-day');
                 nav.classList.add('nav-night');
             }
-        }
-
-        function updateContent() {
-            document.body.className = language;reportText
-
-            var welcomeText = document.getElementById('welcomeText');
-            var reportText = document.getElementById('reportText');
-            var infoTitle = document.getElementById('infoTitle');
-            var infoContent = document.getElementById('infoContent');
-            var buttonContent = document.getElementById('buttonContent');
-            var serviceText = document.getElementById('serviceText');
-
-            if (language === 'en') {
-                welcomeText.textContent = "Welcome to Disaster Reporting Service";
-                reportText.textContent = "Report disasters and get help quickly. Your safety is our priority.";
-                infoTitle.textContent = "Additional Information";
-                infoContent.textContent = "Here you can find additional information about the disaster reporting service. We are ready to assist you with any information you need.";
-                buttonContent.textContent = "Login";
-            } else {
-                welcomeText.textContent = "Selamat Datang di Layanan Pelaporan Bencana";
-                reportText.textContent = "Laporkan bencana dan dapatkan bantuan dengan cepat. Keselamatan Anda adalah prioritas kami.";
-                infoTitle.textContent = "Informasi Tambahan";
-                infoContent.textContent = "Di sini Anda dapat menemukan informasi tambahan mengenai layanan pengaduan bencana. Kami siap membantu Anda dengan segala informasi yang Anda butuhkan.";
-                buttonContent.textContent = "Masuk";
-            }
-
-            welcomeText.style.paddingTop = "75px";
-        }
-
-        function navigateTo(url) {
-            window.location.href = url;
         }
 
         document.getElementById('menuBtnMobile').addEventListener('click', function() {
@@ -277,11 +290,11 @@
                 timeZone: 'Asia/Jakarta'
             };
 
-            const currentDateTime = new Date().toLocaleString(language === 'en' ? 'en-US' : 'id-ID', options);
-            const languageText = (language === 'en') ? 'Current Time' : 'Waktu saat ini';
+            const currentDateTime = new Date().toLocaleString('id-ID', options);
 
-            currentDateTimeElement.textContent = `${languageText}: ${currentDateTime}`;
+            currentDateTimeElement.textContent = `Waktu saat ini: ${currentDateTime}`;
         }
+
         updateDateTime();
         setInterval(updateDateTime, 1000);
     </script>

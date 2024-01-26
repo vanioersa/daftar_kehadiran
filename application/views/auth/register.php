@@ -155,7 +155,7 @@
                 <span class="icon">
                     <i class="fa-solid fa-user"></i>
                 </span>
-                <input type="text" id="nama" placeholder="Nama" name="nama" class="form-control" required>
+                <input type="text" autocomplete="off" id="nama" placeholder="Nama" name="nama" class="form-control" required>
             </div>
 
             <div class="input-group">

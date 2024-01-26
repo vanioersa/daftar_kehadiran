@@ -19,13 +19,15 @@ class User extends CI_Controller
         $data['comment_count'] = $this->m_model->get_comment_count();
         $data['public'] = $this->m_model->get_data('deskripsi_public')->result();
         $data['users'] = $this->m_model->get_user_by_role('user');
-        $data['pesan'] = $this->m_model->get_data('pesan')->result();
-        $data['current_user_id'] = $this->session->userdata('id');
-
-        $data['user'] = $this->m_model->get_by_id('user', 'id', $this->session->userdata('id'))->result();
+        $data['id_user'] = $this->session->userdata('id');
+    
+        // Fetch only the messages related to the current user
+        $data['pesan'] = $this->m_model->get_user_messagess($data['id_user'])->result();
+    
+        $data['user'] = $this->m_model->get_by_id('user', 'id', $data['id_user'])->result();
         $this->load->view('user/dashboard', $data);
     }
-
+    
     public function rating_pengguna()
     {
         $data['reting'] = $this->m_model->get_data('ratting')->result();

@@ -11,24 +11,15 @@
 </head>
 
 <style>
-    .rating-container {
-        margin-bottom: 20px;
-    }
 
     .rating-container h3 {
         color: #333;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }
 
     .star-icon {
         color: #fbbf24;
         font-size: 1.5em;
-    }
-
-    @media (min-width: 768px) {
-        .babuh {
-            margin-left: 55%;
-        }
     }
 </style>
 
@@ -47,14 +38,13 @@
             }
             krsort($groupedRatings);
             foreach ($groupedRatings as $rating => $rows) : ?>
-                <div class="rating-container mb-8">
+                <div class="rating-container mb-20">
                     <h3 class="text-2xl font-semibold mb-4">Rating <?= $rating ?> Bintang</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                         <?php foreach ($rows as $row) : ?>
-                            <div class="rating-card mb-4">
+                            <div class="rating-card">
                                 <div class="bg-blue-600 text-white rounded shadow p-6">
-                                    <p class="text-base rating-content"><?= $row->comment; ?></p>
-                                    <div class="flex items-center justify-between mt-4">
+                                    <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center">
                                             <?php if (!empty($row->id_user)) : ?>
                                                 <img src="<?= base_url('./image/' . tampil_image_byid($row->id_user)) ?>" class="object-cover w-10 h-10 rounded-full" alt="Profile Picture" loading="lazy">
@@ -69,6 +59,7 @@
                                             <?php endfor; ?>
                                         </div>
                                     </div>
+                                    <p class="text-base rating-content"><?= $row->comment; ?></p>
                                 </div>
                             </div>
                         <?php endforeach; ?>
