@@ -146,12 +146,35 @@ class M_model extends CI_Model
         return $this->db->get('pesan');
     }
 
+    public function search_data($table, $order_by, $order_type, $search_query)
+    {
+        $this->db->group_start();
+        $this->db->like('deskripsi', $search_query);
+        $this->db->or_like('tempat', $search_query);
+        $this->db->or_like('waktu_kejadian', $search_query);
+        $this->db->group_end();
+        $this->db->order_by($order_by, $order_type);
+        return $this->db->get($table);
+    }
+
     public function get_data_sorted($table, $field, $order = 'ASC')
     {
         $this->db->select('*');
         $this->db->from($table);
         $this->db->order_by($field, $order);
         return $this->db->get();
+    }
+
+    public function search_public_data($search_query)
+    {
+        if ($search_query !== null) {
+            $escaped_search_query = $this->db->escape_str($search_query);
+            $this->db->like('tempat', $escaped_search_query);
+            $this->db->or_like('deskripsi', $escaped_search_query);
+        }
+
+        $query = $this->db->get('deskripsi_public');
+        return $query->result();
     }
 
     public function get_user_password($user_id)

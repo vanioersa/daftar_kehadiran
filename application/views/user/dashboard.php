@@ -67,6 +67,7 @@
     .cta-link {
         display: inline-block;
         margin-bottom: 1rem;
+        margin-top: 5px;
         padding: 0.75rem 1.5rem;
         background-color: #3490dc;
         color: #fff;
@@ -83,7 +84,7 @@
 <body>
     <?php $this->load->view('sidebar_user'); ?>
 
-    <div class="w-screen-xl w-full text-center mx-auto my-8 px-8">
+    <div class="w-screen-xl w-full text-center mx-auto md:my-5 my-8 px-8">
 
         <div class="mb-8 text-center">
             <?php foreach ($user as $row) : ?>
@@ -154,56 +155,106 @@
 
             <div class="bg-white p-6 rounded-md shadow-md">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Riwayat Pesan</h2>
-                <div style="max-height: 290px;" class="overflow-y-auto px-2 py-3">
+
+                <div style="max-height: 370px;" class="overflow-y-auto px-2 py-3">
                     <?php
                     $prevDate = null;
                     $uniqueMessages = [];
                     $today = date('j/n/Y');
                     $yesterday = date('j/n/Y', strtotime('-1 day'));
-                    usort($pesan, function ($a, $b) {
-                        return strtotime($b->tanggal . ' ' . $b->jam) - strtotime($a->tanggal . ' ' . $a->jam);
-                    });
+
+                    $searchTerm = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
+
                     foreach ($pesan as $row) :
                         $englishDate = date('j F Y', strtotime($row->tanggal));
                         $translatedDate = date('j/n/Y', strtotime($englishDate));
-                        $displayDate = '';
-                        if ($translatedDate == $today) {
-                            $displayDate = 'Hari Ini';
-                        } elseif ($translatedDate == $yesterday) {
-                            $displayDate = 'Kemarin';
-                        } else {
-                            $displayDate = $translatedDate;
-                        }
+                        $displayDate = getDisplayDate($row->tanggal);
+
                         $messageKey = $translatedDate . '_' . $row->jam . '_' . $row->pesan;
-                        if (!in_array($messageKey, $uniqueMessages)) :?>
-                            <?php if ($translatedDate != $prevDate) : ?>
-                                <p class="my-5 text-gray-500 mx-auto text-center bg-blue-100 shadow w-20">
+                        $messageText = tampil_nama_byid($row->id_pengirim) . ' ' . $row->pesan;
+
+                        // Check if the search term is empty or if it matches the message text
+                        if (empty($searchTerm) || stripos($messageText, $searchTerm) !== false) :
+                    ?>
+                            <?php if ($displayDate != $prevDate) : ?>
+                                <p class="my-4 text-gray-500 mx-auto text-center bg-blue-100 px-2 py-1 rounded-md">
                                     <?= $displayDate ?>
                                 </p>
                             <?php endif; ?>
 
-                            <div class="mb-2">
-                                <?php if (!empty($row->id_pengirim)) : ?>
-                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="w-10 h-10 rounded-full <?= ($row->id_pengirim == $id_user) ? 'float-right ml-2' : 'float-left mr-2' ?>" alt="Profile Picture" loading="lazy">
-                                <?php else : ?>
-                                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="w-8 h-8 rounded-full mr-2" alt="Default Profile Picture" loading="lazy">
-                                <?php endif; ?>
-
-                                <div class="flex items-start <?= ($row->id_pengirim == $id_user) ? 'justify-end text-right' : 'justify-start text-left' ?>">
-                                    <div class="<?= ($row->id_pengirim == $id_user) ? 'bg-blue-700 text-white' : 'bg-gray-300 text-black' ?> rounded-md p-3 max-w-2xl inline-block">
-                                        <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
-                                        <p><?= $row->pesan ?></p>
-                                        <p class="text-xs <?= ($row->id_pengirim == $id_user) ? 'md:text-left text-right' : 'text-right' ?>"><?= date('H:i', strtotime($row->jam)) ?></p>
-                                    </div>
+                            <div class="mb-4 flex items-start <?= ($row->id_pengirim == $id_user) ? 'justify-end text-right' : 'justify-start text-left' ?>">
+                                <div class="<?= ($row->id_pengirim == $id_user) ? 'bg-blue-700 text-white' : 'bg-gray-300 text-black' ?> rounded-md p-3 max-w-full inline-block">
+                                    <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
+                                    <p><?= $row->pesan ?></p>
+                                    <p class="text-xs <?= ($row->id_pengirim == $id_user) ? 'md:text-left text-right' : 'text-right' ?>"><?= date('H:i', strtotime($row->jam)) ?></p>
                                 </div>
-                            </div>
 
-                    <?php $uniqueMessages[] = $messageKey;
-                            $prevDate = $translatedDate;
+                                <?php if (!empty($row->id_pengirim)) : ?>
+                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="w-10 h-10 rounded-full <?= ($row->id_pengirim == $id_user) ? 'ml-2' : 'mr-2' ?>" alt="Foto Profil" loading="lazy">
+                                <?php else : ?>
+                                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="w-8 h-8 rounded-full mr-2" alt="Foto Profil Default" loading="lazy">
+                                <?php endif; ?>
+                            </div>
+                    <?php
+                            $uniqueMessages[] = $messageKey;
+                            $prevDate = $displayDate;
                         endif;
-                    endforeach; ?>
+                    endforeach;
+                    ?>
                 </div>
             </div>
+
+            <?php
+            function getDisplayDate($messageDate)
+            {
+                $dateDiff = strtotime('today') - strtotime($messageDate);
+                $daysAgo = floor($dateDiff / (60 * 60 * 24));
+                if ($daysAgo == 0) {
+                    return 'Hari Ini';
+                } elseif ($daysAgo == 1) {
+                    return 'Kemarin';
+                } elseif ($daysAgo >= 2 && $daysAgo <= 6) {
+                    return terbilang($daysAgo) . ' Hari Lalu';
+                } elseif ($daysAgo >= 7 && $daysAgo <= 13) {
+                    $weeksAgo = floor($daysAgo / 7);
+                    return 'Satu Minggu Lalu';
+                } elseif ($daysAgo >= 14 && $daysAgo <= 29) {
+                    return 'Dua Minggu Lalu';
+                } elseif ($daysAgo >= 30 && $daysAgo <= 59) {
+                    return 'Satu Bulan Lalu';
+                } elseif ($daysAgo >= 60 && $daysAgo <= 365) {
+                    $monthsAgo = floor($daysAgo / 30);
+                    return terbilang($monthsAgo) . ' Bulan Lalu';
+                } elseif ($daysAgo > 365) {
+                    $yearsAgo = floor($daysAgo / 365);
+                    return terbilang($yearsAgo) . ' Tahun Lalu';
+                }
+            }
+
+            function terbilang($number)
+            {
+                $words = array(1 => 'Satu', 2 => 'Dua', 3 => 'Tiga', 4 => 'Empat', 5 => 'Lima', 6 => 'Enam', 7 => 'Tujuh', 8 => 'Delapan', 9 => 'Sembilan', 10 => 'Sepuluh', 11 => 'Sebelas');
+
+                if ($number < 12) {
+                    return $words[$number];
+                } elseif ($number < 20) {
+                    return terbilang($number - 10) . ' Belas';
+                } elseif ($number < 100) {
+                    return terbilang($number / 10) . ' Puluh ' . terbilang($number % 10);
+                } elseif ($number < 200) {
+                    return 'Seratus ' . terbilang($number - 100);
+                } elseif ($number < 1000) {
+                    return terbilang($number / 100) . ' Ratus ' . terbilang($number % 100);
+                } elseif ($number < 2000) {
+                    return 'Seribu ' . terbilang($number - 1000);
+                } elseif ($number < 1000000) {
+                    return terbilang($number / 1000) . ' Ribu ' . terbilang($number % 1000);
+                } elseif ($number < 1000000000) {
+                    return terbilang($number / 1000000) . ' Juta ' . terbilang($number % 1000000);
+                }
+                return 'Angka terlalu besar untuk diurai.';
+            }
+            ?>
 
         </div>
     </div>

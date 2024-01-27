@@ -142,10 +142,10 @@
         .night-mode .additional-content,
         .additional-content {
             padding: 2rem;
-            background-color: black;
+            background-color: #667eea;
             border-radius: 10px;
             margin-top: 2rem;
-            color: white;
+            color: #fff;
         }
 
         #buttonContent {
@@ -180,6 +180,16 @@
         .roundued {
             border-radius: 50px;
         }
+
+        .additional-content.nav-day {
+            background-color: #667eea;
+            color: #fff;
+        }
+
+        .additional-content.nav-night {
+            background-color: #1a202c;
+            color: #cbd5e0;
+        }
     </style>
 </head>
 
@@ -188,7 +198,7 @@
         <div class="container mx-auto my-3 py-2 flex flex-col lg:flex-row justify-between items-center">
             <div class="flex items-center font-bold text-2xl lg:text-2xl">
                 <a href="<?= base_url('admin/profile') ?>" class="flex items-center text-white" style="cursor: default;">
-                    <img src="<?= base_url('image/logo1.png') ?>" style="height: 40px;" alt="">
+                    <img id="logoImage" src="<?= base_url('image/logo1.png') ?>" style="height: 40px;" alt="">
                     <p class="ml-2">Layanan Pengaduan Bencana</p>
                 </a>
             </div>
@@ -219,7 +229,7 @@
         <a id="buttonContent" class="px-8 py-4 roundued text-xl bg-blue-600 hover:bg-blue-500 text-white hover:text-black" href="<?php echo base_url('auth') ?>">Masuk</a>
     </div>
 
-    <div class="additional-content">
+    <div class="additional-content nav-day-night">
         <h2 class="text-2xl font-semibold mb-4" id="infoTitle">Informasi Tambahan</h2>
         <p id="infoContent">Di sini Anda dapat menemukan informasi tambahan mengenai layanan pengaduan bencana. Kami siap membantu Anda dengan segala informasi yang Anda butuhkan.</p>
     </div>
@@ -245,16 +255,23 @@
         function updateNavigationColor() {
             var body = document.body;
             var nav = document.querySelector('nav');
+            var additionalContent = document.querySelector('.additional-content');
+            var logo = document.getElementById('logoImage');
 
             body.classList.remove('nav-day', 'nav-night');
             nav.classList.remove('nav-day', 'nav-night');
+            additionalContent.classList.remove('nav-day', 'nav-night');
 
             if (language === 'en') {
                 body.classList.add('nav-night');
                 nav.classList.add('nav-day');
+                additionalContent.classList.add('nav-night');
+                logo.src = "<?= base_url('image/logo2.png') ?>";
             } else {
                 body.classList.add('nav-day');
                 nav.classList.add('nav-night');
+                additionalContent.classList.add('nav-day');
+                logo.src = "<?= base_url('image/logo1.png') ?>";
             }
         }
 

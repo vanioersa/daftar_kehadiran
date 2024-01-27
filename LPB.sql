@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 20, 2024 at 02:00 AM
+-- Generation Time: Jan 27, 2024 at 07:51 AM
 -- Server version: 10.10.2-MariaDB
 -- PHP Version: 8.1.17
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `daftar_kehadiran`
+-- Database: `lpb`
 --
 
 -- --------------------------------------------------------
@@ -31,7 +31,10 @@ CREATE TABLE `deskripsi_public` (
   `id` int(11) NOT NULL,
   `tempat` varchar(255) DEFAULT NULL,
   `deskripsi` longblob DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL
+  `image` varchar(255) DEFAULT NULL,
+  `waktu_kejadian` varchar(255) DEFAULT NULL,
+  `tanggal` varchar(255) DEFAULT NULL,
+  `jam` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -42,11 +45,11 @@ CREATE TABLE `deskripsi_public` (
 
 CREATE TABLE `pesan` (
   `id` int(11) NOT NULL,
-  `id_pengirim` varchar(255) DEFAULT NULL,
-  `id_penerima` varchar(255) DEFAULT NULL,
+  `id_pengirim` varchar(100) DEFAULT NULL,
+  `id_penerima` varchar(100) DEFAULT NULL,
   `pesan` longblob DEFAULT NULL,
-  `tanggal` varchar(255) DEFAULT NULL,
-  `jam` varchar(255) DEFAULT NULL
+  `tanggal` varchar(100) DEFAULT NULL,
+  `jam` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -70,12 +73,12 @@ CREATE TABLE `ratting` (
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
-  `nama` varchar(255) DEFAULT NULL,
-  `nomor` varchar(255) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `jenis_kelamin` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `role` varchar(255) DEFAULT NULL
+  `nama` varchar(100) DEFAULT NULL,
+  `nomor` varchar(100) DEFAULT NULL,
+  `image` varchar(100) DEFAULT NULL,
+  `jenis_kelamin` varchar(100) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `role` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

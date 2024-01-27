@@ -20,14 +20,14 @@ class User extends CI_Controller
         $data['public'] = $this->m_model->get_data('deskripsi_public')->result();
         $data['users'] = $this->m_model->get_user_by_role('user');
         $data['id_user'] = $this->session->userdata('id');
-    
+
         // Fetch only the messages related to the current user
         $data['pesan'] = $this->m_model->get_user_messagess($data['id_user'])->result();
-    
+
         $data['user'] = $this->m_model->get_by_id('user', 'id', $data['id_user'])->result();
         $this->load->view('user/dashboard', $data);
     }
-    
+
     public function rating_pengguna()
     {
         $data['reting'] = $this->m_model->get_data('ratting')->result();
@@ -36,7 +36,13 @@ class User extends CI_Controller
 
     public function public()
     {
-        $data['public'] = $this->m_model->get_data_sorted('deskripsi_public', 'waktu_kejadian', 'DESC')->result();
+        $search_query = $this->input->get('search_query');
+        if ($search_query) {
+            $data['public'] = $this->m_model->search_data('deskripsi_public', 'waktu_kejadian', 'DESC', $search_query)->result();
+        } else {
+            $data['public'] = $this->m_model->get_data_sorted('deskripsi_public', 'waktu_kejadian', 'DESC')->result();
+        }
+
         $data['dayNames'] = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu',];
         $data['monthNames'] = ['January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April', 'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September', 'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember',];
         $this->load->view('user/public', $data);
@@ -64,7 +70,7 @@ class User extends CI_Controller
                 if (!$this->input->post('rating')) {
                     redirect(base_url('user/retting'));
                 }
-                
+
                 $this->load->view('your_form_view');
             } else {
                 $user_id = $this->session->userdata('id');

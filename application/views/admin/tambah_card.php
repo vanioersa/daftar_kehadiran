@@ -99,7 +99,7 @@
         <form action="<?php echo base_url('admin/aksi_tambah_card') ?>" method="post" id="survey-form" class="survey-form">
             <div class="form-group">
                 <label class="group-form" for="tempat">Lokasi</label>
-                <input type="text" id="tempat" name="tempat" class="form-control" placeholder="Lokasi atau tempat" required>
+                <input type="text" autocomplete="off" id="tempat" name="tempat" class="form-control" placeholder="Lokasi atau tempat" required>
             </div>
 
             <div class="form-group">
@@ -109,7 +109,7 @@
 
             <div class="form-group">
                 <label class="group-form" for="deskripsi">Deskripsi</label>
-                <input type="text" id="deskripsi" name="deskripsi" class="form-control" placeholder="Keterangan " required>
+                <input type="text" id="deskripsi" autocomplete="off" name="deskripsi" class="form-control" placeholder="Keterangan " required>
             </div>
 
             <div class="form-group">

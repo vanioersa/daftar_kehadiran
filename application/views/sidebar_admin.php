@@ -164,8 +164,8 @@
                         <button onclick="confirmLogout()" class="px-4 py-2 text-white hover:text-green-500">Keluar</button>
                     </li>
                     <li>
-                        <button class="px-4 py-2 text-white hover:text-green-500 toggle-button" onclick="toggleDayNightMode()">
-                            <i class="fas fa-cloud-moon"></i>
+                        <button class="px-4 py-2 text-white hover:text-green-500 toggle-button" onclick="toggleLanguage()">
+                            <span id="languageIcon"><i class="fa-solid fa-sun"></i></span>
                         </button>
                     </li>
                 </ul>
@@ -176,6 +176,35 @@
     </nav>
 
     <script>
+        var language = 'id';
+
+        function toggleLanguage() {
+            updateLanguageIcon();
+            toggleDayNightMode();
+        }
+
+        function updateLanguageIcon() {
+            var languageIcon = document.getElementById('languageIcon');
+            languageIcon.innerHTML = (language === 'en') ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+        }
+
+        function toggleDayNightMode() {
+            var body = document.body;
+            var nav = document.querySelector('nav');
+            var logo = document.getElementById('logoImage');
+
+            body.classList.toggle('nav-day');
+            body.classList.toggle('nav-night');
+            nav.classList.toggle('nav-day');
+            nav.classList.toggle('nav-night');
+
+            if (body.classList.contains('nav-day')) {
+                logo.src = "<?= base_url('image/logo1.png') ?>";
+            } else {
+                logo.src = "<?= base_url('image/logo2.png') ?>";
+            }
+        }
+
         function updateDateTime() {
             var dateTimeContainer = document.getElementById('date-time');
             var now = new Date();
@@ -187,7 +216,6 @@
                 day: 'numeric',
                 hour: 'numeric',
                 minute: 'numeric',
-                // second: 'numeric',
                 timeZone: 'Asia/Jakarta',
             };
 
@@ -196,7 +224,6 @@
         }
         updateDateTime();
         setInterval(updateDateTime, 1000);
-
 
         function navigateTo(url) {
             window.location.href = url;
@@ -216,27 +243,9 @@
                 cancelButtonText: 'tidak'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redirect to the logout URL
                     window.location.href = "<?= base_url('auth/logout') ?>";
                 }
             });
-        }
-
-        function toggleDayNightMode() {
-            var body = document.body;
-            var nav = document.querySelector('nav');
-            var logo = document.getElementById('logoImage');
-
-            body.classList.toggle('nav-day');
-            body.classList.toggle('nav-night');
-            nav.classList.toggle('nav-day');
-            nav.classList.toggle('nav-night');
-
-            if (body.classList.contains('nav-day')) {
-                logo.src = "<?= base_url('image/logo1.png') ?>";
-            } else {
-                logo.src = "<?= base_url('image/logo2.png') ?>";
-            }
         }
     </script>
 </body>

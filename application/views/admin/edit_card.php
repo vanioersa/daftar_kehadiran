@@ -93,12 +93,12 @@
         <form action="<?php echo base_url('admin/aksi_edit_card/' . $public->id) ?>" method="post" id="edit-form" class="survey-form" enctype="multipart/form-data">
             <div class="form-group">
                 <label class="group-form" for="deskripsi">Deskripsi</label>
-                <input type="text" id="deskripsi" name="deskripsi" class="form-control" value="<?php echo $public->deskripsi; ?>">
+                <input type="text" autocomplete="off" id="deskripsi" name="deskripsi" class="form-control" value="<?php echo $public->deskripsi; ?>">
             </div>
 
             <div class="form-group">
                 <label class="group-form" for="tempat">Lokasi</label>
-                <input type="text" id="tempat" name="tempat" class="form-control" value="<?php echo $public->tempat; ?>">
+                <input type="text" autocomplete="off" id="tempat" name="tempat" class="form-control" value="<?php echo $public->tempat; ?>">
             </div>
 
             <div class="form-group">

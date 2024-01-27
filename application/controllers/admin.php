@@ -91,7 +91,7 @@ class Admin extends CI_Controller
             $upload_path = './image/' . $file_name;
 
             if (move_uploaded_file($image_temp, $upload_path)) {
-                $waktu_kejadian_datetime = date('d-m-Y H.i', strtotime($waktu_kejadian));
+                $waktu_kejadian_datetime = $this->formatDatetimeIndonesian($waktu_kejadian);
 
                 $data = [
                     'image' => $file_name,
@@ -125,6 +125,48 @@ class Admin extends CI_Controller
             }
         }
         echo json_encode($response);
+    }
+
+    private function formatDatetimeIndonesian($datetime)
+    {
+        $date = new DateTime($datetime);
+        $date->setTimeZone(new DateTimeZone('Asia/Jakarta'));
+
+        $day = $date->format('l');
+        $dayNumber = $date->format('d');
+        $month = $date->format('F');
+        $year = $date->format('Y');
+        $hour = $date->format('H');
+        $minute = $date->format('i');
+
+        $dayNames = [
+            'Sunday' => 'Minggu',
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+        ];
+
+        $monthNames = [
+            'January' => 'Januari',
+            'February' => 'Februari',
+            'March' => 'Maret',
+            'April' => 'April',
+            'May' => 'Mei',
+            'June' => 'Juni',
+            'July' => 'Juli',
+            'August' => 'Agustus',
+            'September' => 'September',
+            'October' => 'Oktober',
+            'November' => 'November',
+            'December' => 'Desember',
+        ];
+
+        $formattedDatetime = "{$dayNames[$day]},$dayNumber-{$monthNames[$month]}-$year $hour.$minute";
+
+        return $formattedDatetime;
     }
 
     public function hapus_image($id)

@@ -35,7 +35,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label for="nama" class="block text-sm font-medium text-gray-600">Nama</label>
-                        <input type="text" id="nama" name="nama" placeholder="Masukkan Nama" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500" value="<?= $row->nama; ?>">
+                        <input type="text" autocomplete="off" id="nama" name="nama" placeholder="Masukkan Nama" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-blue-500" value="<?= $row->nama; ?>">
                     </div>
                     <div>
                         <label for="nomor" class="block text-sm font-medium text-gray-600">Nomor</label>

@@ -10,11 +10,26 @@
     <title>Layanan Pengaduan Bencana</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+<style>
+    .cta-link {
+        display: inline-block;
+        margin-bottom: 1rem;
+        margin-top: 5px;
+        padding: 0.75rem 1.5rem;
+        background-color: #3490dc;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .cta-link:hover {
+        background-color: #2779bd;
+    }
+</style>
 
 <body>
-
     <?php $this->load->view('sidebar_admin'); ?>
-
     <div class="w-screen-xl w-full mx-auto my-8 p-4">
 
         <div class="mb-8 text-center">
@@ -62,10 +77,7 @@
             <div class="bg-white p-6 rounded-md shadow-md">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Informasi Rating</h2>
                 <div class="grid grid-cols-1 gap-4">
-                    <?php usort($reting, function ($a, $b) {
-                        return $b->rating - $a->rating;
-                    });
-
+                    <?php
                     $count = 0;
 
                     if (empty($reting)) {
@@ -81,7 +93,7 @@
                             <?php else : ?>
                                 <?php if ($count === 1) : ?>
                                     <div class="text-blue-700 p-4 text-center">
-                                        <a href="<?php echo base_url('admin/ratting') ?>" class="hover:underline">Lihat Lebih Banyak &rarr;</a>
+                                        <a href="<?php echo base_url('admin/ratting') ?>" class="cta-link">Lihat Lebih Lanjut &rarr;</a>
                                     </div>
                                 <?php endif; ?>
                     <?php endif;
@@ -105,18 +117,13 @@
                     foreach ($pesan as $row) :
                         $englishDate = date('j F Y', strtotime($row->tanggal));
                         $translatedDate = date('j/n/Y', strtotime($englishDate));
-                        $displayDate = '';
-                        if ($translatedDate == $today) {
-                            $displayDate = 'Hari Ini';
-                        } elseif ($translatedDate == $yesterday) {
-                            $displayDate = 'Kemarin';
-                        } else {
-                            $displayDate = $translatedDate;
-                        }
+                        $displayDate = getDisplayDate($row->tanggal);
+
                         $messageKey = $translatedDate . '_' . $row->jam . '_' . $row->pesan;
-                        if (!in_array($messageKey, $uniqueMessages)) : ?>
+                        if (!in_array($messageKey, $uniqueMessages)) :
+                    ?>
                             <?php if ($translatedDate != $prevDate) : ?>
-                                <p class="my-5 text-gray-500 mx-auto text-center bg-blue-100 shadow w-20">
+                                <p class="my-5 text-gray-500 mx-auto text-center bg-blue-100 shadow w-full">
                                     <?= $displayDate ?>
                                 </p>
                             <?php endif; ?>
@@ -136,12 +143,65 @@
                                     </div>
                                 </div>
                             </div>
-                    <?php $uniqueMessages[] = $messageKey;
+                    <?php
+                            $uniqueMessages[] = $messageKey;
                             $prevDate = $translatedDate;
                         endif;
                     endforeach; ?>
                 </div>
             </div>
+
+            <?php
+            function getDisplayDate($messageDate)
+            {
+                $dateDiff = strtotime('today') - strtotime($messageDate);
+                $daysAgo = floor($dateDiff / (60 * 60 * 24));
+                if ($daysAgo == 0) {
+                    return 'Hari Ini';
+                } elseif ($daysAgo == 1) {
+                    return 'Kemarin';
+                } elseif ($daysAgo >= 2 && $daysAgo <= 6) {
+                    return terbilang($daysAgo) . ' Hari Lalu';
+                } elseif ($daysAgo >= 7 && $daysAgo <= 13) {
+                    $weeksAgo = floor($daysAgo / 7);
+                    return 'Satu Minggu Lalu';
+                } elseif ($daysAgo >= 14 && $daysAgo <= 29) {
+                    return 'Dua Minggu Lalu';
+                } elseif ($daysAgo >= 30 && $daysAgo <= 59) {
+                    return 'Satu Bulan Lalu';
+                } elseif ($daysAgo >= 60 && $daysAgo <= 365) {
+                    $monthsAgo = floor($daysAgo / 30);
+                    return terbilang($monthsAgo) . ' Bulan Lalu';
+                } elseif ($daysAgo > 365) {
+                    $yearsAgo = floor($daysAgo / 365);
+                    return terbilang($yearsAgo) . ' Tahun Lalu';
+                }
+            }
+
+            function terbilang($number)
+            {
+                $words = array(1 => 'Satu', 2 => 'Dua', 3 => 'Tiga', 4 => 'Empat', 5 => 'Lima', 6 => 'Enam', 7 => 'Tujuh', 8 => 'Delapan', 9 => 'Sembilan', 10 => 'Sepuluh', 11 => 'Sebelas');
+
+                if ($number < 12) {
+                    return $words[$number];
+                } elseif ($number < 20) {
+                    return terbilang($number - 10) . ' Belas';
+                } elseif ($number < 100) {
+                    return terbilang($number / 10) . ' Puluh ' . terbilang($number % 10);
+                } elseif ($number < 200) {
+                    return 'Seratus ' . terbilang($number - 100);
+                } elseif ($number < 1000) {
+                    return terbilang($number / 100) . ' Ratus ' . terbilang($number % 100);
+                } elseif ($number < 2000) {
+                    return 'Seribu ' . terbilang($number - 1000);
+                } elseif ($number < 1000000) {
+                    return terbilang($number / 1000) . ' Ribu ' . terbilang($number % 1000);
+                } elseif ($number < 1000000000) {
+                    return terbilang($number / 1000000) . ' Juta ' . terbilang($number % 1000000);
+                }
+                return 'Angka terlalu besar untuk diurai.';
+            }
+            ?>
 
         </div>
     </div>
