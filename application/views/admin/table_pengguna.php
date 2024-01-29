@@ -13,35 +13,43 @@
     <?php $this->load->view('sidebar_admin'); ?>
     <div class="p-4 lg:p-10">
         <div class="w-full overflow-x-auto">
-            <div class="mb-4">
-                <label for="search" class="text-gray-500">Cari:</label>
-                <input type="text" id="search" class="border border-gray-300 rounded-md p-1">
+
+            <div class="mb-4 relative">
+                <input type="text" id="search" placeholder="Cari......" class="border border-gray-300 rounded-md pl-10 pr-4 py-2 w-full focus:outline-none focus:border-blue-500">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                    <svg class="w-5 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m4.286-1.429a9 9 0 11-12.727-12.728 9 9 0 0112.727 12.728z"></path>
+                    </svg>
+                </div>
             </div>
-            <table id="tableContainer" class="w-full bg-white border border-gray-300 rounded-md shadow-md">
-                <thead class="bg-blue-700 text-white">
-                    <tr>
-                        <th class="py-3 px-4 border-b">#</th>
-                        <th class="py-3 px-4 border-b">Nama</th>
-                        <th class="py-3 px-4 border-b">Jenis Kelamin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (empty($public)) : ?>
+
+            <div class="shadow-md rounded-lg overflow-hidden">
+                <table id="tableContainer" class="w-full bg-white">
+                    <thead class="bg-blue-700 text-white">
                         <tr>
-                            <td colspan="3" class="py-6 text-center text-gray-500">Tidak ada data yang ditemukan.</td>
+                            <th class="py-3 px-4">NO</th>
+                            <th class="py-3 px-4">Nama</th>
+                            <th class="py-3 px-4">Jenis Kelamin</th>
                         </tr>
-                    <?php else : ?>
-                        <?php $no = 0;
-                        foreach ($public as $row) : $no++ ?>
-                            <tr class="data-row hover:bg-blue-100 transition duration-300">
-                                <td class="py-3 px-4 border-b"><?= $no ?>.</td>
-                                <td class="py-3 px-4 border-b"><?= $row->nama ?></td>
-                                <td class="py-3 px-4 border-b"><?= $row->jenis_kelamin ?></td>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($public)) : ?>
+                            <tr>
+                                <td colspan="3" class="py-6 text-center text-gray-500">Tidak ada data yang ditemukan.</td>
                             </tr>
-                        <?php endforeach ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        <?php else : ?>
+                            <?php $no = 0;
+                            foreach ($public as $row) : $no++ ?>
+                                <tr onclick="window.location='<?php echo base_url('admin/detail_pengguna/' . $row->id); ?>'" class="data-row hover:bg-blue-100 transition duration-300">
+                                    <td class="py-3 px-4"><?= $no ?>.</td>
+                                    <td class="py-3 px-4"><?= $row->nama ?></td>
+                                    <td class="py-3 px-4"><?= $row->jenis_kelamin ?></td>
+                                </tr>
+                            <?php endforeach ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

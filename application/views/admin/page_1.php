@@ -18,7 +18,7 @@
 
     <h1 class="text-center text-4xl font-bold mb-10">Public</h1>
     <section class="container mx-auto px-10">
-        <div class="flex flex-wrap -mx-2 mb-8 justify-end">
+        <div class="flex flex-wrap -mx-2 mb-8 justify-center">
             <?php if (!empty($public)) : ?>
                 <?php $public = array_reverse($public);
                 ?>

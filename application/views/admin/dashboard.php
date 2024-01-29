@@ -81,7 +81,7 @@
                     $count = 0;
 
                     if (empty($reting)) {
-                        echo '<div class="text-center md:py-56"><p class="text-gray-600">Maaf, tidak ada data yang tersedia.</p></div>';
+                        echo '<div class="text-center md:py-20"><p class="text-gray-600">Maaf, tidak ada data yang tersedia.</p></div>';
                     } else {
                         foreach ($reting as $row) :
                             if ($count < 1) : ?>
@@ -107,47 +107,54 @@
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Riwayat Pesan</h2>
                 <div style="max-height: 290px;" class="overflow-y-auto px-2 py-3">
                     <?php
-                    $prevDate = null;
-                    $uniqueMessages = [];
-                    $today = date('j/n/Y');
-                    $yesterday = date('j/n/Y', strtotime('-1 day'));
-                    usort($pesan, function ($a, $b) {
-                        return strtotime($b->tanggal . ' ' . $b->jam) - strtotime($a->tanggal . ' ' . $a->jam);
-                    });
-                    foreach ($pesan as $row) :
-                        $englishDate = date('j F Y', strtotime($row->tanggal));
-                        $translatedDate = date('j/n/Y', strtotime($englishDate));
-                        $displayDate = getDisplayDate($row->tanggal);
-
-                        $messageKey = $translatedDate . '_' . $row->jam . '_' . $row->pesan;
-                        if (!in_array($messageKey, $uniqueMessages)) :
+                    if (empty($pesan)) :
                     ?>
-                            <?php if ($translatedDate != $prevDate) : ?>
-                                <p class="my-5 text-gray-500 mx-auto text-center bg-blue-100 shadow w-full">
-                                    <?= $displayDate ?>
-                                </p>
-                            <?php endif; ?>
+                        <p class="text-gray-500 mx-auto text-center md:my-20">Tidak ada pesan yang ditampilkan.</p>
+                        <?php
+                    else :
+                        $prevDate = null;
+                        $uniqueMessages = [];
+                        $today = date('j/n/Y');
+                        $yesterday = date('j/n/Y', strtotime('-1 day'));
+                        usort($pesan, function ($a, $b) {
+                            return strtotime($b->tanggal . ' ' . $b->jam) - strtotime($a->tanggal . ' ' . $a->jam);
+                        });
+                        foreach ($pesan as $row) :
+                            $englishDate = date('j F Y', strtotime($row->tanggal));
+                            $translatedDate = date('j/n/Y', strtotime($englishDate));
+                            $displayDate = getDisplayDate($row->tanggal);
 
-                            <div class="mb-2">
-                                <?php if (!empty($row->id_pengirim)) : ?>
-                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="w-10 h-10 rounded-full <?= ($row->id_pengirim == $id_user) ? 'float-right ml-2' : 'float-left mr-2' ?>" alt="Profile Picture" loading="lazy">
-                                <?php else : ?>
-                                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="w-8 h-8 rounded-full mr-2" alt="Default Profile Picture" loading="lazy">
+                            $messageKey = $translatedDate . '_' . $row->jam . '_' . $row->pesan;
+                            if (!in_array($messageKey, $uniqueMessages)) :
+                        ?>
+                                <?php if ($translatedDate != $prevDate) : ?>
+                                    <p class="my-5 text-gray-500 mx-auto text-center bg-blue-100 shadow w-full">
+                                        <?= $displayDate ?>
+                                    </p>
                                 <?php endif; ?>
 
-                                <div class="flex items-start <?= ($row->id_pengirim == $id_user) ? 'justify-end text-right' : 'justify-start text-left' ?>">
-                                    <div class="<?= ($row->id_pengirim == $id_user) ? 'bg-blue-700 text-white' : 'bg-gray-300 text-black' ?> rounded-md p-3 max-w-2xl inline-block">
-                                        <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
-                                        <p><?= $row->pesan ?></p>
-                                        <p class="text-xs <?= ($row->id_pengirim == $id_user) ? 'text-left' : 'text-right' ?>"><?= date('H:i', strtotime($row->jam)) ?></p>
+                                <div class="mb-2">
+                                    <?php if (!empty($row->id_pengirim)) : ?>
+                                        <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="w-10 h-10 rounded-full <?= ($row->id_pengirim == $id_user) ? 'float-right ml-2' : 'float-left mr-2' ?>" alt="Profile Picture" loading="lazy">
+                                    <?php else : ?>
+                                        <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="w-8 h-8 rounded-full mr-2" alt="Default Profile Picture" loading="lazy">
+                                    <?php endif; ?>
+
+                                    <div class="flex items-start <?= ($row->id_pengirim == $id_user) ? 'justify-end text-right' : 'justify-start text-left' ?>">
+                                        <div class="<?= ($row->id_pengirim == $id_user) ? 'bg-blue-700 text-white' : 'bg-gray-300 text-black' ?> rounded-md p-3 max-w-2xl inline-block">
+                                            <p class="font-bold"><?= tampil_nama_byid($row->id_pengirim) ?></p>
+                                            <p><?= $row->pesan ?></p>
+                                            <p class="text-xs <?= ($row->id_pengirim == $id_user) ? 'text-left' : 'text-right' ?>"><?= date('H:i', strtotime($row->jam)) ?></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                     <?php
-                            $uniqueMessages[] = $messageKey;
-                            $prevDate = $translatedDate;
-                        endif;
-                    endforeach; ?>
+                                $uniqueMessages[] = $messageKey;
+                                $prevDate = $translatedDate;
+                            endif;
+                        endforeach;
+                    endif;
+                    ?>
                 </div>
             </div>
 
