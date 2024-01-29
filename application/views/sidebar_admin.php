@@ -177,15 +177,20 @@
 
     <script>
         var language = 'id';
+        var languageIcons = {
+            'id': '<i class="fa-solid fa-sun"></i>',
+            'en': '<i class="fa-solid fa-moon"></i>'
+        };
 
         function toggleLanguage() {
+            language = (language === 'en') ? 'id' : 'en';
             updateLanguageIcon();
             toggleDayNightMode();
         }
 
         function updateLanguageIcon() {
             var languageIcon = document.getElementById('languageIcon');
-            languageIcon.innerHTML = (language === 'en') ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+            languageIcon.innerHTML = languageIcons[language];
         }
 
         function toggleDayNightMode() {
