@@ -164,7 +164,7 @@ class Admin extends CI_Controller
             'December' => 'Desember',
         ];
 
-        $formattedDatetime = "{$dayNames[$day]},$dayNumber-{$monthNames[$month]}-$year $hour.$minute";
+        $formattedDatetime = "{$dayNames[$day]}, $dayNumber {$monthNames[$month]} $year $hour.$minute";
 
         return $formattedDatetime;
     }

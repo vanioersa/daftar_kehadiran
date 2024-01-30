@@ -15,7 +15,6 @@
         font-family: 'Source Sans Pro', sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #f5f5f5;
     }
 
     body .nav-day {
@@ -106,7 +105,7 @@
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
-            <div id="menu" class="hidden lg:flex lg:items-center">
+            <div id="menu" class="hidden lg:flex lg:items-center flex-col lg:flex-row">
                 <ul class="flex flex-col lg:flex-row lg:ml-auto">
                     <li>
                         <button class="px-4 py-2" onclick="navigateTo('<?php echo base_url('user') ?>')">Dashboard</button>

@@ -8,13 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
             font-family: 'Arial', sans-serif;
         }
 
         .card {
             max-width: 400px;
             margin: 0 auto;
+            background-color: #f3f3f3;
         }
 
         .star-container {
@@ -73,8 +73,8 @@
     <?php $this->load->view('sidebar_user'); ?>
 
     <div class="mx-auto md:my-10 my-14">
-        <div class="max-w-md bg-white shadow-md rounded-md overflow-hidden card">
-            <div class="p-6 bg-blue-200">
+        <div class="max-w-md shadow-md rounded-md overflow-hidden card">
+            <div class="p-6">
                 <form id="myForm" action="<?= base_url('user/aksi_ratting'); ?>" method="post">
                     <?php if (empty($ratingResults)) : ?>
                         <div class="mb-6 text-center rating-container">
@@ -115,15 +115,15 @@
 
                     return $stars;
                 } ?>
-                <div class="mt-8 rating-results">
+                <div onclick="window.location='<?= base_url('user/rating_pengguna') ?>'" class="mt-8 rating-results">
                     <h2 class="text-xl font-bold text-gray-800 mb-4">Hasil Rating Dari (<?php foreach ($user as $row) : ?><?php echo $row->nama; ?><?php endforeach; ?>):</h2>
                     <?php foreach ($ratingResults as $result) : ?>
                         <div class="card">
-                            <div class="bg-blue-300 p-4 rounded-md shadow-md">
-                                <p class="text-lg font-semibold text-gray-800 mb-2"><?= tampil_nama_byid($result->id_user) ?></p>
-                                <p class="text-xl text-gray-800 mb-2"><?= $result->comment ?></p>
+                            <div class="bg-blue-500 p-4 rounded-md shadow-md">
+                                <p class="text-lg font-semibold text-white mb-2"><?= tampil_nama_byid($result->id_user) ?></p>
+                                <p class="text-white mb-2"><?= $result->comment ?></p>
 
-                                <p class="font-semibold text-gray-800"><span class="star-icons" style="color: #fbbf24;"><?= get_star_icons_fa($result->rating) ?></span></p>
+                                <p class="font-semibold text-white"><span class="star-icons" style="color: #fbbf24;"><?= get_star_icons_fa($result->rating) ?></span></p>
                             </div>
                         </div>
                     <?php endforeach; ?>

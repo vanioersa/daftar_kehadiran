@@ -6,222 +6,217 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pesan Untuk User</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-</head>
-<style>
-    .table-container {
-        max-width: screen;
-        margin: 0 auto;
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    table,
-    th,
-    td {
-        border: 1px solid #e4e4e4;
-    }
-
-    th,
-    td {
-        padding: 10px;
-        text-align: left;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-        list-style: none;
-        padding: 0;
-    }
-
-    .pagination li {
-        margin: 0 5px;
-    }
-
-    .pagination a {
-        text-decoration: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .pagination a:hover {
-        background-color: #0056b3;
-    }
-
-    .pagination .active a {
-        background-color: #3559E0;
-    }
-
-    @media (max-width: 640px) {
-        .table-container {
-            max-width: 100%;
-            overflow-x: auto;
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        table {
-            width: max-content;
+        .message-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0px 20px;
+            background-color: #f9f9f9;
+            border-radius: 30px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            height: 460px;
+            max-height: 460px;
+            position: relative;
         }
 
-        th,
-        td {
-            white-space: nowrap;
-        }
 
-        thead {
-            position: -webkit-sticky;
+        .message-date {
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 10px;
+            z-index: 1;
             position: sticky;
             top: 0;
-            z-index: 1;
-            background-color: #f8f8f8;
         }
 
-        tbody {
-            max-height: 300px;
+        .message-date.fixed {
+            position: fixed;
             width: 100%;
-            display: block;
-            overflow-y: auto;
+            left: 0;
         }
-    }
 
-    .scrollable-table {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-</style>
+        .message-container.scroll-padding {
+            padding-top: 30px;
+        }
+
+        .message-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            margin: 20px auto;
+
+            border-radius: 100px;
+        }
+
+        .message .avatar {
+            margin-top: 10px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .message .content {
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 70%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.self {
+            justify-content: flex-end;
+        }
+
+        .message.self .avatar {
+            margin-left: 10px;
+            margin-right: 0;
+        }
+
+        .message.self .content p.sender {
+            text-align: right;
+        }
+
+        .message.self .content p.timestamp {
+            text-align: right;
+        }
+
+        .message .content p {
+            margin: 0;
+            word-wrap: break-word;
+        }
+
+        .message .content .timestamp {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .message .content .sender {
+            font-weight: bold;
+        }
+
+        .reply-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .reply-form textarea {
+            width: calc(100% - 100px);
+            padding-top: 10px;
+            padding-left: 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+
+        #sendMessage {
+            padding: 10px;
+            background-color: #3B62F6;
+            color: white;
+            border: none;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #sendMessage:hover {
+            background-color: #3B82F6;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .message-date {
+                text-align: center;
+                background-color: rgba(255, 255, 255, 1);
+                padding: 10px;
+                z-index: 1;
+                position: sticky;
+            }
+        }
+    </style>
+
+</head>
 
 <body>
     <?php $this->load->view('sidebar_user'); ?>
+    <div class="message-container">
+        <?php $last_date = null;
+        foreach ($pesan as $row) :
+            $message_date = date('Y-m-d', strtotime($row->tanggal));
+            $today_date = date('Y-m-d');
 
-    <div class="flex flex-col md:col-span-2 md:row-span-2 shadow rounded-lg ml-10 mr-10 mt-10 bg-gradient-to-r from-green-400 to-blue-500">
-        <form method="post" action="<?= base_url('user/simpan_pesan'); ?>" id="pesanForm">
-            <div class="px-6 py-5 font-semibold text-white border-b border-gray-100 flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <img src="<?= base_url('./image/' . tampil_image_byid($user_id)) ?>" class="object-cover w-10 h-10 rounded-full mr-2" alt="Foto Profil" loading="lazy">
-                    <p class="text-lg font-semibold">
-                        <?php $user_id = $this->session->userdata('id');
-                        echo tampil_nama_byid($user_id); ?>
-                    </p>
+            if ($message_date == date('Y-m-d', strtotime('-1 day', strtotime($today_date)))) {
+                $formatted_date = 'Kemarin';
+            } elseif ($message_date == $today_date) {
+                $formatted_date = 'Hari Ini';
+            } else {
+                $formatted_date = date('d M Y', strtotime($row->tanggal));
+            }
+
+            if ($formatted_date != $last_date) { ?>
+
+                <p id="<?= str_replace(' ', '_', $formatted_date) ?>" class="message-date"><?= $formatted_date ?></p>
+
+            <?php $last_date = $formatted_date;
+            } ?>
+
+            <div class="message <?= $row->id_pengirim == $user_id ? 'self' : '' ?>">
+                <?php if ($row->id_pengirim != $user_id) : ?>
+                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="avatar" alt="Avatar">
+                <?php endif; ?>
+                <div class="content <?= $row->id_pengirim == $user_id ? 'bg-blue-500 text-white' : 'bg-gray-300' ?>">
+                    <p class="sender"><?= $row->id_pengirim == $user_id ? 'Anda' : tampil_nama_byid($row->id_pengirim) ?></p>
+                    <p class="<?= $row->id_pengirim == $user_id ? 'text-right' : 'text-left' ?>"><?= $row->pesan ?></p>
+                    <p class="<?= $row->id_pengirim == $user_id ? 'text-left pr-10 text-xs' : 'text-right pl-10 text-xs' ?>"> <?= date('H.i', strtotime($row->jam)) ?></p>
                 </div>
-                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+                <?php if ($row->id_pengirim == $user_id) : ?>
+                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="avatar" alt="Avatar">
+                <?php endif; ?>
             </div>
-            <div class="p-4 flex-grow flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-                <div class="bg-white rounded-md p-6 flex-grow">
-                    <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-300">Pesan:</h2>
-                    <textarea class="border rounded-md px-3 py-2 w-full mb-4" name="pesan" placeholder="Tulis pesan untuk ..."></textarea>
-                </div>
-            </div>
+        <?php endforeach; ?>
+    </div>
+    <div>
+        <form method="post" action="<?= base_url('user/simpan_pesan'); ?>" id="pesanForm" class="reply-form">
+            <textarea name="pesan" id="messageInput" placeholder="Tulis pesan untuk ..." required></textarea>
+            <button type="submit" id="sendMessage"><i class="fas fa-paper-plane"></i> Kirim</button>
         </form>
     </div>
 
-    <?php function translateDay($englishDay)
-    {
-        $daysTranslation = ['Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu', 'Sunday' => 'Minggu',];
-        return $daysTranslation[$englishDay];
-    }
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            const messageDates = document.querySelectorAll('.message-date');
+            const messageContainer = document.querySelector('.message-container');
 
-    function translateMonth($englishMonth)
-    {
-        $monthsTranslation = ['January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April', 'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September', 'October' => 'Oktober', 'December' => 'Desember'];
-        return $monthsTranslation[$englishMonth];
-    }
-    ?>
-    <div class="mt-10 mx-10 mb-10">
-        <div class="w-full rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-800">
-            <div class="w-full table-container">
-                <div class="scrollable-table">
-                    <table class="min-w-full bg-white">
-                        <tbody>
-                            <?php
-                            $prevMessage = null;
-                            $rowCounter = 0;
-                            foreach ($pesan as $row) :
-                                $rowClass = 'border-b';
-                                $englishDate = date('l, j F Y', strtotime($row->tanggal));
-                                $translatedDate = translateDay(date('l', strtotime($englishDate))) . ', ' . date('j', strtotime($englishDate)) . ' ' . translateMonth(date('F', strtotime($englishDate))) . ' ' . date('Y', strtotime($englishDate));
-                                $displayTime = date('H.i', strtotime($row->jam));
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY;
 
-                                if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) {
-                                    continue;
-                                }
+                messageDates.forEach(messageDate => {
+                    const messageDatePosition = messageDate.offsetTop;
 
-                                if ($rowCounter >= 5) {
-                                    break;
-                                }
-                                $rowCounter++;
-                            ?>
-                                <tr class="<?= $rowClass ?>">
-                                    <td class="w-1/5 p-4">
-                                        <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
-                                            <div class="flex flex-col items-left">
-                                                <p class="font-semibold dark:text-gray-300"></p>
-                                                <p class="text-sm"></p>
-                                            </div>
-                                        <?php else : ?>
-                                            <div class="flex flex-col items-left">
-                                                <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_pengirim) ?></p>
-                                                <?php if (!empty($row->id_pengirim)) : ?>
-                                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_pengirim)) ?>" class="object-cover w-12 h-12 rounded-full mt-2" alt="Profile Picture" loading="lazy">
-                                                <?php else : ?>
-                                                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-12 h-12 rounded-full mt-2" alt="Default Profile Picture" loading="lazy" />
-                                                <?php endif; ?>
-                                                <p class="text-sm"><?= tampil_nomor_byid($row->id_pengirim) ?></p>
-                                            </div>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="w-2/3 p-4">
-                                        <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
-                                            <div class="flex flex-col bg-gray-300 p-3 rounded">
-                                                <p class="text-gray-800 dark:text-gray-300"></p>
-                                                <p class="text-sm text-gray-800 text-right"></p>
-                                            </div>
-                                        <?php else : ?>
-                                            <div class="flex flex-col bg-gray-300 p-3 rounded">
-                                                <p class="text-gray-800 dark:text-gray-300"><?= $row->pesan ?></p>
-                                                <p class="text-sm text-gray-800 text-right"><?= $translatedDate ?> <?= $displayTime ?></p>
-                                            </div>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="w-1/5 p-4 text-right">
-                                        <?php if ($prevMessage && $prevMessage->pesan == $row->pesan && $prevMessage->jam == $row->jam) : ?>
-                                            <div class="flex flex-col items-end">
-                                                <p class="font-semibold dark:text-gray-300"></p>
-                                                <p class="text-sm"></p>
-                                            </div>
-                                        <?php else : ?>
-                                            <div class="flex flex-col items-end">
-                                                <p class="font-semibold dark:text-gray-300"><?= tampil_nama_byid($row->id_penerima) ?></p>
-                                                <?php if (!empty($row->id_penerima)) : ?>
-                                                    <img src="<?= base_url('./image/' . tampil_image_byid($row->id_penerima)) ?>" class="object-cover w-12 h-12 rounded-full mt-2" alt="Profile Picture" loading="lazy">
-                                                <?php else : ?>
-                                                    <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" class="object-cover w-12 h-12 rounded-full mt-2" alt="Default Profile Picture" loading="lazy" />
-                                                <?php endif; ?>
-                                                <p class="text-sm"><?= tampil_nomor_byid($row->id_penerima) ?></p>
-                                            </div>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php
-                                $prevMessage = $row;
-                            endforeach;
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
+                    if (scrollPosition >= messageDatePosition) {
+                        messageDate.classList.add('fixed');
+                        messageContainer.classList.add('scroll-padding');
+                    } else {
+                        messageDate.classList.remove('fixed');
+                        messageContainer.classList.remove('scroll-padding');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

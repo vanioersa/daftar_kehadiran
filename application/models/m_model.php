@@ -236,6 +236,33 @@ class M_model extends CI_Model
         return $this->db->count_all_results('ratting');
     }
 
+    public function simpan_pesan_user($pesan, $pengirim, $penerima_array)
+    {
+        // Set timezone ke Asia/Jakarta
+        date_default_timezone_set('Asia/Jakarta');
+
+        // Loop melalui array penerima untuk menyimpan pesan kepada setiap penerima
+        foreach ($penerima_array as $penerima) {
+            $data = array(
+                'pesan'       => $pesan,
+                'id_pengirim' => $pengirim,
+                'id_penerima' => $penerima,
+                'tanggal'     => date('Y-m-d'), // Ubah format tanggal menjadi Y-m-d
+                'jam'         => date('H:i:s') // Ubah format jam menjadi H:i:s
+            );
+
+            // Jika penerima adalah array, ubah menjadi string dengan koma
+            if (is_array($penerima)) {
+                $penerima = implode(', ', $penerima);
+            }
+
+            // Simpan data pesan ke dalam tabel pesan
+            $this->db->insert('pesan', $data);
+        }
+
+        return true; // Mengembalikan nilai true jika penyimpanan berhasil
+    }
+
     public function simpan_pesan($pesan, $pengirim, $penerima_array)
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -341,23 +368,6 @@ class M_model extends CI_Model
         }
 
         return $admin_ids;
-    }
-
-    public function simpan_pesan_user($pesan, $pengirim, $penerima_array)
-    {
-        foreach ($penerima_array as $penerima) {
-            $data = array(
-                'pesan'      => $pesan,
-                'id_pengirim' => $pengirim,
-                'id_penerima' => $penerima,
-                'tanggal'     => date('d-m-Y'),
-                'jam'         => date('H.i')
-            );
-
-            $this->db->insert('pesan', $data);
-        }
-
-        return true;
     }
 
     public function edit_deskripsi($id, $data)

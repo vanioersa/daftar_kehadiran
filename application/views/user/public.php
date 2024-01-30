@@ -33,11 +33,27 @@
 
                     <div class="flex items-center justify-between mt-4">
                         <?php
-                        // Memisahkan tanggal dan waktu dari kolom waktu_kejadian
-                        list($hari, $waktu) = explode(' ',  $row->waktu_kejadian);
+                        // Memecah waktu kejadian menjadi bagian-bagian terpisah
+                        $parts = explode(' ', $row->waktu_kejadian);
+
+                        // Pastikan array memiliki setidaknya lima elemen
+                        if (count($parts) >= 5) {
+                            // Tetapkan bagian-bagian ke variabel yang sesuai
+                            $hari = $parts[0];
+                            $tanggal = $parts[1];
+                            $bulan = $parts[2];
+                            $tahun = $parts[3];
+                            $waktu = $parts[4];
+
+                            // Output informasi
                         ?>
-                        <p class="text-gray-300">Tanggal: <?= $hari ?></p>
-                        <p class="text-gray-300">Jam: <?= $waktu ?></p>
+                            <p class="text-gray-300">Hari: <?= $hari ?> <?= $tanggal ?> <?= $bulan ?> <?= $tahun ?></p>
+                            <p class="text-gray-300">Jam: <?= $waktu ?></p>
+                        <?php
+                        } else {
+                            echo "Format waktu kejadian tidak valid.";
+                        }
+                        ?>
                     </div>
                 </div>
             <?php endforeach; ?>

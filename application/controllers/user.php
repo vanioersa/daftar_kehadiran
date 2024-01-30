@@ -118,14 +118,17 @@ class User extends CI_Controller
 
     public function simpan_pesan()
     {
-        $pesan = $this->input->post('pesan');
-        $user_id = $this->session->userdata('id');
-        $user_ids = $this->m_model->get_all_admin_ids_except_current($user_id);
+        $pesan = $this->input->post('pesan'); // Ambil data pesan dari formulir
+        $user_id = $this->session->userdata('id'); // Ambil ID pengguna dari sesi
+        $user_ids = $this->m_model->get_all_admin_ids_except_current($user_id); // Ambil ID admin kecuali pengguna saat ini
 
+        // Jika data pesan tidak kosong
         if (!empty($pesan)) {
-            $this->m_model->simpan_pesan($pesan, $user_id, $user_ids);
+            // Panggil metode untuk menyimpan pesan ke model
+            $this->m_model->simpan_pesan_user($pesan, $user_id, $user_ids);
         }
 
+        // Redirect ke halaman pesan setelah penyimpanan selesai
         redirect(base_url('user/pesan'));
     }
 
